@@ -1,0 +1,244 @@
+// STEP IIT KGP — Incubation Management Platform
+// Prisma schema. Grows module-by-module per docs/14-roadmap.md.
+// Milestone 0 establishes the foundation: tenant seam, Identity & Access (RBAC), audit, settings.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+//  Tenant seam (single-tenant in v1; reserved for future SaaS)
+// ============================================================
+model Organization {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  users     User[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+// ============================================================
+//  Identity & Access (RBAC)
+// ============================================================
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+model User {
+  id             String        @id @default(cuid())
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  email          String        @unique
+  passwordHash   String
+  name           String?
+  phone          String?
+  emailVerified  DateTime?
+  status         UserStatus    @default(PENDING)
+  roles          UserRole[]
+  sessions       Session[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  @@index([organizationId])
+}
+
+model Role {
+  id          String           @id @default(cuid())
+  key         String           @unique // applicant, reviewer, mentor, staff, admin, super_admin
+  name        String
+  description String?
+  permissions RolePermission[]
+  users       UserRole[]
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  key         String           @unique // "application:review", "cms:publish", ...
+  description String?
+  roles       RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model UserRole {
+  userId String
+  roleId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+enum TokenType {
+  EMAIL_VERIFY
+  OTP
+  PASSWORD_RESET
+  RECOMMENDATION
+}
+
+model VerificationToken {
+  id         String    @id @default(cuid())
+  identifier String // email or userId
+  token      String    @unique
+  type       TokenType
+  expiresAt  DateTime
+  createdAt  DateTime  @default(now())
+
+  @@index([identifier, type])
+}
+
+// ============================================================
+//  Audit & Settings (cross-cutting)
+// ============================================================
+model AuditLog {
+  id             String   @id @default(cuid())
+  organizationId String?
+  actorId        String?
+  action         String
+  targetType     String
+  targetId       String?
+  before         Json?
+  after          Json?
+  ip             String?
+  createdAt      DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([actorId])
+  @@index([createdAt])
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value Json
+}
+
+// ============================================================
+//  CMS (Milestone 2) — structured-block content, versioned
+// ============================================================
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// A singleton or standalone page (home, about, director, contact, ...).
+/// Draft blocks live in ContentBlock; publishing snapshots them into ContentVersion
+/// and copies the snapshot into `publishedBlocks` for fast public reads.
+model Page {
+  id              String           @id @default(cuid())
+  key             String           @unique // "home", "about", ...
+  title           String
+  status          ContentStatus    @default(DRAFT)
+  blocks          ContentBlock[]
+  publishedBlocks Json? // last published snapshot (array of blocks) for public rendering
+  publishedAt     DateTime?
+  seo             SeoMeta?
+  versions        ContentVersion[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model ContentBlock {
+  id     String @id @default(cuid())
+  pageId String
+  type   String // hero | richtext | statStrip | gallery | facilities | showcaseTeaser | directorMessage | partners | faq | cta
+  data   Json
+  order  Int
+  page   Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId, order])
+}
+
+model ContentVersion {
+  id          String    @id @default(cuid())
+  pageId      String
+  version     Int
+  snapshot    Json // full block array at publish time
+  publishedBy String?
+  publishedAt DateTime  @default(now())
+  page        Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, version])
+}
+
+/// A repeatable content type (news, events, facilities, faq, partners, downloads).
+model Collection {
+  id    String           @id @default(cuid())
+  key   String           @unique
+  name  String
+  items CollectionItem[]
+}
+
+model CollectionItem {
+  id           String        @id @default(cuid())
+  collectionId String
+  slug         String
+  status       ContentStatus @default(DRAFT)
+  order        Int           @default(0)
+  data         Json
+  publishedAt  DateTime?
+  collection   Collection    @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([collectionId, slug])
+  @@index([collectionId, status, order])
+}
+
+model MediaAsset {
+  id         String   @id @default(cuid())
+  url        String // public URL or storage key resolved to URL
+  fileName   String
+  mimeType   String
+  sizeBytes  Int      @default(0)
+  alt        String?
+  createdAt  DateTime @default(now())
+}
+
+model NavigationItem {
+  id       String  @id @default(cuid())
+  location String // "primary" | "footer"
+  label    String
+  href     String
+  order    Int
+  parentId String?
+
+  @@index([location, order])
+}
+
+model SeoMeta {
+  id          String  @id @default(cuid())
+  pageId      String  @unique
+  title       String?
+  description String?
+  ogImage     String?
+  page        Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+}

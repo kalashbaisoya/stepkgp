@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(pnpm -v)",
+      "Bash(docker -v)",
+      "Bash(git --version)",
+      "Bash(pnpm install *)",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm build *)",
+      "Bash(git mv *)",
+      "Bash(cp -n .env.example .env)",
+      "Bash(pnpm db:up)",
+      "Bash(docker compose *)",
+      "Bash(echo \"exit=$?\")",
+      "Bash(docker-compose version *)",
+      "Bash(docker info *)",
+      "Bash(docker-compose up *)",
+      "Bash(pnpm db:push)",
+      "Bash(pnpm db:seed)",
+      "Bash(pkill -f \"next start\")",
+      "Bash(pkill -f \"next-server\")",
+      "Bash(xargs -r kill)",
+      "Bash(echo \"build exit=$?\")",
+      "Bash(pnpm add *)",
+      "Bash(npm view *)",
+      "Bash(pnpm remove *)",
+      "Bash(npx tsx *)",
+      "Bash(git config *)",
+      "Bash(gh auth *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(grep -E \"\\\\.env\\\\.example$\")"
+    ]
+  }
+}
