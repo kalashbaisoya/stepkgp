@@ -8,7 +8,9 @@ const NAV = [
   { label: "Dashboard", href: "/admin" },
   { label: "Content (CMS)", href: "/admin/cms/pages" },
   { label: "Forms", href: "/admin/forms" },
-  // Cycles, Scorecards, Users, Reports, Audit are added in later milestones.
+  { label: "Cycles", href: "/admin/cycles" },
+  { label: "Documents", href: "/admin/documents" },
+  // Scorecards, Users, Reports, Audit are added in later milestones.
 ];
 
 // Admin shell (Phase 6 IA §4). Middleware ensures a session; here we enforce the

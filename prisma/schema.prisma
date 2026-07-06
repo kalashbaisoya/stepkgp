@@ -271,6 +271,7 @@ model FormTemplate {
   name      String
   sections  FormSection[] // current draft structure
   versions  FormTemplateVersion[]
+  cycles    Cycle[]
   createdAt DateTime              @default(now())
   updatedAt DateTime              @updatedAt
 }
@@ -333,4 +334,74 @@ model OptionValue {
   label       String
   order       Int
   optionSet   OptionSet @relation(fields: [optionSetId], references: [id], onDelete: Cascade)
+}
+
+// ============================================================
+//  Cycles, Categories & Documents (Milestone 4)
+// ============================================================
+enum CycleStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  ARCHIVED
+}
+
+/// An annual cohort. Binds a form template and (via CycleCategory) the categories
+/// it accepts. Applications reference a cycle + category (Milestone 5).
+model Cycle {
+  id             String          @id @default(cuid())
+  organizationId String?
+  year           Int
+  name           String
+  status         CycleStatus     @default(DRAFT)
+  opensAt        DateTime?
+  closesAt       DateTime?
+  formTemplateId String?
+  formTemplate   FormTemplate?   @relation(fields: [formTemplateId], references: [id])
+  categories     CycleCategory[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([organizationId, year])
+  @@index([status])
+}
+
+model Category {
+  id           String                @id @default(cuid())
+  key          String                @unique // student | faculty | staff | external
+  name         String
+  order        Int                   @default(0)
+  cycles       CycleCategory[]
+  documentReqs DocumentRequirement[]
+}
+
+model CycleCategory {
+  cycleId    String
+  categoryId String
+  cycle      Cycle    @relation(fields: [cycleId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([cycleId, categoryId])
+}
+
+model Sector {
+  id   String @id @default(cuid())
+  key  String @unique
+  name String
+}
+
+/// Required documents per category (optionally scoped to a specific cycle).
+model DocumentRequirement {
+  id           String   @id @default(cuid())
+  categoryId   String
+  cycleId      String?
+  key          String
+  label        String
+  required     Boolean  @default(true)
+  allowedTypes String[] @default([])
+  maxSizeMb    Int      @default(10)
+  order        Int      @default(0)
+  category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
 }

@@ -157,6 +157,7 @@ async function main() {
 
   await seedCms();
   await seedForms();
+  await seedCycles();
 
   console.log(
     `Seeded: org=${org.slug}, ${PERMISSIONS.length} permissions, ${Object.keys(ROLES).length} roles, admin=${adminEmail} (password: ${adminPassword})`,
@@ -372,6 +373,79 @@ async function seedForms() {
       data: { templateId: template.id, version: 1, snapshot: full as object },
     });
   }
+}
+
+// ---- Cycles, Categories & Documents (Milestone 4) ----
+async function seedCycles() {
+  const categories = [
+    { key: "student", name: "Student", order: 0 },
+    { key: "faculty", name: "Faculty", order: 1 },
+    { key: "staff", name: "Institute Staff", order: 2 },
+    { key: "external", name: "External Startup", order: 3 },
+  ];
+  for (const c of categories) {
+    await db.category.upsert({ where: { key: c.key }, update: { name: c.name, order: c.order }, create: c });
+  }
+
+  const sectors = ["deeptech", "lifesciences", "hardware", "software", "cleantech"];
+  for (const s of sectors) {
+    await db.sector.upsert({ where: { key: s }, update: {}, create: { key: s, name: s } });
+  }
+
+  // Per-category document requirements (idempotent: clear global reqs then recreate).
+  const docsByCategory: Record<string, { key: string; label: string; required: boolean; allowedTypes: string[]; maxSizeMb: number }[]> = {
+    student: [
+      { key: "id_proof", label: "Institute ID proof", required: true, allowedTypes: ["pdf", "jpg", "png"], maxSizeMb: 5 },
+      { key: "supervisor_rec", label: "Supervisor recommendation", required: true, allowedTypes: ["pdf"], maxSizeMb: 5 },
+      { key: "pitch_deck", label: "Pitch deck", required: false, allowedTypes: ["pdf"], maxSizeMb: 20 },
+    ],
+    faculty: [
+      { key: "id_proof", label: "Faculty ID proof", required: true, allowedTypes: ["pdf", "jpg", "png"], maxSizeMb: 5 },
+      { key: "noc", label: "No-objection certificate", required: true, allowedTypes: ["pdf"], maxSizeMb: 5 },
+    ],
+    staff: [
+      { key: "id_proof", label: "Staff ID proof", required: true, allowedTypes: ["pdf", "jpg", "png"], maxSizeMb: 5 },
+    ],
+    external: [
+      { key: "incorporation", label: "Certificate of incorporation", required: true, allowedTypes: ["pdf"], maxSizeMb: 10 },
+      { key: "pitch_deck", label: "Pitch deck", required: true, allowedTypes: ["pdf"], maxSizeMb: 20 },
+      { key: "founder_id", label: "Founder ID proof", required: true, allowedTypes: ["pdf", "jpg", "png"], maxSizeMb: 5 },
+    ],
+  };
+  for (const [catKey, reqs] of Object.entries(docsByCategory)) {
+    const cat = await db.category.findUnique({ where: { key: catKey } });
+    if (!cat) continue;
+    await db.documentRequirement.deleteMany({ where: { categoryId: cat.id, cycleId: null } });
+    await Promise.all(
+      reqs.map((r, i) =>
+        db.documentRequirement.create({
+          data: { categoryId: cat.id, key: r.key, label: r.label, required: r.required, allowedTypes: r.allowedTypes, maxSizeMb: r.maxSizeMb, order: i },
+        }),
+      ),
+    );
+  }
+
+  // A 2026 open cohort bound to the student-application template, all categories.
+  const template = await db.formTemplate.findUnique({ where: { key: "student-application" } });
+  const allCats = await db.category.findMany();
+  const existing = await db.cycle.findFirst({ where: { year: 2026 } });
+  const cycle = existing
+    ? await db.cycle.update({ where: { id: existing.id }, data: { status: "OPEN", formTemplateId: template?.id ?? null } })
+    : await db.cycle.create({
+        data: {
+          year: 2026,
+          name: "2026 Cohort",
+          status: "OPEN",
+          opensAt: new Date("2026-01-01"),
+          closesAt: new Date("2026-12-31"),
+          formTemplateId: template?.id ?? null,
+        },
+      });
+  await db.cycleCategory.deleteMany({ where: { cycleId: cycle.id } });
+  await db.cycleCategory.createMany({
+    data: allCats.map((c) => ({ cycleId: cycle.id, categoryId: c.id })),
+    skipDuplicates: true,
+  });
 }
 
 main()
