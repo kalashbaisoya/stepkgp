@@ -42,6 +42,12 @@ export async function transition(applicationId: string, toKey: string, actorId: 
     db.applicationStateHistory.create({ data: { applicationId, stateId: toState.id, actorId, note } }),
   ]);
   await audit({ actorId, action: "application.state_changed", targetType: "Application", targetId: applicationId, before: { status: app.status }, after: { status: toKey } });
+
+  // Entering incubation auto-creates the incubation record (idempotent).
+  if (toKey === "incubated") {
+    const { ensureIncubation } = await import("@/modules/incubation/service");
+    await ensureIncubation(applicationId, actorId);
+  }
   return { status: toKey };
 }
 

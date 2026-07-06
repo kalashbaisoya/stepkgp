@@ -47,6 +47,7 @@ model User {
   sessions       Session[]
   applications   Application[]
   reviewAssignments ReviewAssignment[]
+  mentorAssignments MentorAssignment[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   deletedAt      DateTime?
@@ -424,6 +425,7 @@ model Application {
   stateHistory    ApplicationStateHistory[]
   assignments     ReviewAssignment[]
   reviewNotes     ReviewNote[]
+  incubation      Incubation?
   createdAt       DateTime                @default(now())
   updatedAt       DateTime                @updatedAt
   deletedAt       DateTime?
@@ -587,6 +589,96 @@ model BusinessPlanSection {
   businessPlan   BusinessPlan @relation(fields: [businessPlanId], references: [id], onDelete: Cascade)
 
   @@unique([businessPlanId, key])
+}
+
+// ============================================================
+//  Incubation Management (Milestone 8)
+// ============================================================
+/// Post-selection incubation record. Auto-created when an application enters the
+/// "incubated" state. The 11-month scheduler scans `startDate` to flag graduation.
+model Incubation {
+  id                  String            @id @default(cuid())
+  applicationId       String            @unique
+  organizationId      String?
+  startDate           DateTime          @default(now())
+  agreementDate       DateTime?
+  status              String            @default("active") // active | graduated | archived
+  officeSpace         String?
+  elevenMonthFlagged  Boolean           @default(false)
+  elevenMonthFlaggedAt DateTime?
+  graduatedAt         DateTime?
+  application         Application       @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  milestones          Milestone[]
+  funding             FundingRecord[]
+  mentors             MentorAssignment[]
+  reviews             ReviewSchedule[]
+  showcase            ShowcaseEntry?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@index([status, startDate])
+}
+
+model Milestone {
+  id           String     @id @default(cuid())
+  incubationId String
+  title        String
+  dueDate      DateTime?
+  status       String     @default("pending") // pending | done
+  order        Int        @default(0)
+  incubation   Incubation @relation(fields: [incubationId], references: [id], onDelete: Cascade)
+}
+
+model FundingRecord {
+  id           String     @id @default(cuid())
+  incubationId String
+  source       String
+  amount       Decimal    @db.Decimal(14, 2)
+  date         DateTime   @default(now())
+  notes        String?
+  incubation   Incubation @relation(fields: [incubationId], references: [id], onDelete: Cascade)
+}
+
+model MentorAssignment {
+  id           String     @id @default(cuid())
+  incubationId String
+  mentorId     String
+  incubation   Incubation @relation(fields: [incubationId], references: [id], onDelete: Cascade)
+  mentor       User       @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+
+  @@unique([incubationId, mentorId])
+  @@index([mentorId])
+}
+
+model ReviewSchedule {
+  id           String     @id @default(cuid())
+  incubationId String
+  scheduledFor DateTime
+  type         String     @default("monthly")
+  status       String     @default("scheduled") // scheduled | done
+  incubation   Incubation @relation(fields: [incubationId], references: [id], onDelete: Cascade)
+}
+
+/// Public showcase entry for a (graduated) startup — rendered by the directory (M9).
+model ShowcaseEntry {
+  id           String      @id @default(cuid())
+  incubationId String?     @unique
+  slug         String      @unique
+  name         String
+  description  String      @default("")
+  sector       String?
+  website      String?
+  founders     Json?
+  funding      String?
+  achievements Json?
+  socials      Json?
+  gallery      Json?
+  videos       Json?
+  logoUrl      String?
+  published    Boolean     @default(false)
+  incubation   Incubation? @relation(fields: [incubationId], references: [id], onDelete: SetNull)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 }
 
 /// Admin-configurable business-plan section definitions: which sections exist,

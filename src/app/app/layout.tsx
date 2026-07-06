@@ -19,6 +19,8 @@ export default async function AppLayout({
     { label: "My applications", href: "/app", show: true },
     { label: "Pipeline", href: "/app/staff/pipeline", show: can(user, "application:read_any") || can(user, "lifecycle:transition") },
     { label: "Reviews", href: "/app/review", show: can(user, "application:review") },
+    { label: "Incubation", href: "/app/staff/incubation", show: can(user, "incubation:manage") },
+    { label: "Mentees", href: "/app/mentor", show: can(user, "mentor:read_assigned") },
     { label: "Admin", href: "/admin", show: can(user, "cms:read") || can(user, "user:manage") || can(user, "settings:manage") },
   ].filter((n) => n.show);
 

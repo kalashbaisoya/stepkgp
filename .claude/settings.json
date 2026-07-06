@@ -43,7 +43,8 @@
       "Bash(node --conditions=react-server --import tsx _m7check.ts)",
       "Bash(rm -f \"src/app/app/applications/[id]/business-plan/page.tsx\")",
       "Bash(rmdir \"src/app/app/applications/[id]/business-plan\")",
-      "Bash(node --conditions=react-server --import tsx _bpvalid.ts)"
+      "Bash(node --conditions=react-server --import tsx _bpvalid.ts)",
+      "Bash(node --conditions=react-server --import tsx _m8check.ts)"
     ]
   }
 }
