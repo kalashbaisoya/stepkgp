@@ -242,3 +242,95 @@ model SeoMeta {
   ogImage     String?
   page        Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
 }
+
+// ============================================================
+//  Form Engine (Milestone 3) — forms as data, versioned
+// ============================================================
+enum FieldType {
+  TEXT
+  TEXTAREA
+  NUMBER
+  EMAIL
+  PHONE
+  DATE
+  SELECT
+  MULTISELECT
+  RADIO
+  CHECKBOX
+  FILE
+  CURRENCY
+  URL
+  RICHTEXT
+}
+
+/// A named form (e.g. "Student Application"). Holds immutable published versions;
+/// the working draft lives directly on the template's sections/fields.
+model FormTemplate {
+  id        String                @id @default(cuid())
+  key       String                @unique
+  name      String
+  sections  FormSection[] // current draft structure
+  versions  FormTemplateVersion[]
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+}
+
+model FormTemplateVersion {
+  id          String       @id @default(cuid())
+  templateId  String
+  version     Int
+  snapshot    Json // full sections+fields at publish time (source of truth for submissions)
+  publishedBy String?
+  publishedAt DateTime     @default(now())
+  template    FormTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, version])
+}
+
+model FormSection {
+  id         String       @id @default(cuid())
+  templateId String
+  key        String
+  title      String
+  order      Int
+  fields     FormField[]
+  template   FormTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([templateId, order])
+}
+
+model FormField {
+  id          String      @id @default(cuid())
+  sectionId   String
+  key         String
+  label       String
+  type        FieldType
+  required    Boolean     @default(false)
+  order       Int
+  helpText    String?
+  validation  Json? // { min, max, minLength, maxLength, pattern }
+  conditional Json? // { field, equals } — show when another field matches
+  options     Json? // inline [{ value, label }] for SELECT/MULTISELECT/RADIO
+  optionSetId String? // optional shared option set (reserved for reuse)
+  section     FormSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  optionSet   OptionSet?  @relation(fields: [optionSetId], references: [id])
+
+  @@index([sectionId, order])
+}
+
+model OptionSet {
+  id     String        @id @default(cuid())
+  key    String        @unique
+  name   String
+  values OptionValue[]
+  fields FormField[]
+}
+
+model OptionValue {
+  id          String    @id @default(cuid())
+  optionSetId String
+  value       String
+  label       String
+  order       Int
+  optionSet   OptionSet @relation(fields: [optionSetId], references: [id], onDelete: Cascade)
+}

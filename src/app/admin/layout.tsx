@@ -7,7 +7,8 @@ import { LogoutButton } from "@/components/auth/logout-button";
 const NAV = [
   { label: "Dashboard", href: "/admin" },
   { label: "Content (CMS)", href: "/admin/cms/pages" },
-  // Forms, Cycles, Scorecards, Users, Reports, Audit are added in later milestones.
+  { label: "Forms", href: "/admin/forms" },
+  // Cycles, Scorecards, Users, Reports, Audit are added in later milestones.
 ];
 
 // Admin shell (Phase 6 IA §4). Middleware ensures a session; here we enforce the

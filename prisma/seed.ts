@@ -156,6 +156,7 @@ async function main() {
   }
 
   await seedCms();
+  await seedForms();
 
   console.log(
     `Seeded: org=${org.slug}, ${PERMISSIONS.length} permissions, ${Object.keys(ROLES).length} roles, admin=${adminEmail} (password: ${adminPassword})`,
@@ -292,6 +293,85 @@ async function seedCms() {
     ...primary.map((n, i) => db.navigationItem.create({ data: { location: "primary", label: n.label, href: n.href, order: i } })),
     ...footer.map((n, i) => db.navigationItem.create({ data: { location: "footer", label: n.label, href: n.href, order: i } })),
   ]);
+}
+
+// ---- Form Engine sample template (Milestone 3) ----
+async function seedForms() {
+  const template = await db.formTemplate.upsert({
+    where: { key: "student-application" },
+    update: { name: "Student Application" },
+    create: { key: "student-application", name: "Student Application" },
+  });
+
+  // Rebuild draft structure idempotently.
+  await db.formSection.deleteMany({ where: { templateId: template.id } });
+
+  const sections = [
+    {
+      key: "applicant",
+      title: "Applicant details",
+      fields: [
+        { key: "full_name", label: "Full name", type: "TEXT", required: true, validation: { minLength: 2, maxLength: 120 } },
+        { key: "roll_number", label: "Roll number", type: "TEXT", required: true },
+        { key: "department", label: "Department", type: "SELECT", required: true, options: [
+          { value: "cse", label: "Computer Science" },
+          { value: "ece", label: "Electronics" },
+          { value: "mech", label: "Mechanical" },
+          { value: "other", label: "Other" },
+        ] },
+        { key: "email", label: "Email", type: "EMAIL", required: true },
+      ],
+    },
+    {
+      key: "startup",
+      title: "Startup details",
+      fields: [
+        { key: "startup_name", label: "Startup name", type: "TEXT", required: true },
+        { key: "stage", label: "Stage", type: "RADIO", required: true, options: [
+          { value: "idea", label: "Idea" },
+          { value: "prototype", label: "Prototype" },
+          { value: "revenue", label: "Revenue" },
+        ] },
+        { key: "prototype_url", label: "Prototype URL", type: "URL", required: false, conditional: { field: "stage", equals: "prototype" } },
+        { key: "one_liner", label: "One-line description", type: "TEXTAREA", required: true, validation: { maxLength: 280 } },
+        { key: "funding_sought", label: "Funding sought (₹)", type: "CURRENCY", required: false, validation: { min: 0 } },
+      ],
+    },
+  ];
+
+  for (const [si, s] of sections.entries()) {
+    const section = await db.formSection.create({
+      data: { templateId: template.id, key: s.key, title: s.title, order: si },
+    });
+    for (const [fi, f] of s.fields.entries()) {
+      await db.formField.create({
+        data: {
+          sectionId: section.id,
+          key: f.key,
+          label: f.label,
+          type: f.type as never,
+          required: f.required,
+          order: fi,
+          validation: (f as { validation?: object }).validation ?? undefined,
+          conditional: (f as { conditional?: object }).conditional ?? undefined,
+          options: (f as { options?: object }).options ?? undefined,
+        },
+      });
+    }
+  }
+
+  // Publish v1 if not already published.
+  const existing = await db.formTemplateVersion.findFirst({ where: { templateId: template.id } });
+  if (!existing) {
+    const full = await db.formSection.findMany({
+      where: { templateId: template.id },
+      orderBy: { order: "asc" },
+      include: { fields: { orderBy: { order: "asc" } } },
+    });
+    await db.formTemplateVersion.create({
+      data: { templateId: template.id, version: 1, snapshot: full as object },
+    });
+  }
 }
 
 main()

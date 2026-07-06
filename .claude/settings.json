@@ -30,7 +30,11 @@
       "Bash(gh auth *)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(grep -E \"\\\\.env\\\\.example$\")"
+      "Bash(grep -E \"\\\\.env\\\\.example$\")",
+      "Bash(git branch *)",
+      "Bash(git commit -q -m ' *)",
+      "Bash(git remote *)",
+      "Bash(git push *)"
     ]
   }
 }
