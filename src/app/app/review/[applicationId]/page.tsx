@@ -31,8 +31,15 @@ export default async function ReviewPortal({
         <Link href={can(user, "lifecycle:transition") ? "/app/staff/pipeline" : "/app/review"} className="text-sm text-muted-foreground hover:text-foreground">
           ← Back
         </Link>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{app.cycleName} · {app.categoryName}</h1>
-        <p className="text-sm capitalize text-muted-foreground">Status: {app.status.replace(/_/g, " ")}</p>
+        <div className="mt-1 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">{app.cycleName} · {app.categoryName}</h1>
+            <p className="text-sm capitalize text-muted-foreground">Status: {app.status.replace(/_/g, " ")}</p>
+          </div>
+          <a href={`/api/applications/${applicationId}/full`} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground hover:opacity-90">
+            Download full application
+          </a>
+        </div>
 
         {/* Summary of field values */}
         <div className="mt-6 space-y-6">
@@ -50,7 +57,27 @@ export default async function ReviewPortal({
             </section>
           ))}
 
-          {/* Documents + business plan */}
+          {/* Business plan — inline */}
+          {data.businessPlan.length > 0 && (
+            <section>
+              <h2 className="text-sm font-medium text-muted-foreground">Business plan</h2>
+              <div className="mt-2 space-y-4 rounded-lg border border-border bg-surface p-4">
+                {data.businessPlan.map((s, i) => (
+                  <div key={i}>
+                    <h3 className="text-sm font-semibold text-brand">{s.title}</h3>
+                    <p className="mt-1 whitespace-pre-line text-sm text-muted-foreground">
+                      {s.content.trim() || "—"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <a href={`/api/applications/${applicationId}/business-plan`} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-sm text-brand hover:underline">
+                Business plan (PDF) →
+              </a>
+            </section>
+          )}
+
+          {/* Documents */}
           <section>
             <h2 className="text-sm font-medium text-muted-foreground">Documents</h2>
             <ul className="mt-2 space-y-1 text-sm">
@@ -61,14 +88,7 @@ export default async function ReviewPortal({
                   </a>
                 </li>
               ))}
-              {data.hasBusinessPlan && (
-                <li>
-                  <a href={`/api/applications/${applicationId}/business-plan`} target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">
-                    Business plan (PDF)
-                  </a>
-                </li>
-              )}
-              {app.documents.length === 0 && !data.hasBusinessPlan && <li className="text-muted-foreground">None.</li>}
+              {app.documents.length === 0 && <li className="text-muted-foreground">None.</li>}
             </ul>
           </section>
 

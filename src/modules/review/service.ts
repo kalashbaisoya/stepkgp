@@ -80,7 +80,10 @@ export async function getReviewData(applicationId: string, reviewerId: string) {
   const scorecard = await getScorecard(applicationId);
   const criteria = scorecard?.criteria ?? [];
   const history = await getHistory(applicationId);
-  const bp = await db.businessPlan.findUnique({ where: { applicationId }, select: { id: true } });
+  const bp = await db.businessPlan.findUnique({
+    where: { applicationId },
+    include: { sections: { orderBy: { order: "asc" } } },
+  });
 
   const assignment = await db.reviewAssignment.findUnique({
     where: { applicationId_reviewerId: { applicationId, reviewerId } },
@@ -109,6 +112,7 @@ export async function getReviewData(applicationId: string, reviewerId: string) {
   return {
     application: app,
     hasBusinessPlan: !!bp,
+    businessPlan: (bp?.sections ?? []).map((s) => ({ title: s.title, content: s.content })),
     history,
     criteria: criteria.map((c) => ({ id: c.id, name: c.name, weight: c.weight, maxScore: c.maxScore })),
     myAssignment: assignment

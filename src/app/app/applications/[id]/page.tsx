@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/session";
 import { getApplication } from "@/modules/applications/service";
+import { getOrCreateBusinessPlan } from "@/modules/businessPlan/service";
 import { ApplicationWizard } from "@/components/applications/application-wizard";
 
 export default async function ApplicationPage({
@@ -15,7 +16,8 @@ export default async function ApplicationPage({
 
   const app = await getApplication(id);
   if (!app) notFound();
-  if (app.userId !== user.id) redirect("/app"); // owner-only (staff view comes in M7)
+  if (app.userId !== user.id) redirect("/app"); // owner-only (staff use the review portal)
+  const bp = await getOrCreateBusinessPlan(id, user.id);
 
   if (app.status !== "draft") {
     return (
@@ -48,12 +50,9 @@ export default async function ApplicationPage({
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">Your application</h1>
           <p className="text-sm text-muted-foreground">Progress saves automatically. You can leave and continue anytime.</p>
         </div>
-        <Link
-          href={`/app/applications/${app.id}/business-plan`}
-          className="inline-flex h-10 items-center rounded-md border border-border bg-surface px-4 text-sm font-medium hover:bg-muted"
-        >
-          Business plan →
-        </Link>
+        <a href={`/api/applications/${app.id}/full`} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center rounded-md border border-border bg-surface px-4 text-sm font-medium hover:bg-muted">
+          Preview full application
+        </a>
       </div>
       <ApplicationWizard
         id={app.id}
@@ -63,6 +62,7 @@ export default async function ApplicationPage({
         initialValues={app.values}
         requirements={app.requirements.map((r) => ({ key: r.key, label: r.label, required: r.required, allowedTypes: r.allowedTypes, maxSizeMb: r.maxSizeMb }))}
         initialDocuments={app.documents}
+        businessPlan={bp.sections.map((s) => ({ key: s.key, title: s.title, prompt: s.prompt, required: s.required, minWords: s.minWords ?? null, maxWords: s.maxWords ?? null, content: s.content }))}
       />
     </div>
   );

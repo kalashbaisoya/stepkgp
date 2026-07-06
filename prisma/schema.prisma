@@ -589,6 +589,20 @@ model BusinessPlanSection {
   @@unique([businessPlanId, key])
 }
 
+/// Admin-configurable business-plan section definitions: which sections exist,
+/// whether they're required, and word-count limits. Applicants' BusinessPlanSection
+/// content is validated against these on submit (Milestone 6+ enhancement).
+model BusinessPlanSectionDef {
+  id       String  @id @default(cuid())
+  key      String  @unique
+  title    String
+  prompt   String  @default("")
+  required Boolean @default(false)
+  minWords Int?
+  maxWords Int?
+  order    Int
+}
+
 /// Required documents per category (optionally scoped to a specific cycle).
 model DocumentRequirement {
   id           String   @id @default(cuid())

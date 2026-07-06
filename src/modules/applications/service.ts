@@ -5,6 +5,7 @@ import { putObject } from "@/lib/storage/storage";
 import { validateValues } from "@/modules/forms/validation";
 import { getPublishedTemplate } from "@/modules/forms/service";
 import { getRequirementsForCategory } from "@/modules/cycles/service";
+import { validateBusinessPlan } from "@/modules/businessPlan/service";
 import type { FormSectionDef } from "@/modules/forms/field-types";
 
 export class AppError extends Error {
@@ -162,7 +163,7 @@ export async function uploadDocument(
   return { ok: true };
 }
 
-/** Validate completeness (fields + required docs) without mutating. */
+/** Validate completeness (fields + required docs + business plan) without mutating. */
 export async function validateApplication(id: string) {
   const app = await getApplication(id);
   if (!app) throw new AppError("NOT_FOUND", "Application not found.");
@@ -170,10 +171,13 @@ export async function validateApplication(id: string) {
   const missingDocs = app.requirements
     .filter((r) => r.required && !app.documents.some((d) => d.requirementKey === r.key))
     .map((r) => r.label);
+  const bp = await validateBusinessPlan(id);
   return {
-    ok: fieldResult.ok && missingDocs.length === 0,
+    ok: fieldResult.ok && missingDocs.length === 0 && bp.ok,
     fieldErrors: fieldResult.errors,
     missingDocs,
+    businessPlanErrors: bp.errors,
+    businessPlanOk: bp.ok,
   };
 }
 

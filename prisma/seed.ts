@@ -157,6 +157,7 @@ async function main() {
 
   await seedCms();
   await seedForms();
+  await seedBusinessPlanDefs();
   await seedLifecycle();
   await seedCycles();
 
@@ -372,6 +373,18 @@ async function seedForms() {
     });
     await db.formTemplateVersion.create({
       data: { templateId: template.id, version: 1, snapshot: full as object },
+    });
+  }
+}
+
+// ---- Business plan section definitions (admin-configurable) ----
+async function seedBusinessPlanDefs() {
+  const { BUSINESS_PLAN_SECTIONS } = await import("../src/modules/businessPlan/sections");
+  for (const [i, s] of BUSINESS_PLAN_SECTIONS.entries()) {
+    await db.businessPlanSectionDef.upsert({
+      where: { key: s.key },
+      update: { title: s.title, prompt: s.prompt, required: s.required, minWords: s.minWords ?? null, maxWords: s.maxWords ?? null, order: i },
+      create: { key: s.key, title: s.title, prompt: s.prompt, required: s.required, minWords: s.minWords ?? null, maxWords: s.maxWords ?? null, order: i },
     });
   }
 }
