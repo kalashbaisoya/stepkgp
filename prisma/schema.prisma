@@ -45,6 +45,7 @@ model User {
   status         UserStatus    @default(PENDING)
   roles          UserRole[]
   sessions       Session[]
+  applications   Application[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   deletedAt      DateTime?
@@ -359,6 +360,7 @@ model Cycle {
   formTemplateId String?
   formTemplate   FormTemplate?   @relation(fields: [formTemplateId], references: [id])
   categories     CycleCategory[]
+  applications   Application[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
 
@@ -373,6 +375,7 @@ model Category {
   order        Int                   @default(0)
   cycles       CycleCategory[]
   documentReqs DocumentRequirement[]
+  applications Application[]
 }
 
 model CycleCategory {
@@ -388,6 +391,74 @@ model Sector {
   id   String @id @default(cuid())
   key  String @unique
   name String
+}
+
+// ============================================================
+//  Applications (Milestone 5)
+// ============================================================
+/// A single application: a user + cycle + category, filled against a published
+/// form template version. Field values are stored by key; each submit snapshots an
+/// immutable version. `status` is a free string now; Milestone 7 maps it to the
+/// configurable lifecycle states.
+model Application {
+  id              String                  @id @default(cuid())
+  organizationId  String?
+  userId          String
+  cycleId         String
+  categoryId      String
+  templateKey     String?
+  templateVersion Int?
+  status          String                  @default("draft")
+  progress        Int                     @default(0)
+  submittedAt     DateTime?
+  user            User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cycle           Cycle                   @relation(fields: [cycleId], references: [id])
+  category        Category                @relation(fields: [categoryId], references: [id])
+  values          ApplicationFieldValue[]
+  documents       ApplicationDocument[]
+  versions        ApplicationVersion[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+  deletedAt       DateTime?
+
+  @@index([userId])
+  @@index([cycleId, status])
+}
+
+model ApplicationFieldValue {
+  id            String      @id @default(cuid())
+  applicationId String
+  fieldKey      String
+  value         Json
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, fieldKey])
+}
+
+model ApplicationVersion {
+  id            String      @id @default(cuid())
+  applicationId String
+  version       Int
+  snapshot      Json
+  pdfKey        String?
+  createdAt     DateTime    @default(now())
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, version])
+}
+
+model ApplicationDocument {
+  id             String      @id @default(cuid())
+  applicationId  String
+  requirementKey String
+  storageKey     String
+  fileName       String
+  mimeType       String
+  sizeBytes      Int
+  uploadedAt     DateTime    @default(now())
+  application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@unique([applicationId, requirementKey])
 }
 
 /// Required documents per category (optionally scoped to a specific cycle).

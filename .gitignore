@@ -18,6 +18,9 @@ next-env.d.ts
 # prisma
 /prisma/*.db
 
+# local dev object storage
+/.uploads
+
 # misc
 .DS_Store
 *.pem

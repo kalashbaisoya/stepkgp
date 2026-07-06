@@ -1,45 +1,70 @@
+import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/session";
+import { listUserApplications } from "@/modules/applications/service";
+import { getOpenCycle } from "@/modules/cycles/service";
+import { StartApplication } from "@/components/applications/start-application";
 
-// Applicant dashboard (placeholder). Milestone 5 fills this with real applications
-// across cycles + a status tracker. For now it proves the authenticated session + RBAC.
+const statusStyle: Record<string, string> = {
+  draft: "text-status-progress",
+  submitted: "text-status-info",
+};
+
 export default async function AppDashboard() {
   const user = await getCurrentUser();
   if (!user) return null;
+
+  const [applications, openCycle] = await Promise.all([
+    listUserApplications(user.id),
+    getOpenCycle(),
+  ]);
 
   return (
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">
         Welcome{user.name ? `, ${user.name.split(" ")[0]}` : ""}.
       </h1>
-      <p className="mt-2 text-muted-foreground">
-        This is your STEP portal. Your applications will appear here.
-      </p>
+      <p className="mt-2 text-muted-foreground">Your applications and their status.</p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        <section className="rounded-xl border border-border bg-surface p-6">
-          <h2 className="text-sm font-medium text-muted-foreground">Your roles</h2>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {user.roles.map((r) => (
-              <span
-                key={r}
-                className="rounded-full bg-brand/10 px-2.5 py-1 text-xs font-medium text-brand"
-              >
-                {r}
-              </span>
-            ))}
-          </div>
-        </section>
-        <section className="rounded-xl border border-border bg-surface p-6">
-          <h2 className="text-sm font-medium text-muted-foreground">Applications</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            No applications yet. The online application opens in Milestone 5.
+      <div className="mt-8 space-y-4">
+        {applications.map((a) => (
+          <Link
+            key={a.id}
+            href={`/app/applications/${a.id}`}
+            className="block rounded-xl border border-border bg-surface p-5 transition-colors hover:border-brand"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-medium">{a.cycleName} · {a.categoryName}</p>
+                <p className={`text-sm capitalize ${statusStyle[a.status] ?? "text-muted-foreground"}`}>
+                  ● {a.status}
+                  {a.submittedAt && ` · submitted ${new Date(a.submittedAt).toLocaleDateString()}`}
+                </p>
+              </div>
+              <div className="w-40">
+                <div className="h-2 overflow-hidden rounded-full bg-muted">
+                  <div className="h-full bg-brand" style={{ width: `${a.progress}%` }} />
+                </div>
+                <p className="mt-1 text-right text-xs text-muted-foreground">{a.progress}%</p>
+              </div>
+            </div>
+          </Link>
+        ))}
+        {applications.length === 0 && (
+          <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+            You haven&rsquo;t started an application yet.
           </p>
-        </section>
+        )}
       </div>
 
-      <p className="mt-10 text-xs text-muted-foreground">
-        Milestone 1 · Identity, Auth &amp; RBAC.
-      </p>
+      {openCycle && (
+        <div className="mt-8">
+          <StartApplication
+            cycleId={openCycle.id}
+            cycleName={openCycle.name || `${openCycle.year} Cohort`}
+            categories={openCycle.categories}
+          />
+        </div>
+      )}
     </div>
   );
 }
