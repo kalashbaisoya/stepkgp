@@ -5,6 +5,13 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import * as auth from "./service";
 import { ServiceError } from "./service";
+import { getCurrentUser } from "@/lib/auth/session";
+import { roleLandingPath, safeNext } from "@/lib/rbac/guard";
+
+async function postLoginDestination(next: unknown): Promise<string> {
+  const user = await getCurrentUser();
+  return safeNext(typeof next === "string" ? next : null) ?? roleLandingPath(user);
+}
 
 export type FormState = {
   ok?: boolean;
@@ -54,7 +61,7 @@ export async function loginAction(_: FormState, form: FormData): Promise<FormSta
   } catch (err) {
     return toState(err);
   }
-  redirect("/app");
+  redirect(await postLoginDestination(form.get("next")));
 }
 
 export async function requestOtpAction(_: FormState, form: FormData): Promise<FormState> {
@@ -72,7 +79,7 @@ export async function verifyOtpAction(_: FormState, form: FormData): Promise<For
   } catch (err) {
     return toState(err);
   }
-  redirect("/app");
+  redirect(await postLoginDestination(form.get("next")));
 }
 
 export async function forgotAction(_: FormState, form: FormData): Promise<FormState> {

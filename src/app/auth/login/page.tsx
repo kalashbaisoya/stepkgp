@@ -13,7 +13,7 @@ const initial: FormState = {};
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ reset?: string; verified?: string }>;
+  searchParams: Promise<{ reset?: string; verified?: string; next?: string }>;
 }) {
   const params = use(searchParams);
   const [state, action] = useActionState(loginAction, initial);
@@ -31,6 +31,7 @@ export default function LoginPage({
       </p>
       <FormAlert error={state.error} message={notice} />
       <form action={action} className="space-y-4" noValidate>
+        {params.next && <input type="hidden" name="next" value={params.next} />}
         <div>
           <Label htmlFor="email">Email</Label>
           <Input id="email" name="email" type="email" autoComplete="email" required />

@@ -26,6 +26,26 @@ export function can(user: CurrentUser | null, permission: string): boolean {
 }
 
 /**
+ * Role-appropriate landing page after login — so an admin lands on the admin
+ * console rather than the applicant portal, staff on the pipeline, etc.
+ */
+export function roleLandingPath(user: CurrentUser | null): string {
+  if (!user) return "/app";
+  if (can(user, "cms:read") || can(user, "user:manage") || can(user, "settings:manage")) return "/admin";
+  if (can(user, "incubation:manage") || can(user, "lifecycle:transition") || can(user, "application:read_any")) return "/app/staff/pipeline";
+  if (can(user, "application:review")) return "/app/review";
+  if (can(user, "mentor:read_assigned")) return "/app/mentor";
+  return "/app";
+}
+
+/** Validate a `next` redirect target is a safe internal path. */
+export function safeNext(next: string | null | undefined): string | null {
+  if (!next) return null;
+  if (!next.startsWith("/") || next.startsWith("//")) return null;
+  return next;
+}
+
+/**
  * Enforce a permission. Optional `resource` scope check for own-vs-any:
  * pass `ownerId` and the guard confirms the user owns the resource when they
  * lack the broad `*:read_any`-style permission but hold the `own` variant.

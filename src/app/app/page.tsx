@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth/session";
+import { can } from "@/lib/rbac/guard";
 import { listUserApplications } from "@/modules/applications/service";
 import { getOpenCycle } from "@/modules/cycles/service";
 import { StartApplication } from "@/components/applications/start-application";
@@ -17,6 +18,14 @@ export default async function AppDashboard() {
     listUserApplications(user.id),
     getOpenCycle(),
   ]);
+
+  // Staff/admin/reviewer/mentor users manage the platform; don't push the applicant
+  // "start an application" CTA at them (they land on their own console after login).
+  const isElevated =
+    can(user, "cms:read") || can(user, "application:read_any") ||
+    can(user, "application:review") || can(user, "incubation:manage") ||
+    can(user, "mentor:read_assigned");
+  const showStart = openCycle && !isElevated;
 
   return (
     <div>
@@ -56,7 +65,7 @@ export default async function AppDashboard() {
         )}
       </div>
 
-      {openCycle && (
+      {showStart && (
         <div className="mt-8">
           <StartApplication
             cycleId={openCycle.id}
