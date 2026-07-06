@@ -157,6 +157,7 @@ async function main() {
 
   await seedCms();
   await seedForms();
+  await seedLifecycle();
   await seedCycles();
 
   console.log(
@@ -375,6 +376,77 @@ async function seedForms() {
   }
 }
 
+// ---- Lifecycle states + transitions + scorecard (Milestone 7) ----
+async function seedLifecycle() {
+  const states = [
+    { key: "draft", name: "Draft", order: 0 },
+    { key: "submitted", name: "Submitted", order: 1 },
+    { key: "screening", name: "Screening", order: 2 },
+    { key: "under_review", name: "Under Review", order: 3 },
+    { key: "presentation_scheduled", name: "Presentation Scheduled", order: 4 },
+    { key: "interview", name: "Interview", order: 5 },
+    { key: "selected", name: "Selected", order: 6 },
+    { key: "rejected", name: "Rejected", order: 7, isTerminal: true },
+    { key: "agreement_pending", name: "Agreement Pending", order: 8 },
+    { key: "incubated", name: "Incubated", order: 9 },
+    { key: "monthly_review", name: "Monthly Review", order: 10 },
+    { key: "graduated", name: "Graduated", order: 11, isTerminal: true },
+    { key: "archived", name: "Archived", order: 12, isTerminal: true },
+  ];
+  for (const s of states) {
+    await db.lifecycleState.upsert({
+      where: { key: s.key },
+      update: { name: s.name, order: s.order, isTerminal: s.isTerminal ?? false },
+      create: { key: s.key, name: s.name, order: s.order, isTerminal: s.isTerminal ?? false },
+    });
+  }
+
+  // Allowed transitions (from -> [to]). Staff-driven unless noted.
+  const flow: Record<string, string[]> = {
+    submitted: ["screening", "rejected"],
+    screening: ["under_review", "rejected"],
+    under_review: ["presentation_scheduled", "rejected"],
+    presentation_scheduled: ["interview", "rejected"],
+    interview: ["selected", "rejected"],
+    selected: ["agreement_pending"],
+    agreement_pending: ["incubated"],
+    incubated: ["monthly_review", "graduated"],
+    monthly_review: ["graduated", "incubated"],
+    graduated: ["archived"],
+    rejected: ["archived"],
+  };
+  const byKey = Object.fromEntries((await db.lifecycleState.findMany()).map((s) => [s.key, s.id]));
+  for (const [from, tos] of Object.entries(flow)) {
+    for (const to of tos) {
+      await db.lifecycleTransition.upsert({
+        where: { fromStateId_toStateId: { fromStateId: byKey[from], toStateId: byKey[to] } },
+        update: { requiredPermission: "lifecycle:transition" },
+        create: { fromStateId: byKey[from], toStateId: byKey[to], requiredPermission: "lifecycle:transition" },
+      });
+    }
+  }
+
+  // Default scorecard.
+  const sc = await db.scorecard.upsert({
+    where: { key: "default" },
+    update: { name: "Default Scorecard" },
+    create: { key: "default", name: "Default Scorecard" },
+  });
+  const criteria = [
+    { key: "innovation", name: "Innovation", weight: 1.5 },
+    { key: "market", name: "Market", weight: 1.2 },
+    { key: "technology", name: "Technology", weight: 1.3 },
+    { key: "team", name: "Team", weight: 1.2 },
+    { key: "scalability", name: "Scalability", weight: 1 },
+    { key: "business_model", name: "Business Model", weight: 1 },
+    { key: "financial_viability", name: "Financial Viability", weight: 1 },
+  ];
+  await db.scorecardCriterion.deleteMany({ where: { scorecardId: sc.id } });
+  await db.scorecardCriterion.createMany({
+    data: criteria.map((c, i) => ({ scorecardId: sc.id, key: c.key, name: c.name, weight: c.weight, maxScore: 10, order: i })),
+  });
+}
+
 // ---- Cycles, Categories & Documents (Milestone 4) ----
 async function seedCycles() {
   const categories = [
@@ -427,10 +499,11 @@ async function seedCycles() {
 
   // A 2026 open cohort bound to the student-application template, all categories.
   const template = await db.formTemplate.findUnique({ where: { key: "student-application" } });
+  const scorecard = await db.scorecard.findUnique({ where: { key: "default" } });
   const allCats = await db.category.findMany();
   const existing = await db.cycle.findFirst({ where: { year: 2026 } });
   const cycle = existing
-    ? await db.cycle.update({ where: { id: existing.id }, data: { status: "OPEN", formTemplateId: template?.id ?? null } })
+    ? await db.cycle.update({ where: { id: existing.id }, data: { status: "OPEN", formTemplateId: template?.id ?? null, scorecardId: scorecard?.id ?? null } })
     : await db.cycle.create({
         data: {
           year: 2026,
@@ -439,6 +512,7 @@ async function seedCycles() {
           opensAt: new Date("2026-01-01"),
           closesAt: new Date("2026-12-31"),
           formTemplateId: template?.id ?? null,
+          scorecardId: scorecard?.id ?? null,
         },
       });
   await db.cycleCategory.deleteMany({ where: { cycleId: cycle.id } });

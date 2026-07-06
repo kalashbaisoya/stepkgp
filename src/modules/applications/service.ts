@@ -196,11 +196,15 @@ export async function submitApplication(id: string, userId: string) {
     sections: full!.sections,
   };
 
+  const submittedState = await db.lifecycleState.findUnique({ where: { key: "submitted" } });
   await db.$transaction([
     db.applicationVersion.create({
       data: { applicationId: id, version: (last?.version ?? 0) + 1, snapshot: snapshot as object },
     }),
     db.application.update({ where: { id }, data: { status: "submitted", submittedAt: new Date(), progress: 100 } }),
+    ...(submittedState
+      ? [db.applicationStateHistory.create({ data: { applicationId: id, stateId: submittedState.id, actorId: userId, note: "Application submitted" } })]
+      : []),
   ]);
 
   // Generate the branded business-plan PDF if a plan exists (best-effort; a failure

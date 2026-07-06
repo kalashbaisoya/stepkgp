@@ -39,7 +39,8 @@
       "Bash(node --conditions=react-server --import tsx _bpcheck.ts)",
       "Bash(mkdir -p \"src/app/api/applications/[id]/business-plan\")",
       "Bash(mv \"src/app/api/applications/[id]/business-plan.pdf/route.ts\" \"src/app/api/applications/[id]/business-plan/route.ts\")",
-      "Bash(rmdir \"src/app/api/applications/[id]/business-plan.pdf\")"
+      "Bash(rmdir \"src/app/api/applications/[id]/business-plan.pdf\")",
+      "Bash(node --conditions=react-server --import tsx _m7check.ts)"
     ]
   }
 }

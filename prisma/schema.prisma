@@ -46,6 +46,7 @@ model User {
   roles          UserRole[]
   sessions       Session[]
   applications   Application[]
+  reviewAssignments ReviewAssignment[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   deletedAt      DateTime?
@@ -359,6 +360,8 @@ model Cycle {
   closesAt       DateTime?
   formTemplateId String?
   formTemplate   FormTemplate?   @relation(fields: [formTemplateId], references: [id])
+  scorecardId    String?
+  scorecard      Scorecard?      @relation(fields: [scorecardId], references: [id])
   categories     CycleCategory[]
   applications   Application[]
   createdAt      DateTime        @default(now())
@@ -418,6 +421,9 @@ model Application {
   documents       ApplicationDocument[]
   versions        ApplicationVersion[]
   businessPlan    BusinessPlan?
+  stateHistory    ApplicationStateHistory[]
+  assignments     ReviewAssignment[]
+  reviewNotes     ReviewNote[]
   createdAt       DateTime                @default(now())
   updatedAt       DateTime                @updatedAt
   deletedAt       DateTime?
@@ -460,6 +466,104 @@ model ApplicationDocument {
   application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@unique([applicationId, requirementKey])
+}
+
+// ============================================================
+//  Lifecycle, Review & Scoring (Milestone 7)
+// ============================================================
+/// Configurable workflow states (seeded, admin-reconfigurable).
+model LifecycleState {
+  id              String                    @id @default(cuid())
+  key             String                    @unique
+  name            String
+  order           Int
+  isTerminal      Boolean                   @default(false)
+  fromTransitions LifecycleTransition[]     @relation("fromState")
+  toTransitions   LifecycleTransition[]     @relation("toState")
+  history         ApplicationStateHistory[]
+}
+
+model LifecycleTransition {
+  id                 String         @id @default(cuid())
+  fromStateId        String
+  toStateId          String
+  requiredPermission String?
+  fromState          LifecycleState @relation("fromState", fields: [fromStateId], references: [id], onDelete: Cascade)
+  toState            LifecycleState @relation("toState", fields: [toStateId], references: [id], onDelete: Cascade)
+
+  @@unique([fromStateId, toStateId])
+}
+
+model ApplicationStateHistory {
+  id            String         @id @default(cuid())
+  applicationId String
+  stateId       String
+  actorId       String?
+  note          String?
+  createdAt     DateTime       @default(now())
+  application   Application    @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  state         LifecycleState @relation(fields: [stateId], references: [id])
+
+  @@index([applicationId, createdAt])
+}
+
+model Scorecard {
+  id       String               @id @default(cuid())
+  key      String               @unique
+  name     String
+  criteria ScorecardCriterion[]
+  cycles   Cycle[]
+}
+
+model ScorecardCriterion {
+  id          String    @id @default(cuid())
+  scorecardId String
+  key         String
+  name        String
+  weight      Float     @default(1)
+  maxScore    Int       @default(10)
+  order       Int
+  scorecard   Scorecard @relation(fields: [scorecardId], references: [id], onDelete: Cascade)
+  scores      Score[]
+}
+
+model ReviewAssignment {
+  id             String          @id @default(cuid())
+  applicationId  String
+  reviewerId     String
+  status         String          @default("pending") // pending | completed
+  recommendation String? // recommend | hold | reject
+  rationale      String?
+  application    Application     @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  reviewer       User            @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  scores         Score[]
+  createdAt      DateTime        @default(now())
+  completedAt    DateTime?
+
+  @@unique([applicationId, reviewerId])
+  @@index([reviewerId, status])
+}
+
+model Score {
+  id           String             @id @default(cuid())
+  assignmentId String
+  criterionId  String
+  value        Float
+  assignment   ReviewAssignment   @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  criterion    ScorecardCriterion @relation(fields: [criterionId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, criterionId])
+}
+
+model ReviewNote {
+  id            String      @id @default(cuid())
+  applicationId String
+  authorId      String
+  body          String
+  createdAt     DateTime    @default(now())
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId, createdAt])
 }
 
 /// Structured business plan (Milestone 6) — replaces the uploaded Word document.
