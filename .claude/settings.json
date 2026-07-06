@@ -45,7 +45,11 @@
       "Bash(rmdir \"src/app/app/applications/[id]/business-plan\")",
       "Bash(node --conditions=react-server --import tsx _bpvalid.ts)",
       "Bash(node --conditions=react-server --import tsx _m8check.ts)",
-      "Bash(fuser -k 3000/tcp)"
+      "Bash(fuser -k 3000/tcp)",
+      "WebFetch(domain:www.stepiitkgp.org)",
+      "WebSearch",
+      "WebFetch(domain:kgpchronicle.iitkgp.ac.in)",
+      "WebFetch(domain:tracxn.com)"
     ]
   }
 }

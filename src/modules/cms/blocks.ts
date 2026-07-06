@@ -1,21 +1,22 @@
 /**
- * CMS block catalog (Milestone 2). Each block type declares:
- *  - a label (shown in the admin editor)
- *  - default data (used when adding a block)
- *  - a field descriptor list (drives the admin editor's generated inputs)
- * The renderer (block-renderer.tsx) and the admin editor both read this catalog,
- * so adding a block type is a single-place change.
+ * CMS block catalog (Milestone 2, upgraded). Each block type declares a label,
+ * default data, and field descriptors that drive the admin editor. The renderer
+ * (block-renderer.tsx) and the admin editor both read this catalog.
  */
 
 export type BlockType =
   | "hero"
-  | "richtext"
   | "statStrip"
+  | "richtext"
+  | "featuredStartups"
   | "facilities"
+  | "sectors"
+  | "timeline"
   | "showcaseTeaser"
   | "directorMessage"
   | "partners"
   | "faq"
+  | "contact"
   | "cta";
 
 export type Block = {
@@ -29,7 +30,6 @@ export type FieldDescriptor = {
   key: string;
   label: string;
   type: "text" | "textarea" | "url" | "list";
-  /** For `list` fields: the shape of each item (key→label). */
   itemFields?: { key: string; label: string; type: "text" | "textarea" | "url" }[];
 };
 
@@ -40,97 +40,101 @@ export type BlockDef = {
   fields: FieldDescriptor[];
 };
 
+const cta = (key: string): FieldDescriptor[] => [
+  { key: `${key}Label`, label: "CTA label", type: "text" },
+  { key: `${key}Href`, label: "CTA link", type: "url" },
+];
+
 export const BLOCK_CATALOG: Record<BlockType, BlockDef> = {
   hero: {
     label: "Hero",
-    description: "Large headline, subheading, and primary call-to-action.",
+    description: "Full-width headline with CTAs and inline stats.",
     defaultData: {
       eyebrow: "STEP · IIT Kharagpur",
-      heading: "Building deep-tech ventures since 1986.",
-      subheading: "India's pioneering technology incubator at IIT Kharagpur.",
+      heading: "Where deep-tech ventures begin.",
+      subheading: "India's pioneering technology incubator at IIT Kharagpur — from research to market since 1986.",
       ctaLabel: "Apply to the 2026 Cohort",
       ctaHref: "/apply",
+      secondaryLabel: "Explore startups",
+      secondaryHref: "/startups",
+      stats: [
+        { value: "100+", label: "Startups incubated" },
+        { value: "1986", label: "Established" },
+        { value: "₹100Cr+", label: "Value created" },
+      ],
     },
     fields: [
       { key: "eyebrow", label: "Eyebrow", type: "text" },
       { key: "heading", label: "Heading", type: "textarea" },
       { key: "subheading", label: "Subheading", type: "textarea" },
-      { key: "ctaLabel", label: "CTA label", type: "text" },
-      { key: "ctaHref", label: "CTA link", type: "url" },
-    ],
-  },
-  richtext: {
-    label: "Rich text",
-    description: "A titled block of prose.",
-    defaultData: { title: "Section title", body: "Write your content here." },
-    fields: [
-      { key: "title", label: "Title", type: "text" },
-      { key: "body", label: "Body", type: "textarea" },
+      ...cta("cta"),
+      { key: "secondaryLabel", label: "Secondary label", type: "text" },
+      { key: "secondaryHref", label: "Secondary link", type: "url" },
+      { key: "stats", label: "Stats", type: "list", itemFields: [{ key: "value", label: "Value", type: "text" }, { key: "label", label: "Label", type: "text" }] },
     ],
   },
   statStrip: {
     label: "Stat strip",
     description: "A row of headline statistics.",
-    defaultData: {
-      stats: [
-        { value: "100+", label: "Startups incubated" },
-        { value: "1986", label: "Established" },
-      ],
-    },
-    fields: [
-      {
-        key: "stats",
-        label: "Stats",
-        type: "list",
-        itemFields: [
-          { key: "value", label: "Value", type: "text" },
-          { key: "label", label: "Label", type: "text" },
-        ],
-      },
-    ],
+    defaultData: { stats: [{ value: "100+", label: "Startups" }, { value: "1986", label: "Established" }] },
+    fields: [{ key: "stats", label: "Stats", type: "list", itemFields: [{ key: "value", label: "Value", type: "text" }, { key: "label", label: "Label", type: "text" }] }],
+  },
+  richtext: {
+    label: "Rich text",
+    description: "A titled block of prose.",
+    defaultData: { title: "Section title", body: "Write your content here." },
+    fields: [{ key: "title", label: "Title", type: "text" }, { key: "body", label: "Body", type: "textarea" }],
+  },
+  featuredStartups: {
+    label: "Featured startups",
+    description: "Live grid of published startups from the directory.",
+    defaultData: { title: "Featured startups", subtitle: "A few of the ventures built at STEP." },
+    fields: [{ key: "title", label: "Title", type: "text" }, { key: "subtitle", label: "Subtitle", type: "text" }],
   },
   facilities: {
-    label: "Facilities grid",
-    description: "Grid of facilities/offerings.",
+    label: "Facilities / offerings",
+    description: "Grid of facilities or what you offer.",
     defaultData: {
-      title: "Why STEP",
+      title: "What STEP offers",
+      subtitle: "Everything a founder needs to go from idea to market.",
       items: [
-        { title: "Facilities", body: "Office and lab infrastructure." },
-        { title: "Mentorship", body: "Access to experienced mentors." },
-        { title: "Funding", body: "Connections to government and private funding." },
+        { title: "Infrastructure", body: "Office and lab space on the IIT Kharagpur campus." },
+        { title: "Mentorship", body: "Guidance from experienced founders and faculty." },
+        { title: "Funding access", body: "Connections to DST and government & private funding." },
       ],
     },
     fields: [
       { key: "title", label: "Title", type: "text" },
-      {
-        key: "items",
-        label: "Items",
-        type: "list",
-        itemFields: [
-          { key: "title", label: "Title", type: "text" },
-          { key: "body", label: "Body", type: "textarea" },
-        ],
-      },
+      { key: "subtitle", label: "Subtitle", type: "text" },
+      { key: "items", label: "Items", type: "list", itemFields: [{ key: "title", label: "Title", type: "text" }, { key: "body", label: "Body", type: "textarea" }] },
     ],
   },
+  sectors: {
+    label: "Sectors",
+    description: "Pill grid of focus sectors.",
+    defaultData: { title: "Sectors we back", items: [{ name: "Deep-tech" }, { name: "Robotics" }, { name: "Life sciences" }] },
+    fields: [{ key: "title", label: "Title", type: "text" }, { key: "items", label: "Sectors", type: "list", itemFields: [{ key: "name", label: "Name", type: "text" }] }],
+  },
+  timeline: {
+    label: "Timeline",
+    description: "Vertical milestone timeline.",
+    defaultData: { title: "Our journey", items: [{ year: "1986", title: "STEP established", body: "" }] },
+    fields: [{ key: "title", label: "Title", type: "text" }, { key: "items", label: "Milestones", type: "list", itemFields: [{ key: "year", label: "Year", type: "text" }, { key: "title", label: "Title", type: "text" }, { key: "body", label: "Detail", type: "textarea" }] }],
+  },
   showcaseTeaser: {
-    label: "Showcase teaser",
-    description: "Featured startups strip with a link to the directory.",
-    defaultData: { title: "Featured startups", ctaLabel: "View all startups", ctaHref: "/startups" },
-    fields: [
-      { key: "title", label: "Title", type: "text" },
-      { key: "ctaLabel", label: "CTA label", type: "text" },
-      { key: "ctaHref", label: "CTA link", type: "url" },
-    ],
+    label: "Showcase teaser (legacy)",
+    description: "Alias of Featured startups.",
+    defaultData: { title: "Featured startups" },
+    fields: [{ key: "title", label: "Title", type: "text" }],
   },
   directorMessage: {
     label: "Director's message",
     description: "Photo, quote, and attribution.",
     defaultData: {
-      heading: "Director's message",
-      quote: "STEP has been nurturing technology ventures for nearly four decades.",
+      heading: "From the Managing Director",
+      quote: "For nearly four decades, STEP has turned research into ventures that matter.",
       name: "Prof. Siddhartha Das",
-      role: "Managing Director",
+      role: "Managing Director, STEP IIT Kharagpur",
       photoUrl: "",
     },
     fields: [
@@ -143,44 +147,35 @@ export const BLOCK_CATALOG: Record<BlockType, BlockDef> = {
   },
   partners: {
     label: "Partners",
-    description: "Partner / sponsor names.",
-    defaultData: {
-      title: "Our partners",
-      items: [{ name: "DST" }, { name: "IDBI" }, { name: "IFCI" }, { name: "ICICI" }],
-    },
-    fields: [
-      { key: "title", label: "Title", type: "text" },
-      { key: "items", label: "Partners", type: "list", itemFields: [{ key: "name", label: "Name", type: "text" }] },
-    ],
+    description: "Scrolling partner / funder names.",
+    defaultData: { title: "Supported by", items: [{ name: "DST" }, { name: "IDBI" }, { name: "IFCI" }, { name: "ICICI" }] },
+    fields: [{ key: "title", label: "Title", type: "text" }, { key: "items", label: "Partners", type: "list", itemFields: [{ key: "name", label: "Name", type: "text" }] }],
   },
   faq: {
     label: "FAQ",
-    description: "Question and answer list.",
-    defaultData: {
-      title: "Frequently asked questions",
-      items: [{ q: "Who can apply?", a: "Students, faculty, staff, and external startups." }],
-    },
+    description: "Expandable question and answer list.",
+    defaultData: { title: "Frequently asked questions", items: [{ q: "Who can apply?", a: "Students, faculty, staff, and external startups." }] },
+    fields: [{ key: "title", label: "Title", type: "text" }, { key: "items", label: "Questions", type: "list", itemFields: [{ key: "q", label: "Question", type: "text" }, { key: "a", label: "Answer", type: "textarea" }] }],
+  },
+  contact: {
+    label: "Contact",
+    description: "Address, phone, and email cards.",
+    defaultData: { title: "Get in touch", address: "STEP, IIT Kharagpur, West Bengal 721302", phone: "+91-3222-281090", email: "info@stepiitkgp.org" },
     fields: [
       { key: "title", label: "Title", type: "text" },
-      {
-        key: "items",
-        label: "Questions",
-        type: "list",
-        itemFields: [
-          { key: "q", label: "Question", type: "text" },
-          { key: "a", label: "Answer", type: "textarea" },
-        ],
-      },
+      { key: "address", label: "Address", type: "textarea" },
+      { key: "phone", label: "Phone", type: "text" },
+      { key: "email", label: "Email", type: "text" },
     ],
   },
   cta: {
     label: "Call to action",
-    description: "A closing prompt with a button.",
-    defaultData: { heading: "Ready to build?", ctaLabel: "Apply now", ctaHref: "/apply" },
+    description: "Closing gradient panel with a button.",
+    defaultData: { heading: "Ready to build the future?", subheading: "Apply to the current cohort and join 100+ ventures.", ctaLabel: "Apply now", ctaHref: "/apply" },
     fields: [
       { key: "heading", label: "Heading", type: "text" },
-      { key: "ctaLabel", label: "CTA label", type: "text" },
-      { key: "ctaHref", label: "CTA link", type: "url" },
+      { key: "subheading", label: "Subheading", type: "text" },
+      ...cta("cta"),
     ],
   },
 };

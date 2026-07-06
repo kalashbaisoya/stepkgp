@@ -169,64 +169,74 @@ async function main() {
 
 // ---- CMS content (Milestone 2) ----
 async function seedCms() {
-  // Pages with published blocks.
+  // Pages with published blocks — real STEP IIT Kharagpur content.
+  const SECTORS = [
+    { name: "Deep-tech" }, { name: "Robotics" }, { name: "Life sciences" },
+    { name: "Enterprise software" }, { name: "Fintech" }, { name: "Hardware" }, { name: "Clean-tech" },
+  ];
+  const PARTNERS = [{ name: "DST New Delhi" }, { name: "DST West Bengal" }, { name: "IDBI" }, { name: "IFCI" }, { name: "ICICI" }, { name: "NSTEDB" }];
+  const FACILITIES = {
+    title: "What STEP offers",
+    subtitle: "Everything a founder needs to take an idea from the lab to the market.",
+    items: [
+      { title: "Phase-II incubation", body: "Structured incubation for both IIT Kharagpur ventures and external startups." },
+      { title: "Campus infrastructure", body: "Office and laboratory space with the full support of IIT Kharagpur." },
+      { title: "Mentorship", body: "Guidance from experienced founders, faculty, and domain experts." },
+      { title: "Funding access", body: "Connections to DST and other government and private funding programmes." },
+      { title: "Technology transfer", body: "A conduit between IIT Kharagpur research and commercial ventures." },
+      { title: "Founder network", body: "A community of 100+ incubated startups, alumni, and investors." },
+    ],
+  };
+  const TIMELINE = {
+    title: "Four decades of building",
+    items: [
+      { year: "1986", title: "STEP established", body: "One of India's earliest science & technology entrepreneurs' parks, set up at IIT Kharagpur." },
+      { year: "1987", title: "DST recognition", body: "Approved by the Department of Science & Technology, Government of India." },
+      { year: "1989", title: "Operations begin", body: "STEP begins incubating its first ventures on the IIT Kharagpur campus." },
+      { year: "Today", title: "100+ startups", body: "A portfolio spanning deep-tech, robotics, life sciences, fintech and more — with global success stories." },
+    ],
+  };
+
   const pages: { key: string; title: string; blocks: { type: string; data: unknown }[] }[] = [
     {
       key: "home",
-      title: "Home",
+      title: "STEP IIT Kharagpur",
       blocks: [
         {
           type: "hero",
           data: {
-            eyebrow: "STEP · IIT Kharagpur",
-            heading: "Building deep-tech ventures since 1986.",
+            eyebrow: "Science & Technology Entrepreneurs' Park",
+            heading: "Where deep-tech ventures begin.",
             subheading:
-              "India's pioneering technology incubator at IIT Kharagpur — from idea to graduation.",
+              "India's pioneering technology incubator at IIT Kharagpur — turning research into companies since 1986. 100+ startups nurtured and counting.",
             ctaLabel: "Apply to the 2026 Cohort",
             ctaHref: "/apply",
-          },
-        },
-        {
-          type: "statStrip",
-          data: {
+            secondaryLabel: "Explore startups",
+            secondaryHref: "/startups",
             stats: [
-              { value: "100+", label: "Startups incubated" },
               { value: "1986", label: "Established" },
-              { value: "15+", label: "Sectors" },
+              { value: "100+", label: "Startups incubated" },
+              { value: "5", label: "Founding partners" },
             ],
           },
         },
-        {
-          type: "showcaseTeaser",
-          data: { title: "Featured startups", ctaLabel: "View all startups", ctaHref: "/startups" },
-        },
-        {
-          type: "facilities",
-          data: {
-            title: "Why STEP",
-            items: [
-              { title: "Facilities", body: "Office and lab infrastructure on the IIT KGP campus." },
-              { title: "Mentorship", body: "Access to experienced founders and domain mentors." },
-              { title: "Funding", body: "Connections to DST and other government and private funding." },
-            ],
-          },
-        },
+        { type: "featuredStartups", data: { title: "Success stories", subtitle: "Ventures that began at STEP and went on to global impact." } },
+        { type: "facilities", data: FACILITIES },
+        { type: "sectors", data: { title: "Sectors we back", items: SECTORS } },
         {
           type: "directorMessage",
           data: {
-            heading: "Director's message",
+            heading: "From the Managing Director",
             quote:
-              "STEP has been nurturing technology ventures for nearly four decades, turning research into impact.",
+              "For nearly four decades, STEP has provided a nurturing environment for entrepreneurs — a conduit between IIT Kharagpur and the world, turning research outcomes into commercially viable ventures.",
             name: "Prof. Siddhartha Das",
-            role: "Managing Director",
+            role: "Managing Director, STEP IIT Kharagpur",
             photoUrl: "",
           },
         },
-        {
-          type: "partners",
-          data: { title: "Our partners", items: [{ name: "DST" }, { name: "IDBI" }, { name: "IFCI" }, { name: "ICICI" }] },
-        },
-        { type: "cta", data: { heading: "Ready to build?", ctaLabel: "Apply now", ctaHref: "/apply" } },
+        { type: "timeline", data: TIMELINE },
+        { type: "partners", data: { title: "Supported by", items: PARTNERS } },
+        { type: "cta", data: { heading: "Ready to build the future?", subheading: "Apply to the current cohort and join 100+ ventures built at STEP.", ctaLabel: "Start your application", ctaHref: "/apply" } },
       ],
     },
     {
@@ -236,19 +246,56 @@ async function seedCms() {
         {
           type: "richtext",
           data: {
-            title: "About STEP",
+            title: "About STEP, IIT Kharagpur",
             body:
-              "Set up in 1986, the Science & Technology Entrepreneurs' Park (STEP) at IIT Kharagpur has nurtured 100+ incubations, supported by DST, IDBI, IFCI, and ICICI. STEP connects founders to funding, prototyping, and mentorship — helping science & technology ventures get to market.",
+              "The Science & Technology Entrepreneurs' Park (STEP) at IIT Kharagpur was set up in 1986 as one of India's earliest technology incubators, with support from DST New Delhi, DST West Bengal, IDBI, IFCI and ICICI.\n\nUnder the mandate of the National Science & Technology Entrepreneurship Development Board (NSTEDB), STEP has come a long way in promoting entrepreneurship by providing a conducive environment for nurturing and mentoring prospective entrepreneurs. It works in harmony with the institute's other incubation programmes and acts as a conduit between IIT Kharagpur and the external world — facilitating technology transfer and converting research outcomes into commercially viable propositions.\n\nOver nearly four decades, STEP has nurtured 100+ incubations, several of which have become global success stories.",
+          },
+        },
+        { type: "timeline", data: TIMELINE },
+        { type: "facilities", data: FACILITIES },
+        { type: "partners", data: { title: "Supported by", items: PARTNERS } },
+        { type: "cta", data: { heading: "Join the next cohort", ctaLabel: "Apply now", ctaHref: "/apply" } },
+      ],
+    },
+    {
+      key: "programs",
+      title: "Programs",
+      blocks: [
+        {
+          type: "richtext",
+          data: {
+            title: "Incubation at STEP",
+            body:
+              "STEP offers Phase-II incubation for ventures emerging from IIT Kharagpur as well as external startups. Incubatees receive campus infrastructure, mentorship, funding connections, and access to the institute's research and alumni network — with a structured lifecycle from application through graduation.",
+          },
+        },
+        { type: "facilities", data: FACILITIES },
+        { type: "sectors", data: { title: "Focus sectors", items: SECTORS } },
+        { type: "cta", data: { heading: "Apply for incubation", ctaLabel: "Start application", ctaHref: "/apply" } },
+      ],
+    },
+    {
+      key: "contact",
+      title: "Contact",
+      blocks: [
+        {
+          type: "contact",
+          data: {
+            title: "Get in touch",
+            address: "STEP, Indian Institute of Technology Kharagpur, Kharagpur, West Bengal 721302, India",
+            phone: "+91-3222-281090 / +91-3222-281091",
+            email: "info@stepiitkgp.org",
           },
         },
         {
-          type: "facilities",
+          type: "faq",
           data: {
-            title: "What we offer",
+            title: "Frequently asked questions",
             items: [
-              { title: "Incubation", body: "Phase-II incubation for internal and external startups." },
-              { title: "Infrastructure", body: "Office and lab space with institute support." },
-              { title: "Network", body: "A community of founders, mentors, and alumni." },
+              { q: "Who can apply to STEP?", a: "IIT Kharagpur students, faculty and staff, as well as external startups, may apply during an open cohort." },
+              { q: "What does incubation include?", a: "Office/lab space, mentorship, funding connections, and access to the IIT Kharagpur ecosystem." },
+              { q: "How long is the incubation?", a: "The core incubation runs up to 11 months, after which startups graduate from the programme." },
+              { q: "How do I apply?", a: "Create an account and complete the online application — including a structured business plan — during an open cohort." },
             ],
           },
         },
@@ -283,14 +330,15 @@ async function seedCms() {
   // Navigation.
   const primary = [
     { label: "About", href: "/about" },
+    { label: "Programs", href: "/programs" },
     { label: "Startups", href: "/startups" },
-    { label: "Apply", href: "/apply" },
+    { label: "Contact", href: "/contact" },
   ];
   const footer = [
     { label: "About", href: "/about" },
+    { label: "Programs", href: "/programs" },
     { label: "Startups", href: "/startups" },
-    { label: "Apply", href: "/apply" },
-    { label: "Sign in", href: "/auth/login" },
+    { label: "Contact", href: "/contact" },
   ];
   await db.navigationItem.deleteMany({});
   await Promise.all([
@@ -538,28 +586,54 @@ async function seedCycles() {
 
 // ---- Public showcase sample entries (Milestone 9) ----
 async function seedShowcase() {
+  // Remove earlier placeholder entries (not tied to a real incubation).
+  await db.showcaseEntry.deleteMany({ where: { slug: { in: ["aeronyx-robotics", "medgenix-labs"] } } });
+
+  // Real STEP IIT Kharagpur portfolio success stories.
   const entries = [
     {
-      slug: "aeronyx-robotics",
-      name: "AeroNyx Robotics",
-      sector: "hardware",
-      description: "Autonomous inspection drones for industrial infrastructure, spun out of IIT Kharagpur labs.",
-      website: "https://example.com",
-      funding: "₹4.2 Cr",
-      founders: [{ name: "Ananya Sen", role: "CEO" }, { name: "Rohit Verma", role: "CTO" }],
-      achievements: ["DST-NIDHI grant recipient", "Deployed at 3 power plants"],
-      socials: [{ label: "LinkedIn", url: "https://linkedin.com" }],
+      slug: "capillary-technologies",
+      name: "Capillary Technologies",
+      sector: "Enterprise software",
+      description:
+        "AI-powered customer loyalty and engagement software used by hundreds of global brands. Founded by IIT Kharagpur alumni, Capillary is one of STEP's landmark success stories.",
+      website: "https://www.capillarytech.com",
+      funding: "$100M+ raised",
+      founders: [
+        { name: "Aneesh Reddy", role: "Co-founder & CEO" },
+        { name: "Krishna Mehra", role: "Co-founder" },
+        { name: "Ajay Modani", role: "Co-founder" },
+      ],
+      achievements: ["Serves 400+ global brands", "Operations across Asia, the Middle East & the US", "IIT Kharagpur alumni founders"],
+      socials: [{ label: "Website", url: "https://www.capillarytech.com" }],
     },
     {
-      slug: "medgenix-labs",
-      name: "MedGenix Labs",
-      sector: "lifesciences",
-      description: "Affordable point-of-care diagnostics for rural India.",
-      website: "https://example.com",
-      funding: "₹2.8 Cr",
-      founders: [{ name: "Dr. Priya Nair", role: "Founder" }],
-      achievements: ["1M+ tests delivered"],
-      socials: [{ label: "Website", url: "https://example.com" }],
+      slug: "auro-robotics",
+      name: "Auro Robotics",
+      sector: "Robotics",
+      description:
+        "Self-driving shuttle technology spun out of a research group at IIT Kharagpur, building autonomous driving and ADAS systems. Auro went through Y Combinator and was later acquired by Ridecell.",
+      website: "",
+      funding: "Y Combinator · Acquired by Ridecell",
+      founders: [
+        { name: "Nalin Gupta", role: "Co-founder & CEO" },
+        { name: "Jit Ray Chowdhury", role: "Co-founder" },
+        { name: "Srinivas Reddy", role: "Co-founder" },
+      ],
+      achievements: ["Y Combinator (S15)", "Acquired by Ridecell (2017)", "Campus autonomous shuttles in the US"],
+      socials: [],
+    },
+    {
+      slug: "tradelab",
+      name: "TradeLab",
+      sector: "Fintech",
+      description:
+        "A trading-technology company providing low-latency infrastructure, analytics, and real-time tools for stock-broking — powering transactions for leading brokerages.",
+      website: "",
+      funding: "Profitable",
+      founders: [],
+      achievements: ["Trading infrastructure for leading brokerages", "Real-time analytics & execution tooling"],
+      socials: [],
     },
   ];
   for (const e of entries) {
