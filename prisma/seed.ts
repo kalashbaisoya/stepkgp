@@ -160,6 +160,7 @@ async function main() {
   await seedBusinessPlanDefs();
   await seedLifecycle();
   await seedCycles();
+  await seedShowcase();
 
   console.log(
     `Seeded: org=${org.slug}, ${PERMISSIONS.length} permissions, ${Object.keys(ROLES).length} roles, admin=${adminEmail} (password: ${adminPassword})`,
@@ -533,6 +534,47 @@ async function seedCycles() {
     data: allCats.map((c) => ({ cycleId: cycle.id, categoryId: c.id })),
     skipDuplicates: true,
   });
+}
+
+// ---- Public showcase sample entries (Milestone 9) ----
+async function seedShowcase() {
+  const entries = [
+    {
+      slug: "aeronyx-robotics",
+      name: "AeroNyx Robotics",
+      sector: "hardware",
+      description: "Autonomous inspection drones for industrial infrastructure, spun out of IIT Kharagpur labs.",
+      website: "https://example.com",
+      funding: "₹4.2 Cr",
+      founders: [{ name: "Ananya Sen", role: "CEO" }, { name: "Rohit Verma", role: "CTO" }],
+      achievements: ["DST-NIDHI grant recipient", "Deployed at 3 power plants"],
+      socials: [{ label: "LinkedIn", url: "https://linkedin.com" }],
+    },
+    {
+      slug: "medgenix-labs",
+      name: "MedGenix Labs",
+      sector: "lifesciences",
+      description: "Affordable point-of-care diagnostics for rural India.",
+      website: "https://example.com",
+      funding: "₹2.8 Cr",
+      founders: [{ name: "Dr. Priya Nair", role: "Founder" }],
+      achievements: ["1M+ tests delivered"],
+      socials: [{ label: "Website", url: "https://example.com" }],
+    },
+  ];
+  for (const e of entries) {
+    await db.showcaseEntry.upsert({
+      where: { slug: e.slug },
+      update: {
+        name: e.name, sector: e.sector, description: e.description, website: e.website, funding: e.funding,
+        founders: e.founders, achievements: e.achievements, socials: e.socials, published: true,
+      },
+      create: {
+        slug: e.slug, name: e.name, sector: e.sector, description: e.description, website: e.website, funding: e.funding,
+        founders: e.founders, achievements: e.achievements, socials: e.socials, published: true,
+      },
+    });
+  }
 }
 
 main()

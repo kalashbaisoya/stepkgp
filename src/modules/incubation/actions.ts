@@ -59,6 +59,8 @@ export async function publishShowcaseAction(id: string) {
   const user = await requirePermission("showcase:publish");
   const res = await inc.publishShowcase(id, user.id);
   revalidatePath(`/app/staff/incubation/${id}`);
+  const { revalidateTag } = await import("next/cache");
+  revalidateTag("showcase"); // refresh the public directory
   return { ok: true, slug: res.slug };
 }
 
