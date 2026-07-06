@@ -42,10 +42,18 @@ export default async function ApplicationPage({
 
   return (
     <div>
-      <div className="mb-6">
-        <Link href="/app" className="text-sm text-muted-foreground hover:text-foreground">← Dashboard</Link>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">Your application</h1>
-        <p className="text-sm text-muted-foreground">Progress saves automatically. You can leave and continue anytime.</p>
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <Link href="/app" className="text-sm text-muted-foreground hover:text-foreground">← Dashboard</Link>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight">Your application</h1>
+          <p className="text-sm text-muted-foreground">Progress saves automatically. You can leave and continue anytime.</p>
+        </div>
+        <Link
+          href={`/app/applications/${app.id}/business-plan`}
+          className="inline-flex h-10 items-center rounded-md border border-border bg-surface px-4 text-sm font-medium hover:bg-muted"
+        >
+          Business plan →
+        </Link>
       </div>
       <ApplicationWizard
         id={app.id}

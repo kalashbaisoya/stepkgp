@@ -417,6 +417,7 @@ model Application {
   values          ApplicationFieldValue[]
   documents       ApplicationDocument[]
   versions        ApplicationVersion[]
+  businessPlan    BusinessPlan?
   createdAt       DateTime                @default(now())
   updatedAt       DateTime                @updatedAt
   deletedAt       DateTime?
@@ -459,6 +460,29 @@ model ApplicationDocument {
   application    Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@unique([applicationId, requirementKey])
+}
+
+/// Structured business plan (Milestone 6) — replaces the uploaded Word document.
+/// Sections are filled as forms and rendered to a branded PDF on submit.
+model BusinessPlan {
+  id            String                @id @default(cuid())
+  applicationId String                @unique
+  pdfKey        String?
+  sections      BusinessPlanSection[]
+  application   Application           @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  updatedAt     DateTime              @updatedAt
+}
+
+model BusinessPlanSection {
+  id             String       @id @default(cuid())
+  businessPlanId String
+  key            String
+  title          String
+  content        String       @default("")
+  order          Int
+  businessPlan   BusinessPlan @relation(fields: [businessPlanId], references: [id], onDelete: Cascade)
+
+  @@unique([businessPlanId, key])
 }
 
 /// Required documents per category (optionally scoped to a specific cycle).

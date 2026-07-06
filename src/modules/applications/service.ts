@@ -202,6 +202,19 @@ export async function submitApplication(id: string, userId: string) {
     }),
     db.application.update({ where: { id }, data: { status: "submitted", submittedAt: new Date(), progress: 100 } }),
   ]);
+
+  // Generate the branded business-plan PDF if a plan exists (best-effort; a failure
+  // here must not roll back a valid submission).
+  const hasBusinessPlan = await db.businessPlan.findUnique({ where: { applicationId: id }, select: { id: true } });
+  if (hasBusinessPlan) {
+    try {
+      const { generatePdf } = await import("@/modules/businessPlan/service");
+      await generatePdf(id);
+    } catch (err) {
+      console.error("[submit] business-plan PDF generation failed", err);
+    }
+  }
+
   await audit({ actorId: userId, action: "application.submitted", targetType: "Application", targetId: id });
   return { alreadySubmitted: false };
 }

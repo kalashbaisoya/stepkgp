@@ -35,7 +35,11 @@
       "Bash(git commit -q -m ' *)",
       "Bash(git remote *)",
       "Bash(git push *)",
-      "Bash(node --conditions=react-server --import tsx _appcheck.ts)"
+      "Bash(node --conditions=react-server --import tsx _appcheck.ts)",
+      "Bash(node --conditions=react-server --import tsx _bpcheck.ts)",
+      "Bash(mkdir -p \"src/app/api/applications/[id]/business-plan\")",
+      "Bash(mv \"src/app/api/applications/[id]/business-plan.pdf/route.ts\" \"src/app/api/applications/[id]/business-plan/route.ts\")",
+      "Bash(rmdir \"src/app/api/applications/[id]/business-plan.pdf\")"
     ]
   }
 }
