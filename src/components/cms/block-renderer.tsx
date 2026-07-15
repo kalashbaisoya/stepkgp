@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Block, BlockType } from "@/modules/cms/blocks";
 import { listPublishedShowcase } from "@/modules/directory/service";
+import { HeroCarousel } from "./hero-carousel";
 
 // Premium public block renderer. Each block is a self-contained section. Unknown
 // block types are skipped (forward-compatible). Some blocks (featuredStartups) are
@@ -301,8 +302,26 @@ function Cta({ data }: { data: Record<string, unknown> }) {
   );
 }
 
+function HeroCarouselBlock({ data }: { data: Record<string, unknown> }) {
+  const slides = (get<{ src: string; caption?: string }[]>(data, "slides")) ?? [];
+  return (
+    <HeroCarousel
+      eyebrow={get(data, "eyebrow")}
+      heading={get(data, "heading")}
+      subheading={get(data, "subheading")}
+      ctaLabel={get(data, "ctaLabel")}
+      ctaHref={get(data, "ctaHref")}
+      secondaryLabel={get(data, "secondaryLabel")}
+      secondaryHref={get(data, "secondaryHref")}
+      slides={slides}
+      stats={get<{ value: string; label: string }[]>(data, "stats") ?? []}
+    />
+  );
+}
+
 const REGISTRY: Record<string, (p: { data: Record<string, unknown> }) => React.ReactNode | Promise<React.ReactNode>> = {
   hero: Hero,
+  heroCarousel: HeroCarouselBlock,
   statStrip: StatStrip,
   richtext: RichText,
   featuredStartups: FeaturedStartups,

@@ -16,8 +16,9 @@ export default async function PublicLayout({
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-brand to-brand-accent text-sm font-bold text-white">S</span>
+          <Link href="/" className="flex items-center gap-2.5 font-semibold tracking-tight">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/logo.png" alt="STEP IIT Kharagpur" className="h-9 w-9 object-contain" />
             <span className="text-sm uppercase tracking-widest">STEP · IIT-KGP</span>
           </Link>
           <nav className="hidden items-center gap-7 text-sm sm:flex">
@@ -40,8 +41,9 @@ export default async function PublicLayout({
       <footer className="border-t border-border bg-surface-2">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2 font-semibold">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-brand to-brand-accent text-sm font-bold text-white">S</span>
+            <div className="flex items-center gap-2.5 font-semibold">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/logo.png" alt="STEP IIT Kharagpur" className="h-9 w-9 object-contain" />
               STEP · IIT Kharagpur
             </div>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">

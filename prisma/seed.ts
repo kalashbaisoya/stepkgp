@@ -203,7 +203,7 @@ async function seedCms() {
       title: "STEP IIT Kharagpur",
       blocks: [
         {
-          type: "hero",
+          type: "heroCarousel",
           data: {
             eyebrow: "Science & Technology Entrepreneurs' Park",
             heading: "Where deep-tech ventures begin.",
@@ -213,6 +213,11 @@ async function seedCms() {
             ctaHref: "/apply",
             secondaryLabel: "Explore startups",
             secondaryHref: "/startups",
+            slides: [
+              { src: "/images/kgp-main-building.webp", caption: "IIT Kharagpur — Main Building" },
+              { src: "/images/step-office.webp", caption: "STEP campus office" },
+              { src: "/images/gopali-tea-garden.webp", caption: "Kharagpur" },
+            ],
             stats: [
               { value: "1986", label: "Established" },
               { value: "100+", label: "Startups incubated" },

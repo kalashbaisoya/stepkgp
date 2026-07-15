@@ -6,6 +6,7 @@
 
 export type BlockType =
   | "hero"
+  | "heroCarousel"
   | "statStrip"
   | "richtext"
   | "featuredStartups"
@@ -46,6 +47,39 @@ const cta = (key: string): FieldDescriptor[] => [
 ];
 
 export const BLOCK_CATALOG: Record<BlockType, BlockDef> = {
+  heroCarousel: {
+    label: "Hero carousel",
+    description: "Full-bleed rotating image hero with headline, CTAs, and stats.",
+    defaultData: {
+      eyebrow: "Science & Technology Entrepreneurs' Park",
+      heading: "Where deep-tech ventures begin.",
+      subheading: "India's pioneering technology incubator at IIT Kharagpur — turning research into companies since 1986.",
+      ctaLabel: "Apply to the 2026 Cohort",
+      ctaHref: "/apply",
+      secondaryLabel: "Explore startups",
+      secondaryHref: "/startups",
+      slides: [
+        { src: "/images/kgp-main-building.webp", caption: "IIT Kharagpur" },
+        { src: "/images/step-office.webp", caption: "STEP campus" },
+        { src: "/images/gopali-tea-garden.webp", caption: "Kharagpur" },
+      ],
+      stats: [
+        { value: "1986", label: "Established" },
+        { value: "100+", label: "Startups incubated" },
+        { value: "5", label: "Founding partners" },
+      ],
+    },
+    fields: [
+      { key: "eyebrow", label: "Eyebrow", type: "text" },
+      { key: "heading", label: "Heading", type: "textarea" },
+      { key: "subheading", label: "Subheading", type: "textarea" },
+      ...cta("cta"),
+      { key: "secondaryLabel", label: "Secondary label", type: "text" },
+      { key: "secondaryHref", label: "Secondary link", type: "url" },
+      { key: "slides", label: "Slides", type: "list", itemFields: [{ key: "src", label: "Image URL", type: "url" }, { key: "caption", label: "Caption", type: "text" }] },
+      { key: "stats", label: "Stats", type: "list", itemFields: [{ key: "value", label: "Value", type: "text" }, { key: "label", label: "Label", type: "text" }] },
+    ],
+  },
   hero: {
     label: "Hero",
     description: "Full-width headline with CTAs and inline stats.",
