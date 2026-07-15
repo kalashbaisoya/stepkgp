@@ -161,6 +161,7 @@ async function main() {
   await seedLifecycle();
   await seedCycles();
   await seedShowcase();
+  await seedNotificationTemplates();
 
   console.log(
     `Seeded: org=${org.slug}, ${PERMISSIONS.length} permissions, ${Object.keys(ROLES).length} roles, admin=${adminEmail} (password: ${adminPassword})`,
@@ -587,6 +588,31 @@ async function seedCycles() {
     data: allCats.map((c) => ({ cycleId: cycle.id, categoryId: c.id })),
     skipDuplicates: true,
   });
+}
+
+// ---- Notification templates (Milestone 10) ----
+async function seedNotificationTemplates() {
+  const templates = [
+    { key: "application.submitted", title: "Application received", emailSubject: "Your STEP application has been received", body: "Hi {{name}}, we've received your application for {{cycle}}. You can track its status in your portal." },
+    { key: "application.clarification_requested", title: "Clarification requested", emailSubject: "Action needed on your STEP application", body: "Hi {{name}}, our team has requested a clarification on your application. Please review and respond." },
+    { key: "application.presentation_scheduled", title: "Presentation scheduled", emailSubject: "Your STEP presentation is scheduled", body: "Hi {{name}}, a presentation has been scheduled for your application. Details will follow." },
+    { key: "application.interview", title: "Interview stage", emailSubject: "You've advanced to the interview stage", body: "Hi {{name}}, your application has advanced to the interview stage at STEP." },
+    { key: "application.selected", title: "Congratulations — selected!", emailSubject: "Congratulations! You've been selected by STEP", body: "Hi {{name}}, we're delighted to inform you that your application has been selected. Next steps will follow." },
+    { key: "application.rejected", title: "Application update", emailSubject: "Update on your STEP application", body: "Hi {{name}}, thank you for applying to STEP. After careful review, your application was not selected this cycle." },
+    { key: "application.agreement_pending", title: "Agreement pending", emailSubject: "Next steps: incubation agreement", body: "Hi {{name}}, please complete your incubation agreement to proceed." },
+    { key: "application.incubated", title: "Welcome to incubation", emailSubject: "Welcome to STEP incubation", body: "Hi {{name}}, your startup is now incubated at STEP. Welcome aboard!" },
+    { key: "incubation.milestone_11m", title: "11-month milestone reached", emailSubject: "Your incubation has reached 11 months", body: "Hi {{name}}, your incubation at STEP has reached the 11-month milestone. Our team will be in touch about graduation." },
+    { key: "incubation.graduated", title: "Congratulations — graduated!", emailSubject: "You've graduated from STEP", body: "Hi {{name}}, congratulations on graduating from STEP incubation. We're proud to have you in our alumni network." },
+    { key: "mentor.assigned", title: "New mentee assigned", emailSubject: "You've been assigned a new mentee", body: "Hi {{name}}, a new startup has been assigned to you for mentorship at STEP." },
+    { key: "review.assigned", title: "New application to review", emailSubject: "You have a new application to review", body: "Hi {{name}}, a new application has been assigned to you for review." },
+  ];
+  for (const t of templates) {
+    await db.notificationTemplate.upsert({
+      where: { key: t.key },
+      update: { title: t.title, emailSubject: t.emailSubject, body: t.body },
+      create: { ...t, channels: ["inapp", "email"] },
+    });
+  }
 }
 
 // ---- Public showcase sample entries (Milestone 9) ----

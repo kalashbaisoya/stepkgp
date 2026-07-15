@@ -48,6 +48,13 @@ export async function transition(applicationId: string, toKey: string, actorId: 
     const { ensureIncubation } = await import("@/modules/incubation/service");
     await ensureIncubation(applicationId, actorId);
   }
+
+  // Notify the applicant on meaningful state changes (FR-M).
+  const NOTIFY = ["presentation_scheduled", "interview", "selected", "rejected", "agreement_pending", "incubated"];
+  if (NOTIFY.includes(toKey)) {
+    const { notify } = await import("@/modules/notifications/service");
+    await notify(app.userId, `application.${toKey}`, {}, `/app/applications/${applicationId}`);
+  }
   return { status: toKey };
 }
 

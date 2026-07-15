@@ -12,7 +12,8 @@ const NAV = [
   { label: "Business plan", href: "/admin/business-plan" },
   { label: "Cycles", href: "/admin/cycles" },
   { label: "Documents", href: "/admin/documents" },
-  // Scorecards, Users, Reports, Audit are added in later milestones.
+  { label: "Notifications", href: "/admin/settings/notifications" },
+  // Users, Reports, Audit are added in later milestones.
 ];
 
 // Admin shell (Phase 6 IA §4). Middleware ensures a session; here we enforce the

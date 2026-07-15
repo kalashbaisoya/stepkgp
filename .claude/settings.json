@@ -55,7 +55,8 @@
       "Bash(mv kgp_main_building.png kgp-main-building.webp)",
       "Bash(mv step_office_2.png step-office.webp)",
       "Bash(mv gopali_tea_garden.png gopali-tea-garden.webp)",
-      "Bash(cp public/images/logo.png src/app/icon.png)"
+      "Bash(cp public/images/logo.png src/app/icon.png)",
+      "Bash(node --conditions=react-server --import tsx _m10check.ts)"
     ]
   }
 }

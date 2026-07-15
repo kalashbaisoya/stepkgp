@@ -117,6 +117,8 @@ export async function assignMentor(id: string, mentorId: string, actorId?: strin
     create: { incubationId: id, mentorId },
   });
   await audit({ actorId, action: "mentor.assigned", targetType: "Incubation", targetId: id, after: { mentorId } });
+  const { notify } = await import("@/modules/notifications/service");
+  await notify(mentorId, "mentor.assigned", {}, `/app/mentor/${id}`);
 }
 
 export async function graduate(id: string, actorId?: string) {
@@ -129,6 +131,10 @@ export async function graduate(id: string, actorId?: string) {
     await db.applicationStateHistory.create({ data: { applicationId: app.id, stateId: gradState.id, actorId, note: "Graduated" } });
   }
   await audit({ actorId, action: "incubation.graduated", targetType: "Incubation", targetId: id });
+  if (app) {
+    const { notify } = await import("@/modules/notifications/service");
+    await notify(app.userId, "incubation.graduated", {}, `/app/applications/${app.id}`);
+  }
 }
 
 // ---- Mentor portal (scoped) ----
@@ -197,10 +203,16 @@ export async function runElevenMonthScan(now: Date = new Date()): Promise<string
     select: { id: true },
   });
 
+  const { notify, notifyMany, usersWithRole } = await import("@/modules/notifications/service");
+  const staff = await usersWithRole("staff", "admin", "super_admin");
   for (const inc of due) {
     await db.incubation.update({ where: { id: inc.id }, data: { elevenMonthFlagged: true, elevenMonthFlaggedAt: now } });
     await audit({ action: "incubation.milestone_11m", targetType: "Incubation", targetId: inc.id });
-    // TODO(M10): notify startup + staff.
+    const record = await db.incubation.findUnique({ where: { id: inc.id }, include: { application: true } });
+    if (record) {
+      await notify(record.application.userId, "incubation.milestone_11m", {}, `/app/applications/${record.applicationId}`);
+      await notifyMany(staff, "incubation.milestone_11m", {}, `/app/staff/incubation/${inc.id}`);
+    }
   }
   return due.map((d) => d.id);
 }

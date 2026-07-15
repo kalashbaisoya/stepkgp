@@ -224,5 +224,7 @@ export async function submitApplication(id: string, userId: string) {
   }
 
   await audit({ actorId: userId, action: "application.submitted", targetType: "Application", targetId: id });
+  const { notify } = await import("@/modules/notifications/service");
+  await notify(app.userId, "application.submitted", { cycle: full!.cycleName }, `/app/applications/${id}`);
   return { alreadySubmitted: false };
 }

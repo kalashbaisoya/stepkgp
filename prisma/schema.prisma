@@ -48,6 +48,8 @@ model User {
   applications   Application[]
   reviewAssignments ReviewAssignment[]
   mentorAssignments MentorAssignment[]
+  notifications  Notification[]
+  notificationPreference NotificationPreference?
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   deletedAt      DateTime?
@@ -141,6 +143,43 @@ model Setting {
   id    String @id @default(cuid())
   key   String @unique
   value Json
+}
+
+// ============================================================
+//  Notifications (Milestone 10) — event-driven email + in-app
+// ============================================================
+/// Editable message templates. Body/title/subject support {{placeholders}}.
+model NotificationTemplate {
+  id           String   @id @default(cuid())
+  key          String   @unique
+  title        String // in-app title
+  emailSubject String
+  body         String // shared body (both channels)
+  channels     String[] @default(["inapp", "email"])
+  updatedAt    DateTime @updatedAt
+}
+
+model Notification {
+  id          String    @id @default(cuid())
+  userId      String
+  templateKey String
+  title       String
+  body        String
+  href        String?
+  readAt      DateTime?
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+}
+
+model NotificationPreference {
+  id           String  @id @default(cuid())
+  userId       String  @unique
+  emailEnabled Boolean @default(true)
+  inappEnabled Boolean @default(true)
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // ============================================================

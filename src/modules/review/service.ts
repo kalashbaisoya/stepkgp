@@ -32,6 +32,8 @@ export async function assignReviewers(applicationId: string, reviewerIds: string
     });
   }
   await audit({ actorId, action: "review.assigned", targetType: "Application", targetId: applicationId, after: { reviewerIds } });
+  const { notifyMany } = await import("@/modules/notifications/service");
+  await notifyMany(reviewerIds, "review.assigned", {}, `/app/review/${applicationId}`);
 }
 
 export async function listReviewers() {
