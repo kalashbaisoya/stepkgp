@@ -13,6 +13,10 @@ export type ShowcaseProfile = {
   website: string | null;
   logoUrl: string | null;
   funding: string | null;
+  batch: string | null;
+  stage: string | null;
+  location: string | null;
+  tags: string[];
   founders: { name: string; role?: string }[];
   achievements: string[];
   socials: { label: string; url: string }[];
@@ -22,7 +26,8 @@ export type ShowcaseProfile = {
 
 function toProfile(e: {
   slug: string; name: string; description: string; sector: string | null; website: string | null;
-  logoUrl: string | null; funding: string | null; founders: unknown; achievements: unknown;
+  logoUrl: string | null; funding: string | null; batch?: string | null; stage?: string | null;
+  location?: string | null; tags?: string[]; founders: unknown; achievements: unknown;
   socials: unknown; gallery: unknown; videos: unknown;
 }): ShowcaseProfile {
   return {
@@ -33,6 +38,10 @@ function toProfile(e: {
     website: e.website,
     logoUrl: e.logoUrl,
     funding: e.funding,
+    batch: e.batch ?? null,
+    stage: e.stage ?? null,
+    location: e.location ?? null,
+    tags: e.tags ?? [],
     founders: (Array.isArray(e.founders) ? e.founders : []) as { name: string; role?: string }[],
     achievements: (Array.isArray(e.achievements) ? e.achievements : []) as string[],
     socials: (Array.isArray(e.socials) ? e.socials : []) as { label: string; url: string }[],
@@ -46,8 +55,14 @@ export const listPublishedShowcase = unstable_cache(
   async () => {
     const rows = await db.showcaseEntry.findMany({ where: { published: true }, orderBy: { name: "asc" } });
     const profiles = rows.map(toProfile);
-    const sectors = Array.from(new Set(profiles.map((p) => p.sector).filter(Boolean))) as string[];
-    return { profiles, sectors: sectors.sort() };
+    const uniq = (xs: (string | null)[]) => Array.from(new Set(xs.filter(Boolean) as string[])).sort();
+    return {
+      profiles,
+      sectors: uniq(profiles.map((p) => p.sector)),
+      batches: uniq(profiles.map((p) => p.batch)).reverse(), // newest first
+      stages: uniq(profiles.map((p) => p.stage)),
+      tags: uniq(profiles.flatMap((p) => p.tags)),
+    };
   },
   ["showcase-list"],
   { tags: [TAG] },
@@ -82,6 +97,10 @@ export async function getShowcaseForEdit(id: string) {
     website: e.website ?? "",
     logoUrl: e.logoUrl ?? "",
     funding: e.funding ?? "",
+    batch: e.batch ?? "",
+    stage: e.stage ?? "",
+    location: e.location ?? "",
+    tags: e.tags ?? [],
     published: e.published,
     founders: (Array.isArray(e.founders) ? e.founders : []) as { name: string; role?: string }[],
     achievements: (Array.isArray(e.achievements) ? e.achievements : []) as string[],
@@ -98,6 +117,10 @@ export type ShowcaseInput = {
   website: string;
   logoUrl: string;
   funding: string;
+  batch: string;
+  stage: string;
+  location: string;
+  tags: string[];
   published: boolean;
   founders: { name: string; role?: string }[];
   achievements: string[];
@@ -116,6 +139,10 @@ export async function updateShowcase(id: string, input: ShowcaseInput, actorId?:
       website: input.website || null,
       logoUrl: input.logoUrl || null,
       funding: input.funding || null,
+      batch: input.batch || null,
+      stage: input.stage || null,
+      location: input.location || null,
+      tags: input.tags ?? [],
       published: input.published,
       founders: input.founders,
       achievements: input.achievements,

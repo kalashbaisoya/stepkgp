@@ -58,7 +58,14 @@
       "Bash(cp public/images/logo.png src/app/icon.png)",
       "Bash(node --conditions=react-server --import tsx _m10check.ts)",
       "Bash(node --conditions=react-server --import tsx _m11check.ts)",
-      "Bash(node --conditions=react-server --import tsx _m12check.ts)"
+      "Bash(node --conditions=react-server --import tsx _m12check.ts)",
+      "Read(//home/invincible/.local/share/pnpm/**)",
+      "Bash(npx prisma *)",
+      "Read(//home/invincible/.nvm/**)",
+      "Read(//home/invincible/.nvm/versions/node/**)",
+      "Read(//home/invincible/**)",
+      "Bash(grep -E \"^\\\\.\\(bashrc|zshrc|profile|bash_profile\\)$\")",
+      "Read(//usr/local/bin/**)"
     ]
   }
 }

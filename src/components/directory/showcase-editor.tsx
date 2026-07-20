@@ -8,7 +8,8 @@ import { Input, Label } from "@/components/ui/input";
 
 type Entry = {
   id: string; slug: string; name: string; description: string; sector: string; website: string;
-  logoUrl: string; funding: string; published: boolean;
+  logoUrl: string; funding: string; batch: string; stage: string; location: string; tags: string[];
+  published: boolean;
   founders: { name: string; role?: string }[];
   achievements: string[];
   socials: { label: string; url: string }[];
@@ -26,7 +27,8 @@ export function ShowcaseEditor({ entry }: { entry: Entry }) {
     start(async () => {
       await updateShowcaseAction(e.id, {
         name: e.name, description: e.description, sector: e.sector, website: e.website,
-        logoUrl: e.logoUrl, funding: e.funding, published: e.published,
+        logoUrl: e.logoUrl, funding: e.funding, batch: e.batch, stage: e.stage,
+        location: e.location, tags: e.tags, published: e.published,
         founders: e.founders, achievements: e.achievements, socials: e.socials, gallery: e.gallery, videos: e.videos,
       });
       setMsg("Saved.");
@@ -56,6 +58,10 @@ export function ShowcaseEditor({ entry }: { entry: Entry }) {
         <div><Label>Sector</Label><Input value={e.sector} onChange={(ev) => set({ sector: ev.target.value })} /></div>
         <div><Label>Website</Label><Input value={e.website} onChange={(ev) => set({ website: ev.target.value })} placeholder="https://" /></div>
         <div><Label>Funding</Label><Input value={e.funding} onChange={(ev) => set({ funding: ev.target.value })} placeholder="₹2 Cr" /></div>
+        <div><Label>Batch / year</Label><Input value={e.batch} onChange={(ev) => set({ batch: ev.target.value })} placeholder="2016" /></div>
+        <div><Label>Stage</Label><Input value={e.stage} onChange={(ev) => set({ stage: ev.target.value })} placeholder="Growth / Established / Acquired" /></div>
+        <div><Label>Location</Label><Input value={e.location} onChange={(ev) => set({ location: ev.target.value })} placeholder="Bengaluru, India" /></div>
+        <div><Label>Tags (comma separated)</Label><Input value={e.tags.join(", ")} onChange={(ev) => set({ tags: ev.target.value.split(",").map((t) => t.trim()).filter(Boolean) })} placeholder="SaaS, AI/ML" /></div>
         <div className="sm:col-span-2"><Label>Logo URL</Label><Input value={e.logoUrl} onChange={(ev) => set({ logoUrl: ev.target.value })} /></div>
         <div className="sm:col-span-2">
           <Label>Description</Label>

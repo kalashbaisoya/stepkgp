@@ -1,54 +1,59 @@
 @import "tailwindcss";
 
 /*
-  Design tokens — Phase 12 design system.
-  Semantic colors, typography, radius, motion. Light + dark via `.dark` class.
-  Tailwind v4 CSS-first: tokens exposed to utilities through @theme inline.
+  Design tokens — YC-inspired: minimal, high-contrast, typography-first.
+  Accent is IIT Kharagpur orange (#FF6600) against deep navy + clean grays.
 */
 
 :root {
   /* Brand */
-  --brand: oklch(0.42 0.14 264); /* deep indigo/navy */
-  --brand-foreground: oklch(0.98 0 0);
-  --brand-accent: oklch(0.72 0.15 55); /* warm accent */
+  --brand: #ff6600;              /* IIT KGP / accelerator orange */
+  --brand-hover: #e65c00;
+  --brand-foreground: #ffffff;
+  --brand-subtle: #fff4ec;       /* orange tint background */
+  --navy: #0a2540;               /* deep navy for headings/dark sections */
 
-  /* Surfaces & text */
-  --background: oklch(0.99 0.002 264);
-  --foreground: oklch(0.21 0.02 264);
-  --surface: oklch(1 0 0);
-  --surface-2: oklch(0.97 0.004 264);
-  --muted: oklch(0.96 0.004 264);
-  --muted-foreground: oklch(0.52 0.02 264);
-  --border: oklch(0.9 0.006 264);
-  --ring: oklch(0.42 0.14 264);
+  /* Surfaces & text (high contrast) */
+  --background: #ffffff;
+  --foreground: #14171f;         /* near-black */
+  --surface: #ffffff;
+  --surface-2: #f7f7f5;          /* warm off-white section band */
+  --muted: #f0f0ee;
+  --muted-foreground: #5f6672;   /* AA on white */
+  --border: #e4e4e0;
+  --ring: #ff6600;
 
-  /* Lifecycle / status */
-  --status-draft: oklch(0.6 0.02 264);
-  --status-info: oklch(0.6 0.13 240);
-  --status-progress: oklch(0.75 0.15 75);
-  --status-success: oklch(0.65 0.15 150);
-  --status-danger: oklch(0.6 0.2 25);
-  --status-selected: oklch(0.68 0.15 160);
+  /* Status */
+  --status-draft: #6b7280;
+  --status-info: #2563eb;
+  --status-progress: #b45309;
+  --status-success: #15803d;
+  --status-danger: #b91c1c;
+  --status-selected: #047857;
 
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 }
 
 .dark {
-  --background: oklch(0.19 0.02 264);
-  --foreground: oklch(0.96 0.004 264);
-  --surface: oklch(0.23 0.02 264);
-  --surface-2: oklch(0.26 0.02 264);
-  --muted: oklch(0.28 0.02 264);
-  --muted-foreground: oklch(0.7 0.02 264);
-  --border: oklch(0.32 0.02 264);
-  --ring: oklch(0.72 0.12 264);
-  --brand: oklch(0.62 0.15 264);
+  --background: #0d1117;
+  --foreground: #f2f3f5;
+  --surface: #151b23;
+  --surface-2: #11161d;
+  --muted: #1e252e;
+  --muted-foreground: #9aa4b2;
+  --border: #262d38;
+  --ring: #ff6600;
+  --brand-subtle: #24160c;
+  --navy: #0a2540;
 }
 
 @theme inline {
   --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
   --color-brand-foreground: var(--brand-foreground);
-  --color-brand-accent: var(--brand-accent);
+  --color-brand-subtle: var(--brand-subtle);
+  --color-brand-accent: var(--brand);
+  --color-navy: var(--navy);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
@@ -64,16 +69,20 @@
   --color-status-danger: var(--status-danger);
   --color-status-selected: var(--status-selected);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
   --radius-xl: calc(var(--radius) + 6px);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 * {
   border-color: var(--color-border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -81,6 +90,24 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Typography rhythm — strong hierarchy, tight display tracking */
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* Accessible focus ring everywhere */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -92,49 +119,37 @@ body {
   }
 }
 
-/* ---------- Premium public visuals ---------- */
+/* ---------- Utilities ---------- */
 
-/* Soft radial "mesh" gradient background for hero sections */
-.mesh {
-  background-color: var(--background);
-  background-image:
-    radial-gradient(40rem 40rem at 15% -10%, color-mix(in oklch, var(--brand) 22%, transparent), transparent 60%),
-    radial-gradient(38rem 38rem at 100% 0%, color-mix(in oklch, var(--brand-accent) 18%, transparent), transparent 55%),
-    radial-gradient(30rem 30rem at 50% 120%, color-mix(in oklch, var(--brand) 12%, transparent), transparent 60%);
-}
-
-/* Subtle dotted grid */
+/* Subtle dotted grid for hero backdrops */
 .grid-bg {
-  background-image: radial-gradient(color-mix(in oklch, var(--foreground) 8%, transparent) 1px, transparent 1px);
-  background-size: 22px 22px;
-  mask-image: linear-gradient(to bottom, black, transparent 85%);
+  background-image: radial-gradient(color-mix(in srgb, var(--foreground) 7%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(to bottom, black, transparent 80%);
 }
 
-/* Gradient text for accent headings */
-.text-gradient {
-  background: linear-gradient(120deg, var(--brand), color-mix(in oklch, var(--brand-accent) 90%, var(--brand)));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Reveal-on-load animation (staggered via inline delay) */
+/* Reveal on load (staggered via inline delay) */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.reveal { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.reveal { animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
-/* Marquee for partners */
+/* Partner marquee */
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
-.marquee-track { animation: marquee 28s linear infinite; }
-.marquee-mask {
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-}
+.marquee-track { animation: marquee 30s linear infinite; }
+.marquee-mask { mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
 
-/* Card hover lift */
-.lift { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
-.lift:hover { transform: translateY(-3px); }
+/* Card hover */
+.lift { transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease; }
+.lift:hover { border-color: var(--brand); box-shadow: 0 6px 24px -12px rgb(0 0 0 / 0.18); }
+
+/* Orange underline accent for links */
+.link-accent { color: var(--brand); text-underline-offset: 3px; }
+.link-accent:hover { text-decoration: underline; }
+
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }

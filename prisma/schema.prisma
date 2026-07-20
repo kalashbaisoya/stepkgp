@@ -714,6 +714,10 @@ model ShowcaseEntry {
   gallery      Json?
   videos       Json?
   logoUrl      String?
+  batch        String? // cohort/year label, e.g. "2006"
+  stage        String? // Seed / Growth / Acquired / Established
+  tags         String[] @default([])
+  location     String?
   published    Boolean     @default(false)
   incubation   Incubation? @relation(fields: [incubationId], references: [id], onDelete: SetNull)
   createdAt    DateTime    @default(now())

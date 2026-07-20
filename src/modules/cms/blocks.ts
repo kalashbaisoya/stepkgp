@@ -10,6 +10,7 @@ export type BlockType =
   | "statStrip"
   | "richtext"
   | "featuredStartups"
+  | "testimonials"
   | "facilities"
   | "sectors"
   | "timeline"
@@ -124,6 +125,28 @@ export const BLOCK_CATALOG: Record<BlockType, BlockDef> = {
     description: "Live grid of published startups from the directory.",
     defaultData: { title: "Featured startups", subtitle: "A few of the ventures built at STEP." },
     fields: [{ key: "title", label: "Title", type: "text" }, { key: "subtitle", label: "Subtitle", type: "text" }],
+  },
+  testimonials: {
+    label: "Testimonials",
+    description: "Founder quotes in a card grid.",
+    defaultData: {
+      eyebrow: "Founders",
+      title: "What founders say",
+      items: [{ quote: "STEP gave us the space, mentorship and credibility to get started.", name: "Founder name", role: "CEO", company: "Company" }],
+    },
+    fields: [
+      { key: "eyebrow", label: "Eyebrow", type: "text" },
+      { key: "title", label: "Title", type: "text" },
+      {
+        key: "items", label: "Quotes", type: "list",
+        itemFields: [
+          { key: "quote", label: "Quote", type: "textarea" },
+          { key: "name", label: "Name", type: "text" },
+          { key: "role", label: "Role", type: "text" },
+          { key: "company", label: "Company", type: "text" },
+        ],
+      },
+    ],
   },
   facilities: {
     label: "Facilities / offerings",

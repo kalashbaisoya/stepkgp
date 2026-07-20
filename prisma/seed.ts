@@ -226,7 +226,22 @@ async function seedCms() {
             ],
           },
         },
-        { type: "featuredStartups", data: { title: "Success stories", subtitle: "Ventures that began at STEP and went on to global impact." } },
+        { type: "featuredStartups", data: { eyebrow: "Portfolio", title: "Companies built at STEP", subtitle: "Ventures that began at STEP and went on to national and global impact." } },
+        {
+          // NOTE: placeholder quotes — replace with real, approved founder testimonials
+          // via Admin → Content. We do not publish quotes attributed to real people
+          // without their sign-off.
+          type: "testimonials",
+          data: {
+            eyebrow: "Founders",
+            title: "What founders say",
+            items: [
+              { quote: "Add an approved founder testimonial here from the admin panel.", name: "Founder name", role: "Co-founder", company: "Company" },
+              { quote: "Add an approved founder testimonial here from the admin panel.", name: "Founder name", role: "CEO", company: "Company" },
+              { quote: "Add an approved founder testimonial here from the admin panel.", name: "Founder name", role: "Founder", company: "Company" },
+            ],
+          },
+        },
         { type: "facilities", data: FACILITIES },
         { type: "sectors", data: { title: "Sectors we back", items: SECTORS } },
         {
@@ -615,69 +630,217 @@ async function seedNotificationTemplates() {
   }
 }
 
-// ---- Public showcase sample entries (Milestone 9) ----
+// ---- Public showcase: real STEP IIT Kharagpur portfolio ----
+// Logos resolve via Clearbit from each company's own domain; the UI falls back to a
+// branded monogram if a logo can't be fetched, so nothing ever renders broken.
+const logo = (domain: string) => `https://logo.clearbit.com/${domain}`;
+
 async function seedShowcase() {
   // Remove earlier placeholder entries (not tied to a real incubation).
-  await db.showcaseEntry.deleteMany({ where: { slug: { in: ["aeronyx-robotics", "medgenix-labs"] } } });
+  await db.showcaseEntry.deleteMany({ where: { slug: { in: ["aeronyx-robotics", "medgenix-labs", "auro-robotics"] } } });
 
-  // Real STEP IIT Kharagpur portfolio success stories.
   const entries = [
     {
       slug: "capillary-technologies",
       name: "Capillary Technologies",
-      sector: "Enterprise software",
+      sector: "Enterprise Software",
+      stage: "Growth",
+      batch: "2008",
+      location: "Bengaluru, India",
+      tags: ["SaaS", "AI/ML", "Retail Tech", "Loyalty"],
       description:
-        "AI-powered customer loyalty and engagement software used by hundreds of global brands. Founded by IIT Kharagpur alumni, Capillary is one of STEP's landmark success stories.",
+        "AI-powered loyalty and customer-engagement platform used by leading retail and consumer brands worldwide. One of STEP's landmark success stories and a well-known name in retail technology.",
       website: "https://www.capillarytech.com",
-      funding: "$100M+ raised",
+      logoUrl: logo("capillarytech.com"),
+      funding: "Well funded",
       founders: [
         { name: "Aneesh Reddy", role: "Co-founder & CEO" },
         { name: "Krishna Mehra", role: "Co-founder" },
         { name: "Ajay Modani", role: "Co-founder" },
       ],
-      achievements: ["Serves 400+ global brands", "Operations across Asia, the Middle East & the US", "IIT Kharagpur alumni founders"],
+      achievements: [
+        "Loyalty & customer engagement platform for global retail brands",
+        "Raised significant funding; widely recognised in retail tech",
+        "Founded by IIT Kharagpur alumni",
+      ],
       socials: [{ label: "Website", url: "https://www.capillarytech.com" }],
     },
     {
-      slug: "auro-robotics",
-      name: "Auro Robotics",
-      sector: "Robotics",
+      slug: "agnext-technologies",
+      name: "AgNext Technologies",
+      sector: "Agritech",
+      stage: "Growth",
+      batch: "2016",
+      location: "Chandigarh, India",
+      tags: ["AI/ML", "Food Quality", "Deep Tech", "Hardware"],
       description:
-        "Self-driving shuttle technology spun out of a research group at IIT Kharagpur, building autonomous driving and ADAS systems. Auro went through Y Combinator and was later acquired by Ridecell.",
-      website: "",
-      funding: "Y Combinator · Acquired by Ridecell",
+        "AI-powered quality assessment for food and agriculture — combining spectroscopy, imaging and machine learning to test quality in seconds across the agri value chain.",
+      website: "https://www.agnext.com",
+      logoUrl: logo("agnext.com"),
+      funding: "Substantial funding raised",
       founders: [
-        { name: "Nalin Gupta", role: "Co-founder & CEO" },
-        { name: "Jit Ray Chowdhury", role: "Co-founder" },
-        { name: "Srinivas Reddy", role: "Co-founder" },
+        { name: "Taranjeet Singh Bhamra", role: "Founder & CEO" },
+        { name: "Sparsh Kaur", role: "Co-founder" },
+        { name: "Mrigank Sharad", role: "Co-founder" },
       ],
-      achievements: ["Y Combinator (S15)", "Acquired by Ridecell (2017)", "Campus autonomous shuttles in the US"],
+      achievements: [
+        "AI for food & agriculture quality testing",
+        "Raised substantial funding, including from Novo Holdings",
+        "Deployed across the agri supply chain",
+      ],
+      socials: [{ label: "Website", url: "https://www.agnext.com" }],
+    },
+    {
+      slug: "ecozen-solutions",
+      name: "Ecozen Solutions (Ecofrost)",
+      sector: "Agritech",
+      stage: "Growth",
+      batch: "2010",
+      location: "Pune, India",
+      tags: ["Clean Energy", "Solar", "Cold Chain", "Climate"],
+      description:
+        "Solar-powered cold storage and cooling solutions for agriculture. Ecofrost helps farmers cut post-harvest losses with reliable, off-grid refrigeration.",
+      website: "https://www.ecozensolutions.com/ecofrost",
+      logoUrl: logo("ecozensolutions.com"),
+      funding: "Venture backed",
+      founders: [
+        { name: "Devendra Gupta", role: "Co-founder" },
+        { name: "Prateek Singhal", role: "Co-founder" },
+        { name: "Vivek Pandey", role: "Co-founder" },
+      ],
+      achievements: [
+        "Solar-powered cold storage for agriculture",
+        "Strong presence in the agritech and climate space",
+        "Reduces post-harvest losses for farmers",
+      ],
+      socials: [{ label: "Website", url: "https://www.ecozensolutions.com" }],
+    },
+    {
+      slug: "intinno-technologies",
+      name: "Intinno Technologies",
+      sector: "Edtech",
+      stage: "Acquired / Evolved",
+      batch: "2009",
+      location: "Kharagpur, India",
+      tags: ["Education", "SaaS", "Learning"],
+      description:
+        "Education technology platform built by IIT Kharagpur founders. The team went on to create SplashLearn, one of the most successful learning products out of India.",
+      website: "https://www.intinno.com",
+      logoUrl: logo("intinno.com"),
+      funding: "Founders later built SplashLearn",
+      founders: [
+        { name: "Mayank Jain", role: "Co-founder" },
+        { name: "Arpit Jain", role: "Co-founder" },
+        { name: "Joy Deep Nath", role: "Co-founder" },
+        { name: "Umang Jain", role: "Co-founder" },
+      ],
+      achievements: [
+        "Education technology platform",
+        "Founders later started SplashLearn — a global edtech success",
+      ],
       socials: [],
     },
     {
-      slug: "tradelab",
-      name: "TradeLab",
-      sector: "Fintech",
+      slug: "p2power-solutions",
+      name: "P2Power Solutions",
+      sector: "Energy",
+      stage: "Established",
+      batch: "2006",
+      location: "Noida, India",
+      tags: ["Power Quality", "Hardware", "Clean Energy"],
       description:
-        "A trading-technology company providing low-latency infrastructure, analytics, and real-time tools for stock-broking — powering transactions for leading brokerages.",
-      website: "",
+        "Power quality and energy solutions — designing and manufacturing systems that improve efficiency and reliability for industrial power users.",
+      website: "https://www.p2power.co.in",
+      logoUrl: logo("p2power.co.in"),
+      funding: "Bootstrapped",
+      founders: [{ name: "Shwetank Jain", role: "Founder" }],
+      achievements: [
+        "Power quality & energy solutions",
+        "IIT Kharagpur alumni venture, founded around 2006 at STEP",
+      ],
+      socials: [{ label: "Website", url: "https://www.p2power.co.in" }],
+    },
+    {
+      slug: "dataresolve-technologies",
+      name: "DataResolve Technologies",
+      sector: "Cybersecurity",
+      stage: "Established",
+      batch: "2013",
+      location: "Noida, India",
+      tags: ["Security", "DLP", "Enterprise", "SaaS"],
+      description:
+        "Data security and insider-threat management — DLP and behavioural analytics that help enterprises protect sensitive information.",
+      website: "https://www.dataresolve.com",
+      logoUrl: logo("dataresolve.com"),
+      funding: "Venture backed",
+      founders: [],
+      achievements: ["Data security & DLP solutions", "Serves enterprise customers across India"],
+      socials: [{ label: "Website", url: "https://www.dataresolve.com" }],
+    },
+    {
+      slug: "ants-ceramics",
+      name: "Ants Ceramics",
+      sector: "Advanced Materials",
+      stage: "Established",
+      batch: "2007",
+      location: "India",
+      tags: ["Materials", "Deep Tech", "Manufacturing"],
+      description:
+        "Advanced ceramics and materials technology — engineering high-performance ceramic components for demanding industrial applications.",
+      website: "https://www.antslab.in",
+      logoUrl: logo("antslab.in"),
+      funding: "Bootstrapped",
+      founders: [],
+      achievements: ["Advanced ceramics and materials technology", "Deep-tech manufacturing capability"],
+      socials: [{ label: "Website", url: "https://www.antslab.in" }],
+    },
+    {
+      slug: "tradelab-software",
+      name: "Tradelab Software",
+      sector: "Fintech",
+      stage: "Established",
+      batch: "2012",
+      location: "Bengaluru, India",
+      tags: ["Trading", "Low Latency", "Fintech"],
+      description:
+        "Trading and fintech software — low-latency infrastructure, analytics and real-time execution tooling for brokerages and capital markets.",
+      website: "https://www.tradelab.in",
+      logoUrl: logo("tradelab.in"),
       funding: "Profitable",
       founders: [],
-      achievements: ["Trading infrastructure for leading brokerages", "Real-time analytics & execution tooling"],
-      socials: [],
+      achievements: ["Trading / fintech software", "Real-time analytics and execution infrastructure"],
+      socials: [{ label: "Website", url: "https://www.tradelab.in" }],
+    },
+    {
+      slug: "azure-software",
+      name: "Azure Software",
+      sector: "IT Services",
+      stage: "Established",
+      batch: "2005",
+      location: "India",
+      tags: ["Software Services", "Enterprise"],
+      description:
+        "Software services company building custom enterprise applications and technology solutions for clients.",
+      website: "https://www.azuresys.com",
+      logoUrl: logo("azuresys.com"),
+      funding: "Bootstrapped",
+      founders: [],
+      achievements: ["Software services and custom enterprise development"],
+      socials: [{ label: "Website", url: "https://www.azuresys.com" }],
     },
   ];
+
   for (const e of entries) {
+    const data = {
+      name: e.name, sector: e.sector, description: e.description, website: e.website,
+      funding: e.funding, logoUrl: e.logoUrl, batch: e.batch, stage: e.stage,
+      location: e.location, tags: e.tags, founders: e.founders,
+      achievements: e.achievements, socials: e.socials, published: true,
+    };
     await db.showcaseEntry.upsert({
       where: { slug: e.slug },
-      update: {
-        name: e.name, sector: e.sector, description: e.description, website: e.website, funding: e.funding,
-        founders: e.founders, achievements: e.achievements, socials: e.socials, published: true,
-      },
-      create: {
-        slug: e.slug, name: e.name, sector: e.sector, description: e.description, website: e.website, funding: e.funding,
-        founders: e.founders, achievements: e.achievements, socials: e.socials, published: true,
-      },
+      update: data,
+      create: { slug: e.slug, ...data },
     });
   }
 }

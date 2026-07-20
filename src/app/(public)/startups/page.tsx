@@ -1,64 +1,46 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { listPublishedShowcase } from "@/modules/directory/service";
+import { CompanyDirectory } from "@/components/directory/company-directory";
 
 export const metadata: Metadata = {
-  title: "Startups",
-  description: "Startups incubated at STEP, IIT Kharagpur.",
+  title: "Companies",
+  description: "Startups incubated at STEP, IIT Kharagpur — from deep-tech and agritech to fintech and SaaS.",
 };
 
-export default async function StartupsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ sector?: string }>;
-}) {
-  const { sector } = await searchParams;
-  const { profiles, sectors } = await listPublishedShowcase();
-  const filtered = sector ? profiles.filter((p) => p.sector === sector) : profiles;
+export default async function StartupsPage() {
+  const { profiles, sectors, batches, stages, tags } = await listPublishedShowcase();
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-20">
-      <h1 className="text-3xl font-semibold tracking-tight">Our startups</h1>
-      <p className="mt-3 max-w-2xl text-muted-foreground">
-        Ventures incubated at STEP, IIT Kharagpur — building deep-tech since 1986.
-      </p>
-
-      {sectors.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-2">
-          <Link href="/startups" className={`rounded-full border px-3 py-1 text-sm ${!sector ? "border-brand bg-brand/10 text-brand" : "border-border text-muted-foreground hover:bg-muted"}`}>
-            All
-          </Link>
-          {sectors.map((s) => (
-            <Link key={s} href={`/startups?sector=${encodeURIComponent(s)}`} className={`rounded-full border px-3 py-1 text-sm capitalize ${sector === s ? "border-brand bg-brand/10 text-brand" : "border-border text-muted-foreground hover:bg-muted"}`}>
-              {s}
-            </Link>
-          ))}
+    <div>
+      {/* Masthead */}
+      <section className="relative border-b border-border bg-surface-2">
+        <div className="grid-bg absolute inset-0" aria-hidden />
+        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:py-20">
+          <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl">
+            STEP <span className="text-brand">companies</span>
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+            Since 1986, STEP at IIT Kharagpur has helped founders turn research into companies —
+            spanning agritech, deep-tech, fintech, materials and enterprise software.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-x-12 gap-y-4">
+            <Stat value={`${profiles.length}`} label="Featured companies" />
+            <Stat value="100+" label="Startups incubated" />
+            <Stat value="1986" label="Founded" />
+          </div>
         </div>
-      )}
+      </section>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((p) => (
-          <Link key={p.slug} href={`/startups/${p.slug}`} className="group rounded-xl border border-border bg-surface p-5 transition-colors hover:border-brand">
-            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-lg bg-surface-2">
-              {p.logoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.logoUrl} alt={p.name} className="h-full w-full object-cover" />
-              ) : (
-                <span className="text-lg font-semibold text-muted-foreground">{p.name.charAt(0)}</span>
-              )}
-            </div>
-            <h2 className="mt-3 font-semibold group-hover:text-brand">{p.name}</h2>
-            {p.sector && <p className="text-xs uppercase tracking-wide text-muted-foreground">{p.sector}</p>}
-            <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{p.description}</p>
-          </Link>
-        ))}
-      </div>
+      <CompanyDirectory companies={profiles} facets={{ sectors, batches, stages, tags }} />
+    </div>
+  );
+}
 
-      {filtered.length === 0 && (
-        <p className="mt-10 rounded-xl border border-dashed border-border p-10 text-center text-muted-foreground">
-          {profiles.length === 0 ? "The startup directory will appear here as startups graduate." : "No startups in this sector."}
-        </p>
-      )}
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <div>
+      <div className="text-3xl font-extrabold tracking-tight">{value}</div>
+      <div className="mt-0.5 text-sm text-muted-foreground">{label}</div>
     </div>
   );
 }
