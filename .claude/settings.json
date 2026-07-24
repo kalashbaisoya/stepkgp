@@ -65,7 +65,8 @@
       "Read(//home/invincible/.nvm/versions/node/**)",
       "Read(//home/invincible/**)",
       "Bash(grep -E \"^\\\\.\\(bashrc|zshrc|profile|bash_profile\\)$\")",
-      "Read(//usr/local/bin/**)"
+      "Read(//usr/local/bin/**)",
+      "WebFetch(domain:shrishtikhetra.com)"
     ]
   }
 }

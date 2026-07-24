@@ -17,6 +17,7 @@ export type ShowcaseProfile = {
   stage: string | null;
   location: string | null;
   tags: string[];
+  featured: boolean;
   founders: { name: string; role?: string }[];
   achievements: string[];
   socials: { label: string; url: string }[];
@@ -27,7 +28,7 @@ export type ShowcaseProfile = {
 function toProfile(e: {
   slug: string; name: string; description: string; sector: string | null; website: string | null;
   logoUrl: string | null; funding: string | null; batch?: string | null; stage?: string | null;
-  location?: string | null; tags?: string[]; founders: unknown; achievements: unknown;
+  location?: string | null; tags?: string[]; featured?: boolean; founders: unknown; achievements: unknown;
   socials: unknown; gallery: unknown; videos: unknown;
 }): ShowcaseProfile {
   return {
@@ -42,6 +43,7 @@ function toProfile(e: {
     stage: e.stage ?? null,
     location: e.location ?? null,
     tags: e.tags ?? [],
+    featured: e.featured ?? false,
     founders: (Array.isArray(e.founders) ? e.founders : []) as { name: string; role?: string }[],
     achievements: (Array.isArray(e.achievements) ? e.achievements : []) as string[],
     socials: (Array.isArray(e.socials) ? e.socials : []) as { label: string; url: string }[],
@@ -65,6 +67,19 @@ export const listPublishedShowcase = unstable_cache(
     };
   },
   ["showcase-list"],
+  { tags: [TAG] },
+);
+
+/** Companies to feature on the homepage. Falls back to all published if none flagged. */
+export const listFeaturedShowcase = unstable_cache(
+  async () => {
+    const featured = await db.showcaseEntry.findMany({ where: { published: true, featured: true }, orderBy: { name: "asc" } });
+    const rows = featured.length > 0
+      ? featured
+      : await db.showcaseEntry.findMany({ where: { published: true }, orderBy: { name: "asc" }, take: 6 });
+    return rows.map(toProfile);
+  },
+  ["showcase-featured"],
   { tags: [TAG] },
 );
 
@@ -102,6 +117,7 @@ export async function getShowcaseForEdit(id: string) {
     location: e.location ?? "",
     tags: e.tags ?? [],
     published: e.published,
+    featured: e.featured,
     founders: (Array.isArray(e.founders) ? e.founders : []) as { name: string; role?: string }[],
     achievements: (Array.isArray(e.achievements) ? e.achievements : []) as string[],
     socials: (Array.isArray(e.socials) ? e.socials : []) as { label: string; url: string }[],
@@ -122,6 +138,7 @@ export type ShowcaseInput = {
   location: string;
   tags: string[];
   published: boolean;
+  featured: boolean;
   founders: { name: string; role?: string }[];
   achievements: string[];
   socials: { label: string; url: string }[];
@@ -144,6 +161,7 @@ export async function updateShowcase(id: string, input: ShowcaseInput, actorId?:
       location: input.location || null,
       tags: input.tags ?? [],
       published: input.published,
+      featured: input.featured,
       founders: input.founders,
       achievements: input.achievements,
       socials: input.socials,

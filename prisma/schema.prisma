@@ -719,6 +719,7 @@ model ShowcaseEntry {
   tags         String[] @default([])
   location     String?
   published    Boolean     @default(false)
+  featured     Boolean     @default(false) // show on the homepage featured section
   incubation   Incubation? @relation(fields: [incubationId], references: [id], onDelete: SetNull)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt

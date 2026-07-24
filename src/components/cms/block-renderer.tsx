@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Block, BlockType } from "@/modules/cms/blocks";
-import { listPublishedShowcase } from "@/modules/directory/service";
+import { listFeaturedShowcase } from "@/modules/directory/service";
 import { CompanyLogo } from "@/components/directory/company-logo";
 import { HeroCarousel } from "./hero-carousel";
 
@@ -115,7 +115,7 @@ function RichText({ data }: { data: Record<string, unknown> }) {
 }
 
 async function FeaturedStartups({ data }: { data: Record<string, unknown> }) {
-  const { profiles } = await listPublishedShowcase();
+  const profiles = await listFeaturedShowcase();
   const featured = profiles.slice(0, 6);
   return (
     <section className="border-b border-border">

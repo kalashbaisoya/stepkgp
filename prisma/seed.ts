@@ -830,12 +830,136 @@ async function seedShowcase() {
     },
   ];
 
-  for (const e of entries) {
+  // Additional STEP companies — published (searchable in the directory) but NOT
+  // featured on the homepage. Founder data is best-effort from public sources.
+  const moreEntries = [
+    {
+      slug: "drishtee-foundation",
+      name: "Drishtee Foundation",
+      sector: "Social Enterprise",
+      stage: "Established",
+      batch: "2001",
+      location: "Noida, India",
+      tags: ["Rural Development", "Livelihoods", "Impact", "Social"],
+      description:
+        "Rural development and social enterprise focused on building sustainable livelihoods. Drishtee empowers rural communities through its Community, Capacity, Capital and Channels (4C) approach across thousands of villages.",
+      website: "https://drishteefoundation.org",
+      logoUrl: logo("drishteefoundation.org"),
+      funding: "Social enterprise",
+      founders: [
+        { name: "Satyan Mishra", role: "Co-founder & Managing Director" },
+        { name: "Nitin Gachhayat", role: "Co-founder" },
+        { name: "Shailesh Thakur", role: "Co-founder" },
+      ],
+      achievements: [
+        "Rural livelihoods across thousands of villages",
+        "Founder Satyan Mishra is an Ashoka Fellow",
+        "4C approach: Community, Capacity, Capital & Channels",
+      ],
+      socials: [{ label: "Website", url: "https://drishteefoundation.org" }],
+    },
+    {
+      slug: "maribus-solar",
+      name: "Maribus Solar",
+      sector: "Clean Energy",
+      stage: "Early",
+      batch: "2022",
+      location: "Gopali, Kharagpur, India",
+      tags: ["Solar", "Marine", "Blue Economy", "Deep Tech"],
+      description:
+        "Solar-powered marine solutions for the blue economy — designing electro-mechanical systems, solar motor boats and remote monitoring for waterways. Incubated at STEP Gopali, IIT Kharagpur.",
+      website: "https://maribussolar.com",
+      logoUrl: logo("maribussolar.com"),
+      funding: "Early stage",
+      founders: [
+        { name: "Sharat Kumar", role: "Co-founder & Director" },
+        { name: "Kshitij Shrivastava", role: "CEO" },
+      ],
+      achievements: [
+        "Solar-powered marine solutions for the blue economy",
+        "Incubated at STEP Gopali, IIT Kharagpur",
+        "Founders from Ocean Engineering & Naval Architecture, IIT Kharagpur",
+      ],
+      socials: [{ label: "Website", url: "https://maribussolar.com" }],
+    },
+    {
+      slug: "sensordrops-networks",
+      name: "SensorDrops Networks",
+      sector: "IoT",
+      stage: "Early",
+      batch: "2018",
+      location: "Kharagpur, India",
+      tags: ["IoT", "Sensors", "Deep Tech", "Industry 4.0"],
+      description:
+        "IoT-based sensing, monitoring and control solutions for healthcare, industry, agriculture and power. A government-recognised startup incubated at STEP, IIT Kharagpur.",
+      website: "https://sensordropsnetworks.com",
+      logoUrl: logo("sensordropsnetworks.com"),
+      funding: "Early stage",
+      founders: [
+        { name: "Prof. Sudip Misra", role: "Co-founder & Director" },
+        { name: "Anandarup Mukherjee", role: "Co-founder & Director" },
+      ],
+      achievements: [
+        "IoT sensing, monitoring & control across sectors",
+        "Incubated at STEP, IIT Kharagpur",
+        "Founded by IIT Kharagpur IoT researchers",
+      ],
+      socials: [{ label: "Website", url: "https://sensordropsnetworks.com" }],
+    },
+    {
+      slug: "weevils-drones",
+      name: "Weevils Drones",
+      sector: "Drones",
+      stage: "Early",
+      batch: "2024",
+      location: "Bhubaneswar, India",
+      tags: ["Drones", "UAV", "Robotics", "Hardware"],
+      description:
+        "Drone technology company designing, manufacturing and deploying advanced all-terrain UAVs — tested in extreme conditions from high-altitude Ladakh to high-temperature desert environments.",
+      website: "https://weevildrone.co.in",
+      logoUrl: logo("weevildrone.co.in"),
+      funding: "Early stage",
+      founders: [
+        { name: "Siddhartha Sircar", role: "Director" },
+        { name: "Sagarika Parija", role: "Director" },
+        { name: "Ashis Saha", role: "Director" },
+      ],
+      achievements: [
+        "Advanced all-terrain UAV design and manufacturing",
+        "Tested from high-altitude Ladakh to desert conditions",
+      ],
+      socials: [{ label: "Website", url: "https://weevildrone.co.in" }],
+    },
+    {
+      slug: "shrishtikhetra-agro-aqua",
+      name: "Shrishtikhetra Agro & Aqua",
+      sector: "Agritech",
+      stage: "Early",
+      batch: "2020",
+      location: "West Bengal, India",
+      tags: ["Agriculture", "Aquaculture", "AgriTech"],
+      description:
+        "Agro and aquaculture products and services — building sustainable agriculture and aquaculture solutions for farmers and producers.",
+      website: "https://shrishtikhetra.com",
+      logoUrl: logo("shrishtikhetra.com"),
+      funding: "Early stage",
+      founders: [],
+      achievements: ["Agro and aquaculture products & services"],
+      socials: [{ label: "Website", url: "https://shrishtikhetra.com" }],
+    },
+  ];
+
+  const all = [
+    ...entries.map((e) => ({ ...e, featured: true })),
+    ...moreEntries.map((e) => ({ ...e, featured: false })),
+  ];
+
+  for (const e of all) {
     const data = {
       name: e.name, sector: e.sector, description: e.description, website: e.website,
       funding: e.funding, logoUrl: e.logoUrl, batch: e.batch, stage: e.stage,
       location: e.location, tags: e.tags, founders: e.founders,
-      achievements: e.achievements, socials: e.socials, published: true,
+      achievements: e.achievements, socials: e.socials, published: true, featured: e.featured,
     };
     await db.showcaseEntry.upsert({
       where: { slug: e.slug },

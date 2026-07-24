@@ -9,7 +9,7 @@ import { Input, Label } from "@/components/ui/input";
 type Entry = {
   id: string; slug: string; name: string; description: string; sector: string; website: string;
   logoUrl: string; funding: string; batch: string; stage: string; location: string; tags: string[];
-  published: boolean;
+  published: boolean; featured: boolean;
   founders: { name: string; role?: string }[];
   achievements: string[];
   socials: { label: string; url: string }[];
@@ -28,7 +28,7 @@ export function ShowcaseEditor({ entry }: { entry: Entry }) {
       await updateShowcaseAction(e.id, {
         name: e.name, description: e.description, sector: e.sector, website: e.website,
         logoUrl: e.logoUrl, funding: e.funding, batch: e.batch, stage: e.stage,
-        location: e.location, tags: e.tags, published: e.published,
+        location: e.location, tags: e.tags, published: e.published, featured: e.featured,
         founders: e.founders, achievements: e.achievements, socials: e.socials, gallery: e.gallery, videos: e.videos,
       });
       setMsg("Saved.");
@@ -48,6 +48,10 @@ export function ShowcaseEditor({ entry }: { entry: Entry }) {
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={e.published} onChange={(ev) => set({ published: ev.target.checked })} />
             Published
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={e.featured} onChange={(ev) => set({ featured: ev.target.checked })} />
+            Featured on homepage
           </label>
           <Button onClick={save} disabled={pending}>Save</Button>
         </div>
