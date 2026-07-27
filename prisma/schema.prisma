@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -155,7 +155,7 @@ model NotificationTemplate {
   title        String // in-app title
   emailSubject String
   body         String // shared body (both channels)
-  channels     String[] @default(["inapp", "email"])
+  channels     Json? // ["inapp", "email"]
   updatedAt    DateTime @updatedAt
 }
 
@@ -672,7 +672,7 @@ model FundingRecord {
   id           String     @id @default(cuid())
   incubationId String
   source       String
-  amount       Decimal    @db.Decimal(14, 2)
+  amount       Float
   date         DateTime   @default(now())
   notes        String?
   incubation   Incubation @relation(fields: [incubationId], references: [id], onDelete: Cascade)
@@ -716,7 +716,7 @@ model ShowcaseEntry {
   logoUrl      String?
   batch        String? // cohort/year label, e.g. "2006"
   stage        String? // Seed / Growth / Acquired / Established
-  tags         String[] @default([])
+  tags         Json? // array of tag strings
   location     String?
   published    Boolean     @default(false)
   featured     Boolean     @default(false) // show on the homepage featured section
@@ -747,10 +747,80 @@ model DocumentRequirement {
   key          String
   label        String
   required     Boolean  @default(true)
-  allowedTypes String[] @default([])
+  allowedTypes Json? // array of allowed MIME types
   maxSizeMb    Int      @default(10)
   order        Int      @default(0)
   category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@index([categoryId])
 }
+
+// ============================================================
+//  Startup Playground Models (Milestone 11)
+// ============================================================
+model SeededProblem {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  description String
+  tags        Json     // string[]
+  authorName  String
+  authorRole  String   // e.g. "Prof. S. K. Roy (Dept of CS)"
+  upvotes     Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FacultyMember {
+  id                     String   @id @default(cuid())
+  name                   String
+  department             String
+  email                  String   @unique
+  labName                String
+  researchAreas          Json     // string[]
+  availableForMentorship Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model AlumniMentor {
+  id        String   @id @default(cuid())
+  name      String
+  batch     String
+  role      String
+  company   String
+  location  String
+  domain    String
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PlaygroundSubmission {
+  id               String   @id @default(cuid())
+  userId           String?
+  title            String
+  category         String
+  problemStatement String
+  targetAudience   String
+  proposedSolution String
+  selectedFaculty  Json?    // string[]
+  selectedAlumni   Json?    // string[]
+  tamSamScore      Int?
+  viabilityScore   Int?
+  pitchDeckUrl     String?
+  status           String   @default("draft") // draft | submitted | review
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model ResearchBriefDispatch {
+  id             String   @id @default(cuid())
+  recipientEmail String
+  recipientName  String
+  subject        String
+  content        String
+  status         String   @default("dispatched") // dispatched | pending | failed
+  createdAt      DateTime @default(now())
+}
+

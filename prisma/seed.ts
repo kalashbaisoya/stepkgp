@@ -601,7 +601,6 @@ async function seedCycles() {
   await db.cycleCategory.deleteMany({ where: { cycleId: cycle.id } });
   await db.cycleCategory.createMany({
     data: allCats.map((c) => ({ cycleId: cycle.id, categoryId: c.id })),
-    skipDuplicates: true,
   });
 }
 
