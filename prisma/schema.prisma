@@ -796,6 +796,23 @@ model AlumniMentor {
   updatedAt DateTime @updatedAt
 }
 
+model CoFounderTalent {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  roleTarget   String   // Co-Founder / CTO / Lead AI Engineer / Founding Designer
+  education    String   // B.Tech Computer Science, IIT Kharagpur
+  department   String?  // Computer Science & Engineering
+  capabilities Json     // string[] e.g. ["PyTorch", "Next.js", "CAD/CAM"]
+  availability String   // Full-Time Co-Founder | Part-Time Co-Founder | Founding Engineer
+  bio          String
+  linkedinUrl  String?
+  githubUrl    String?
+  featured     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model PlaygroundSubmission {
   id               String   @id @default(cuid())
   userId           String?
@@ -823,4 +840,79 @@ model ResearchBriefDispatch {
   status         String   @default("dispatched") // dispatched | pending | failed
   createdAt      DateTime @default(now())
 }
+
+enum ProfileRole {
+  STUDENT
+  ALUMNI
+  PROFESSOR
+}
+
+model TalentProfile {
+  id                  String      @id @default(cuid())
+  userId              String?     @unique
+  name                String
+  email               String      @unique
+  role                ProfileRole @default(STUDENT)
+  departmentOrCompany String
+  bio                 String      @default("")
+  skills              Json        // string[]
+  interests           Json        // string[]
+  availability        Boolean     @default(true)
+  location            String?
+  linkedinUrl         String?
+  githubUrl           String?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model PlaygroundGraphExecution {
+  id               String   @id @default(cuid())
+  userId           String?
+  title            String
+  category         String
+  currentStage     Int      @default(1)
+  problemStatement String
+  targetAudience   String
+  proposedSolution String
+  selectedFaculty  Json?    // string[]
+  selectedAlumni   Json?    // string[]
+  tamSamScore      Int?
+  viabilityScore   Int?
+  nodeOutputs      Json?    // map of nodeId -> output object
+  architectureSpec Json?    // system architecture & tech stack spec
+  status           String   @default("active") // active | completed | archived
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model LearningDoc {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  category  String   // "graph-nodes" | "system-setup" | "profiles" | "incubation-guide"
+  summary   String
+  content   String   // markdown content
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SyncedGovernmentPolicy {
+  id                  String   @id @default(cuid())
+  externalId          String   @unique
+  schemeName          String
+  department          String
+  stateOrCentral      String
+  financialAssistance String
+  summary             String
+  eligibility         String
+  tags                Json     // string[]
+  officialUrl         String
+  contentHash         String?
+  lastFetchedAt       DateTime @default(now())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+
 

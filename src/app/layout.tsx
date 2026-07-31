@@ -16,6 +16,27 @@ export const metadata: Metadata = {
   description:
     "Science & Technology Entrepreneurs' Park, IIT Kharagpur — building deep-tech ventures since 1986.",
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "STEP IIT Kharagpur",
+  url: process.env.APP_URL ?? "http://localhost:3000",
+  logo: `${process.env.APP_URL ?? "http://localhost:3000"}/icon.png`,
+  description:
+    "Science & Technology Entrepreneurs' Park, IIT Kharagpur — building deep-tech ventures since 1986.",
 };
 
 export default function RootLayout({
@@ -23,6 +44,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

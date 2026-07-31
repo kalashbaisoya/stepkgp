@@ -1,0 +1,15 @@
+# STEP · IIT Kharagpur
+
+> Science & Technology Entrepreneurs' Park (STEP) at IIT Kharagpur is a pioneer technology incubator fostering deep-tech innovation and venture creation since 1986.
+
+## Overview
+STEP IIT Kharagpur provides incubation support, seed capital, laboratory access, domain mentoring, and ecosystem networking to technology startups and innovators.
+
+## Key Sections
+- Home: Incubation management platform, updates, and highlights.
+- Incubation Application: Process and portal for startups seeking incubation or funding support.
+- Portfolio Startups: Catalog of incubated startups, alumni companies, and deep-tech innovations.
+
+## Target Audience
+- Founders & Innovators seeking seed funding and physical/virtual incubation.
+- Industry Partners, Mentors, and Investors looking to engage with IIT Kharagpur startups.

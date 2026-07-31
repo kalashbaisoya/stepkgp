@@ -31,6 +31,18 @@ export default async function PublicLayout({
                 {item.label}
               </Link>
             ))}
+            <Link
+              href="/playground?search=open"
+              className="font-semibold text-amber-600 transition-colors hover:underline flex items-center gap-1.5"
+            >
+              <span>🏛️</span> Govt &amp; IP Services
+            </Link>
+            <Link
+              href="/playground?search=open"
+              className="font-semibold text-brand transition-colors hover:underline flex items-center gap-1.5"
+            >
+              <span>📜</span> Statewise Policies &amp; SOPs
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -50,7 +62,7 @@ export default async function PublicLayout({
       <div className="flex-1">{children}</div>
 
       <footer className="border-t border-border bg-surface-2">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -84,15 +96,42 @@ export default async function PublicLayout({
             <nav className="mt-5 flex flex-col gap-3 text-sm text-muted-foreground">
               <Link href="/apply" className="hover:text-brand">Apply to STEP</Link>
               <Link href="/startups" className="hover:text-brand">Portfolio</Link>
-              <Link href="/auth/register" className="hover:text-brand">Create account</Link>
+              <Link href="/playground" className="hover:text-brand">Startup Playground</Link>
               <Link href="/auth/login" className="hover:text-brand">Sign in</Link>
+            </nav>
+          </div>
+
+          <div>
+            <div className="text-xs font-bold uppercase tracking-widest text-foreground">Government Policies &amp; SOPs</div>
+            <nav className="mt-5 flex flex-col gap-2.5 text-xs text-muted-foreground">
+              <a href="https://startup.gujarat.gov.in/policy/standard-operating-procedure" target="_blank" rel="noreferrer" className="hover:text-brand flex items-center gap-1">
+                <span>🦁</span> Gujarat Policies &amp; SOPs (1-5)
+              </a>
+              <a href="https://startinup.up.gov.in/" target="_blank" rel="noreferrer" className="hover:text-brand flex items-center gap-1">
+                <span>🟢</span> StartInUP Uttar Pradesh
+              </a>
+              <a href="https://www.startupindia.gov.in/" target="_blank" rel="noreferrer" className="hover:text-brand flex items-center gap-1">
+                <span>🇮🇳</span> Startup India DPIIT Grants
+              </a>
+              <a href="https://nidhi.dst.gov.in/" target="_blank" rel="noreferrer" className="hover:text-brand flex items-center gap-1">
+                <span>🎯</span> DST NIDHI (PRAYAS, EIR, SSP)
+              </a>
+              <a href="https://msh.meity.gov.in/" target="_blank" rel="noreferrer" className="hover:text-brand flex items-center gap-1">
+                <span>💻</span> MeitY Startup Hub (SAMRIDH)
+              </a>
+              <a href="https://www.indiascienceandtechnology.gov.in/" target="_blank" rel="noreferrer" className="hover:text-brand flex items-center gap-1">
+                <span>🔬</span> India Science &amp; Tech (ISTI)
+              </a>
+              <a href="/api/search/gujarat-sitemap" target="_blank" rel="noreferrer" className="hover:text-brand font-semibold text-foreground pt-1 border-t border-border">
+                🗺️ Portal Sitemaps &amp; API Feeds ↗
+              </a>
             </nav>
           </div>
         </div>
         <div className="border-t border-border">
           <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <span>© {new Date().getFullYear()} STEP, IIT Kharagpur. All rights reserved.</span>
-            <span>Supported by DST · IDBI · IFCI · ICICI · NSTEDB</span>
+            <span>Supported by DST · IDBI · IFCI · ICICI · NSTEDB · DPIIT · MeitY</span>
           </div>
         </div>
       </footer>

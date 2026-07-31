@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import SeededProblemFeed from '@/components/playground/SeededProblemFeed';
 import ValidationDirectory from '@/components/playground/ValidationDirectory';
 import SurdsBIEngine from '@/components/playground/SurdsBIEngine';
@@ -11,6 +12,12 @@ import StartupVideoHub from '@/components/playground/StartupVideoHub';
 import HalfBakedNewsletterSection from '@/components/playground/HalfBakedNewsletterSection';
 import FigmaGraphCanvas from '@/components/playground/FigmaGraphCanvas';
 import PlaygroundHero from '@/components/playground/PlaygroundHero';
+import EcosystemSearchModal from '@/components/playground/EcosystemSearchModal';
+import ProfileRegistrationModal from '@/components/playground/ProfileRegistrationModal';
+import MVPBuilderModal from '@/components/playground/MVPBuilderModal';
+import GovtServicesModal from '@/components/playground/GovtServicesModal';
+import CoFounderMatchmakingHub from '@/components/playground/CoFounderMatchmakingHub';
+import RegisterTalentModal from '@/components/playground/RegisterTalentModal';
 
 export type StartupIdeaState = {
   id?: string;
@@ -24,6 +31,7 @@ export type StartupIdeaState = {
   tamSamScore?: number;
   viabilityScore?: number;
   pitchDeckFile?: string;
+  lastExecutionData?: any;
 };
 
 const STAGES = [
@@ -32,11 +40,36 @@ const STAGES = [
   { id: 3, name: 'Surds Business Intelligence', icon: '📊', desc: 'TAM/SAM, Competitor Analysis & Viability' },
   { id: 4, name: 'Social Launchpack', icon: '🚀', desc: 'LinkedIn Post & Elevator Pitch Generator' },
   { id: 5, name: 'VC Dispatch & Legal Vault', icon: '⚖️', desc: 'Incubation Pitch & Compliance Checklist' },
+  { id: 6, name: 'Co-Founder & Talent Matchmaking', icon: '🤝', desc: 'Find Co-Founders, CTOs & Engineers' },
 ];
 
 export default function StartupPlaygroundPage() {
   const [currentStage, setCurrentStage] = useState(1);
   const [viewMode, setViewMode] = useState<'canvas' | 'stepper'>('canvas');
+  const [executingNode, setExecutingNode] = useState(false);
+
+  // Modals state
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [mvpOpen, setMvpOpen] = useState(false);
+  const [govtOpen, setGovtOpen] = useState(false);
+  const [talentModalOpen, setTalentModalOpen] = useState(false);
+
+  React.useEffect(() => {
+    const checkSearchParam = () => {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('search') === 'open' || params.has('search')) {
+          setSearchOpen(true);
+        }
+      }
+    };
+
+    checkSearchParam();
+    window.addEventListener('popstate', checkSearchParam);
+    return () => window.removeEventListener('popstate', checkSearchParam);
+  }, []);
+
   const [ideaState, setIdeaState] = useState<StartupIdeaState>({
     title: 'Autonomous Agri-Drone Mesh Network',
     category: 'DeepTech / Robotics',
@@ -49,9 +82,60 @@ export default function StartupPlaygroundPage() {
     viabilityScore: 91,
   });
 
+  const handleExecuteBackendNode = async (nodeId: number) => {
+    setExecutingNode(true);
+    try {
+      const res = await fetch('/api/playground/execute-node', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nodeId, ideaState }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setIdeaState((prev) => ({
+          ...prev,
+          lastExecutionData: data,
+          tamSamScore: data.data?.tamSamScore || prev.tamSamScore,
+          viabilityScore: data.data?.viabilityScore || prev.viabilityScore,
+        }));
+      }
+    } catch (err) {
+      console.error('Node execution failed:', err);
+    } finally {
+      setExecutingNode(false);
+    }
+  };
+
+  const handleExecuteFullGraph = async () => {
+    setExecutingNode(true);
+    try {
+      const res = await fetch('/api/playground/execute-graph', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ideaState }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setIdeaState((prev) => ({
+          ...prev,
+          lastExecutionData: data,
+          tamSamScore: data.summary?.tamSamScore || prev.tamSamScore,
+          viabilityScore: data.summary?.viabilityScore || prev.viabilityScore,
+        }));
+        alert('🎉 Full Graph Pipeline executed successfully! Results saved to database.');
+      }
+    } catch (err) {
+      console.error('Graph execution failed:', err);
+    } finally {
+      setExecutingNode(false);
+    }
+  };
+
   const handleNextStage = () => {
     if (currentStage < STAGES.length) {
-      setCurrentStage((prev) => prev + 1);
+      const nextStage = currentStage + 1;
+      setCurrentStage(nextStage);
+      handleExecuteBackendNode(nextStage);
     }
   };
 
@@ -70,14 +154,14 @@ export default function StartupPlaygroundPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-stone-800 selection:bg-stone-900 selection:text-stone-50 font-sans pb-24 relative overflow-hidden">
-      {/* Background Soft Subtle Chalk Texture */}
+      {/* Background Soft Subtle Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
       {/* Top Header Navigation */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FAF9F6]/90 border-b border-stone-200/90 px-6 py-4">
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#FAF9F6]/90 border-b border-stone-200/90 px-6 py-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-stone-900 flex items-center justify-center font-black text-stone-50 shadow-md">
+            <div className="w-10 h-10 rounded-xl bg-stone-900 flex items-center justify-center font-black text-stone-50 shadow-xs">
               ⚡
             </div>
             <div>
@@ -85,36 +169,59 @@ export default function StartupPlaygroundPage() {
                 STEP Startup Playground
               </h1>
               <p className="text-xs text-stone-500 font-medium">
-                IIT Kharagpur Incubation & Surds Intelligence Workspace
+                IIT Kharagpur Incubation & Node Graph Execution Engine
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* View Mode Toggle */}
-            <div className="flex bg-stone-200/80 p-1 rounded-xl border border-stone-300">
-              <button
-                onClick={() => setViewMode('canvas')}
-                className={`text-xs font-bold px-3.5 py-1.5 rounded-lg transition ${
-                  viewMode === 'canvas' ? 'bg-stone-900 text-stone-50 shadow-xs' : 'text-stone-700 hover:text-stone-950'
-                }`}
-              >
-                📐 Figma Canvas
-              </button>
-              <button
-                onClick={() => setViewMode('stepper')}
-                className={`text-xs font-bold px-3.5 py-1.5 rounded-lg transition ${
-                  viewMode === 'stepper' ? 'bg-stone-900 text-stone-50 shadow-xs' : 'text-stone-700 hover:text-stone-950'
-                }`}
-              >
-                📊 Linear Stepper
-              </button>
-            </div>
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Govt & IP Services Direct Action Button */}
+            <button
+              onClick={() => setGovtOpen(true)}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-400 text-stone-950 hover:bg-amber-500 border border-stone-900 transition shadow-2xs flex items-center gap-1.5"
+            >
+              <span>🏛️</span> Govt &amp; IP Services
+            </button>
 
-            <span className="text-xs px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-300 flex items-center gap-2 font-bold shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Surds BI Active
-            </span>
+            {/* Statewise Policies & SOPs Direct Action Button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-900 text-stone-50 hover:bg-stone-800 border border-stone-900 transition shadow-2xs flex items-center gap-1.5"
+            >
+              <span>📜</span> Statewise Policies &amp; SOPs
+            </button>
+
+            {/* Hybrid Search Button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-white border border-stone-300 text-stone-700 hover:bg-stone-100 transition shadow-2xs flex items-center gap-1.5"
+            >
+              <span>🔍</span> Search Ecosystem
+            </button>
+
+            {/* Claim Profile Button */}
+            <button
+              onClick={() => setProfileOpen(true)}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-100 border border-amber-300 text-amber-900 hover:bg-amber-200 transition shadow-2xs flex items-center gap-1.5"
+            >
+              <span>👤</span> Claim Profile
+            </button>
+
+            {/* MVP Spec Builder */}
+            <button
+              onClick={() => setMvpOpen(true)}
+              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-950 hover:bg-emerald-200 transition shadow-2xs flex items-center gap-1.5"
+            >
+              <span>⚙️</span> MVP Spec Builder
+            </button>
+
+            {/* System Docs Link */}
+            <Link
+              href="/playground/docs"
+              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-900 text-stone-50 hover:bg-stone-800 transition shadow-2xs flex items-center gap-1.5"
+            >
+              <span>📚</span> Docs & System Guide
+            </Link>
           </div>
         </div>
       </header>
@@ -123,16 +230,58 @@ export default function StartupPlaygroundPage() {
         {/* Top Hero Section with Embedded AI Banner Image & Infographic Stats */}
         <PlaygroundHero onStartBuilding={scrollToWorkspace} />
 
+        {/* Workspace Toolbar: Execute Graph & View Toggle */}
+        <div id="playground-workspace" className="scroll-mt-24 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl border border-stone-200 shadow-xs">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleExecuteFullGraph}
+              disabled={executingNode}
+              className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs shadow-xs transition flex items-center gap-2 disabled:opacity-50"
+            >
+              <span>⚡</span> {executingNode ? 'Executing Node Engine...' : 'Run Full Graph Execution'}
+            </button>
+
+            <span className="text-xs text-stone-500 font-medium hidden md:inline">
+              Executes Nodes 1–5 backend pipeline synchronously
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-stone-400 font-bold">Topology Layout:</span>
+            <div className="flex bg-stone-100 p-1 rounded-lg border border-stone-200">
+              <button
+                onClick={() => setViewMode('canvas')}
+                className={`text-xs font-bold px-3 py-1 rounded-md transition ${
+                  viewMode === 'canvas' ? 'bg-stone-900 text-stone-50 shadow-2xs' : 'text-stone-700 hover:text-stone-950'
+                }`}
+              >
+                📐 Canvas Graph
+              </button>
+              <button
+                onClick={() => setViewMode('stepper')}
+                className={`text-xs font-bold px-3 py-1 rounded-md transition ${
+                  viewMode === 'stepper' ? 'bg-stone-900 text-stone-50 shadow-2xs' : 'text-stone-700 hover:text-stone-950'
+                }`}
+              >
+                📊 Linear Stepper
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* 1st Level: Dynamic Founder Topology (Figma Canvas or Stepper) */}
-        <div id="playground-workspace" className="scroll-mt-24">
+        <div>
           {viewMode === 'canvas' ? (
             <FigmaGraphCanvas
               ideaState={ideaState}
               currentStage={currentStage}
-              onSelectStage={(id) => setCurrentStage(id)}
+              onSelectStage={(id) => {
+                setCurrentStage(id);
+                handleExecuteBackendNode(id);
+              }}
             />
           ) : (
-            <div className="p-6 rounded-2xl bg-white border border-stone-200/90 shadow-sm">
+            <div className="p-6 rounded-xl bg-white border border-stone-200/90 shadow-xs">
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-stone-900">STAGE {currentStage} OF {STAGES.length}</span>
@@ -151,7 +300,10 @@ export default function StartupPlaygroundPage() {
                   return (
                     <button
                       key={s.id}
-                      onClick={() => setCurrentStage(s.id)}
+                      onClick={() => {
+                        setCurrentStage(s.id);
+                        handleExecuteBackendNode(s.id);
+                      }}
                       className={`flex flex-col p-3.5 rounded-xl border text-left transition-all relative ${
                         isActive
                           ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-md ring-2 ring-stone-900/10'
@@ -178,36 +330,36 @@ export default function StartupPlaygroundPage() {
           )}
         </div>
 
-        {/* 2nd Level: Startup Academy & Embedded Video Hub (Right after Figma Flow) */}
+        {/* Startup Academy & Video Hub */}
         <StartupVideoHub />
 
-        {/* 2nd Level: Half Baked Newsletter Section (gethalfbaked.com integration) */}
+        {/* Half Baked Newsletter Integration */}
         <HalfBakedNewsletterSection />
 
-        {/* 3rd Level: Focus Workspace Header Banner for Active Stage */}
-        <div className="p-4 md:p-5 rounded-none bg-white border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        {/* Active Stage Workspace Banner */}
+        <div className="p-4 md:p-5 rounded-xl bg-white border border-stone-300 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="text-2xl p-2 rounded-none bg-amber-400 border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(28,25,23,1)]">
+            <span className="text-2xl p-2 rounded-lg bg-amber-100 border border-amber-300">
               {STAGES[currentStage - 1].icon}
             </span>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-stone-900 px-2 py-0.5 rounded-none bg-amber-100 border border-stone-900 inline-block mb-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900 px-2 py-0.5 rounded bg-amber-100 inline-block mb-1">
                 STAGE WORKSPACE {currentStage}
               </span>
-              <h3 className="text-base font-black text-stone-900 leading-tight">
+              <h3 className="text-base font-bold text-stone-900 leading-tight">
                 {STAGES[currentStage - 1].name}
               </h3>
             </div>
           </div>
-          <div className="text-xs font-bold text-stone-900 bg-[#FAF9F5] px-3.5 py-2 rounded-none border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(28,25,23,1)] flex items-center gap-2">
+          <div className="text-xs font-semibold text-stone-700 bg-stone-50 px-3.5 py-2 rounded-lg border border-stone-200 flex items-center gap-2">
             <span>Selected Idea:</span>
-            <strong className="text-stone-950 font-black px-2 py-0.5 rounded-none bg-amber-400 border border-stone-900">
+            <strong className="text-stone-900 font-bold px-2 py-0.5 rounded bg-amber-100">
               {ideaState.title}
             </strong>
           </div>
         </div>
 
-        {/* 3rd Level: Dynamic Stage Content Renderer */}
+        {/* Stage Content Renderer */}
         <div className="transition-all duration-300">
           {currentStage === 1 && (
             <SeededProblemFeed ideaState={ideaState} setIdeaState={setIdeaState} onNext={handleNextStage} />
@@ -231,9 +383,13 @@ export default function StartupPlaygroundPage() {
               <LegalVault ideaState={ideaState} />
             </div>
           )}
+
+          {currentStage === 6 && (
+            <CoFounderMatchmakingHub onOpenRegisterModal={() => setTalentModalOpen(true)} />
+          )}
         </div>
 
-        {/* Global Bottom Stage Navigation Controls */}
+        {/* Navigation Controls */}
         <div className="mt-12 flex items-center justify-between p-4 rounded-xl bg-white border border-stone-200 shadow-xs">
           <button
             disabled={currentStage === 1}
@@ -257,13 +413,28 @@ export default function StartupPlaygroundPage() {
           ) : (
             <button
               onClick={() => alert('Congratulations! Your startup package is ready for STEP Incubation Review.')}
-              className="px-6 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-sm transition"
+              className="px-6 py-2.5 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-sm transition"
             >
               🎉 Submit to STEP Incubation
             </button>
           )}
         </div>
       </main>
+
+      {/* Ecosystem Search Modal */}
+      <EcosystemSearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+
+      {/* Claim Profile Registration Modal */}
+      <ProfileRegistrationModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
+
+      {/* MVP Spec Engineering Builder Modal */}
+      <MVPBuilderModal isOpen={mvpOpen} onClose={() => setMvpOpen(false)} ideaState={ideaState} />
+
+      {/* Government & IP Services Integration Modal */}
+      <GovtServicesModal isOpen={govtOpen} onClose={() => setGovtOpen(false)} />
+
+      {/* Register Talent & Co-Founder Modal */}
+      <RegisterTalentModal isOpen={talentModalOpen} onClose={() => setTalentModalOpen(false)} />
     </div>
   );
 }

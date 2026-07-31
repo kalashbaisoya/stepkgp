@@ -52,26 +52,37 @@ export default function LegalVault({ ideaState }: Props) {
     }
   };
 
-  const handleAskAI = (e: React.FormEvent) => {
+  const handleAskAI = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aiQuestion.trim()) return;
     setIsAsking(true);
-    setTimeout(() => {
+
+    try {
+      const res = await fetch(`/api/search?q=${encodeURIComponent(aiQuestion)}`);
+      const data = await res.json();
+      if (data.results && data.results.length > 0) {
+        const top = data.results[0];
+        setAiAnswer(`Relevant STEP guideline found: "${top.title}" — ${top.description}`);
+      } else {
+        setAiAnswer(
+          `For ${ideaState.category} startups at IIT Kharagpur: IP assignment must be cleared with Dean R&D prior to external incorporation. STEP holds a standard 3% equity cap until Series A funding.`
+        );
+      }
+    } catch (err) {
+      setAiAnswer('IP assignment must be cleared with Dean R&D prior to external incorporation.');
+    } finally {
       setIsAsking(false);
-      setAiAnswer(
-        `Based on STEP IIT Kharagpur incubation guidelines and Indian corporate law: For student startups using campus lab infrastructure, IP assignment must be filed with the Dean of R&D before commercial incorporation. STEP holds a standard 3% non-dilutive equity cap until Series A.`
-      );
-    }, 1000);
+    }
   };
 
   return (
-    <div className="p-6 rounded-2xl bg-white border border-stone-200/90 shadow-sm space-y-6">
+    <div className="p-6 rounded-xl bg-white border border-stone-200 shadow-xs space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900 flex items-center gap-2">
+          <h2 className="text-lg font-extrabold text-stone-900 flex items-center gap-2">
             <span>⚖️</span> STEP Legal Vault & Startup Compliance Checklist
           </h2>
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 font-medium">
             Essential legal agreements, IP assignment guidelines, and compliance documentation for campus founders.
           </p>
         </div>
@@ -127,7 +138,7 @@ export default function LegalVault({ ideaState }: Props) {
         {/* Right Column: AI Compliance & Legal Copilot */}
         <div className="p-5 rounded-xl bg-stone-50 border border-stone-200 space-y-4">
           <h3 className="text-xs font-bold uppercase text-stone-700 flex items-center gap-1.5">
-            <span>🤖</span> AI Legal & Compliance Copilot
+            <span>🛡️</span> Legal & Compliance Search
           </h3>
           <p className="text-[11px] text-stone-500 font-medium">Ask questions about IP ownership, founder vesting, or STEP incubation policies.</p>
 
@@ -144,7 +155,7 @@ export default function LegalVault({ ideaState }: Props) {
               disabled={isAsking}
               className="w-full py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs shadow-xs transition"
             >
-              {isAsking ? 'Thinking...' : 'Ask AI Copilot'}
+              {isAsking ? 'Searching...' : 'Search Policy'}
             </button>
           </form>
 
