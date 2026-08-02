@@ -1,26 +1,28 @@
 @import "tailwindcss";
 
 /*
-  Design tokens — YC-inspired: minimal, high-contrast, typography-first.
-  Accent is IIT Kharagpur orange (#FF6600) against deep navy + clean grays.
+  Design tokens: claymorphism.
+  Soft, rounded, tactile surfaces on a warm paper background.
+  Accent is IIT Kharagpur orange (#FF6600). One shared language across
+  the marketing site, the app shell and the Startup Playground.
 */
 
 :root {
   /* Brand */
   --brand: #ff6600;              /* IIT KGP / accelerator orange */
-  --brand-hover: #e65c00;
+  --brand-hover: #ef5c00;
   --brand-foreground: #ffffff;
-  --brand-subtle: #fff4ec;       /* orange tint background */
-  --navy: #0a2540;               /* deep navy for headings/dark sections */
+  --brand-subtle: #fff1e6;       /* orange tint background */
+  --navy: #33302b;               /* warm charcoal ink, no blue cast */
 
-  /* Surfaces & text (high contrast) */
-  --background: #ffffff;
-  --foreground: #14171f;         /* near-black */
+  /* Surfaces & text */
+  --background: #f6f4f0;         /* warm paper, lets clay lift off the page */
+  --foreground: #1e2230;
   --surface: #ffffff;
-  --surface-2: #f7f7f5;          /* warm off-white section band */
-  --muted: #f0f0ee;
-  --muted-foreground: #5f6672;   /* AA on white */
-  --border: #e4e4e0;
+  --surface-2: #f1efea;          /* section band */
+  --muted: #eceae4;
+  --muted-foreground: #6b7183;   /* AA on paper */
+  --border: #e7e3db;
   --ring: #ff6600;
 
   /* Status */
@@ -31,20 +33,61 @@
   --status-danger: #b91c1c;
   --status-selected: #047857;
 
-  --radius: 0.5rem;
+  --radius: 0.75rem;
+
+  /* ---------- Clay ---------- */
+  --clay-radius: 1.25rem;
+  --clay-surface: var(--surface);
+  --clay-ink: var(--foreground);
+  --clay-light: rgba(255, 255, 255, 0.9);   /* inner top highlight */
+  --clay-shade: rgba(148, 138, 124, 0.22);  /* inner bottom shade */
+  --clay-drop: rgba(94, 84, 72, 0.18);      /* outer soft drop */
+  --clay-edge: rgba(255, 255, 255, 0.75);   /* rim */
+
+  /* Pastel clay tints: the whole accent palette, sitewide */
+  --clay-sun: #ffe3b8;
+  --clay-sun-ink: #6b4708;
+  --clay-mint: #cdeedd;
+  --clay-mint-ink: #10553a;
+  --clay-sky: #d6e6ff;
+  --clay-sky-ink: #17417e;
+  --clay-lilac: #e5ddff;
+  --clay-lilac-ink: #45318c;
+  --clay-rose: #ffdcdc;
+  --clay-rose-ink: #8f2f37;
+  --clay-soft: var(--brand-subtle);
+  --clay-soft-ink: #a63f00;
 }
 
 .dark {
-  --background: #0d1117;
-  --foreground: #f2f3f5;
-  --surface: #151b23;
-  --surface-2: #11161d;
-  --muted: #1e252e;
-  --muted-foreground: #9aa4b2;
-  --border: #262d38;
+  --background: #14161d;
+  --foreground: #f0f1f5;
+  --surface: #1c1f29;
+  --surface-2: #181b23;
+  --muted: #232733;
+  --muted-foreground: #a0a7b8;
+  --border: #2b3040;
   --ring: #ff6600;
-  --brand-subtle: #24160c;
-  --navy: #0a2540;
+  --brand-subtle: #2a1a0e;
+  --navy: #262320;
+
+  --clay-light: rgba(255, 255, 255, 0.07);
+  --clay-shade: rgba(0, 0, 0, 0.45);
+  --clay-drop: rgba(0, 0, 0, 0.55);
+  --clay-edge: rgba(255, 255, 255, 0.06);
+
+  --clay-sun: #4a3a1c;
+  --clay-sun-ink: #ffd591;
+  --clay-mint: #1d3d31;
+  --clay-mint-ink: #9fe3c4;
+  --clay-sky: #1e3352;
+  --clay-sky-ink: #b3d1ff;
+  --clay-lilac: #2f2a52;
+  --clay-lilac-ink: #cfc4ff;
+  --clay-rose: #4a2429;
+  --clay-rose-ink: #ffc2c5;
+  --clay-soft: #2a1a0e;
+  --clay-soft-ink: #ffb27a;
 }
 
 @theme inline {
@@ -69,12 +112,18 @@
   --color-status-danger: var(--status-danger);
   --color-status-selected: var(--status-selected);
 
+  --color-clay-sun: var(--clay-sun);
+  --color-clay-mint: var(--clay-mint);
+  --color-clay-sky: var(--clay-sky);
+  --color-clay-lilac: var(--clay-lilac);
+  --color-clay-rose: var(--clay-rose);
+
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) + 2px);
-  --radius-xl: calc(var(--radius) + 6px);
+  --radius-lg: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 8px);
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 * {
@@ -90,13 +139,19 @@ body {
   color: var(--color-foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  letter-spacing: 0.005em;
 }
 
-/* Typography rhythm — strong hierarchy, tight display tracking */
+/* Typography: softer, rounder rhythm to match the clay surfaces */
 h1, h2, h3, h4 {
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
   text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -107,7 +162,8 @@ h1, h2, h3, h4 {
 /* Accessible focus ring everywhere */
 :focus-visible {
   outline: 2px solid var(--brand);
-  outline-offset: 2px;
+  outline-offset: 3px;
+  border-radius: 0.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -119,13 +175,185 @@ h1, h2, h3, h4 {
   }
 }
 
+/* ---------- Clay components ----------
+   Layered in `components` so any Tailwind utility (rounded-*, bg-*, p-*)
+   can still override a clay class on a per-element basis. */
+
+@layer components {
+  /* Base raised surface */
+  .clay {
+    border-radius: var(--clay-radius);
+    background-color: var(--clay-surface);
+    color: var(--clay-ink);
+    border: 1px solid var(--clay-edge);
+    box-shadow:
+      0 14px 28px -16px var(--clay-drop),
+      0 3px 6px -3px var(--clay-drop),
+      inset 0 2px 3px 0 var(--clay-light),
+      inset 0 -5px 10px -4px var(--clay-shade);
+  }
+
+  /* Smaller pieces: chips, compact buttons, list rows */
+  .clay-sm {
+    border-radius: 0.875rem;
+    background-color: var(--clay-surface);
+    color: var(--clay-ink);
+    border: 1px solid var(--clay-edge);
+    box-shadow:
+      0 6px 14px -10px var(--clay-drop),
+      inset 0 1px 2px 0 var(--clay-light),
+      inset 0 -3px 6px -3px var(--clay-shade);
+  }
+
+  /* Hero panels and page-level containers */
+  .clay-lg {
+    border-radius: 2rem;
+    background-color: var(--clay-surface);
+    color: var(--clay-ink);
+    border: 1px solid var(--clay-edge);
+    box-shadow:
+      0 32px 60px -32px var(--clay-drop),
+      0 8px 16px -10px var(--clay-drop),
+      inset 0 3px 4px 0 var(--clay-light),
+      inset 0 -8px 16px -6px var(--clay-shade);
+  }
+
+  /* Pressed-in well: inputs, tab tracks, code blocks, progress rails */
+  .clay-inset {
+    border-radius: var(--clay-radius);
+    background-color: var(--muted);
+    border: 1px solid transparent;
+    box-shadow:
+      inset 0 3px 6px -2px var(--clay-shade),
+      inset 0 -1px 0 0 var(--clay-light);
+  }
+
+  /* Interactive clay: lifts on hover, presses on click */
+  .clay-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.875rem;
+    background-color: var(--clay-surface);
+    color: var(--clay-ink);
+    border: 1px solid var(--clay-edge);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow:
+      0 8px 16px -10px var(--clay-drop),
+      inset 0 2px 2px 0 var(--clay-light),
+      inset 0 -4px 8px -4px var(--clay-shade);
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.18s ease, background-color 0.18s ease, filter 0.18s ease;
+  }
+  .clay-btn:hover:not(:disabled) {
+    transform: translateY(-1.5px);
+    filter: brightness(1.03);
+    box-shadow:
+      0 14px 24px -12px var(--clay-drop),
+      inset 0 2px 2px 0 var(--clay-light),
+      inset 0 -4px 8px -4px var(--clay-shade);
+  }
+  .clay-btn:active:not(:disabled) {
+    transform: translateY(1px);
+    filter: brightness(0.985);
+    box-shadow:
+      0 2px 4px -3px var(--clay-drop),
+      inset 0 3px 6px -2px var(--clay-shade);
+  }
+  .clay-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Cards that respond to hover without being buttons */
+  .clay-hover {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  }
+  .clay-hover:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 26px 40px -22px var(--clay-drop),
+      0 4px 8px -4px var(--clay-drop),
+      inset 0 2px 3px 0 var(--clay-light),
+      inset 0 -5px 10px -4px var(--clay-shade);
+  }
+
+  /* Pill badge */
+  .clay-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    background-color: var(--clay-surface);
+    color: var(--clay-ink);
+    font-weight: 600;
+    border: 1px solid var(--clay-edge);
+    box-shadow:
+      0 4px 8px -6px var(--clay-drop),
+      inset 0 1px 1px 0 var(--clay-light),
+      inset 0 -2px 4px -2px var(--clay-shade);
+  }
+
+  /* Form control: inset well with a soft brand focus glow */
+  .clay-field {
+    width: 100%;
+    border-radius: 0.875rem;
+    background-color: var(--muted);
+    color: var(--foreground);
+    border: 1px solid transparent;
+    padding: 0.625rem 0.875rem;
+    box-shadow:
+      inset 0 3px 6px -2px var(--clay-shade),
+      inset 0 -1px 0 0 var(--clay-light);
+    transition: box-shadow 0.18s ease, background-color 0.18s ease;
+  }
+  .clay-field::placeholder {
+    color: var(--muted-foreground);
+  }
+  .clay-field:focus {
+    outline: none;
+    background-color: var(--surface);
+    box-shadow:
+      inset 0 3px 6px -2px var(--clay-shade),
+      0 0 0 3px color-mix(in srgb, var(--brand) 22%, transparent);
+  }
+  .clay-field:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* ---------- Tints ----------
+     Compose with any of the above: `clay clay-mint`, `clay-btn clay-primary`. */
+  .clay-primary { --clay-surface: var(--brand); --clay-ink: var(--brand-foreground); --clay-edge: rgba(255,255,255,0.28); }
+  .clay-dark    { --clay-surface: var(--navy);  --clay-ink: #f5f6fa;                 --clay-edge: rgba(255,255,255,0.12); }
+  .clay-soft    { --clay-surface: var(--clay-soft);  --clay-ink: var(--clay-soft-ink); }
+  .clay-sun     { --clay-surface: var(--clay-sun);   --clay-ink: var(--clay-sun-ink); }
+  .clay-mint    { --clay-surface: var(--clay-mint);  --clay-ink: var(--clay-mint-ink); }
+  .clay-sky     { --clay-surface: var(--clay-sky);   --clay-ink: var(--clay-sky-ink); }
+  .clay-lilac   { --clay-surface: var(--clay-lilac); --clay-ink: var(--clay-lilac-ink); }
+  .clay-rose    { --clay-surface: var(--clay-rose);  --clay-ink: var(--clay-rose-ink); }
+  .clay-plain   { --clay-surface: var(--surface);    --clay-ink: var(--foreground); }
+  .clay-well    { --clay-surface: var(--surface-2);  --clay-ink: var(--foreground); }
+}
+
 /* ---------- Utilities ---------- */
 
-/* Subtle dotted grid for hero backdrops */
+/* Soft dotted grid for hero backdrops */
 .grid-bg {
   background-image: radial-gradient(color-mix(in srgb, var(--foreground) 7%, transparent) 1px, transparent 1px);
   background-size: 24px 24px;
   mask-image: linear-gradient(to bottom, black, transparent 80%);
+}
+
+/* Warm blurred blobs behind hero sections */
+.clay-blobs {
+  background:
+    radial-gradient(38rem 24rem at 12% -8%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 70%),
+    radial-gradient(32rem 22rem at 88% 4%, color-mix(in srgb, var(--clay-sky) 70%, transparent), transparent 70%);
+  filter: blur(2px);
 }
 
 /* Reveal on load (staggered via inline delay) */
@@ -143,9 +371,16 @@ h1, h2, h3, h4 {
 .marquee-track { animation: marquee 30s linear infinite; }
 .marquee-mask { mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
 
-/* Card hover */
-.lift { transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease; }
-.lift:hover { border-color: var(--brand); box-shadow: 0 6px 24px -12px rgb(0 0 0 / 0.18); }
+/* Legacy card hover, now mapped onto the clay lift */
+.lift { transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease; }
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 26px 40px -22px var(--clay-drop),
+    0 4px 8px -4px var(--clay-drop),
+    inset 0 2px 3px 0 var(--clay-light),
+    inset 0 -5px 10px -4px var(--clay-shade);
+}
 
 /* Orange underline accent for links */
 .link-accent { color: var(--brand); text-underline-offset: 3px; }

@@ -20,7 +20,7 @@ export default async function IncubationsPage() {
         {can(user, "incubation:manage") && <ScanButton />}
       </div>
 
-      <div className="mt-8 overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="mt-8 overflow-hidden clay">
         <table className="w-full text-sm">
           <thead className="border-b border-border bg-surface-2 text-left text-muted-foreground">
             <tr>
@@ -42,7 +42,7 @@ export default async function IncubationsPage() {
                     {i.monthsElapsed}/11 {i.elevenMonthFlagged && "⚠"}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-muted-foreground">{i.mentors.join(", ") || "—"}</td>
+                <td className="px-4 py-3 text-muted-foreground">{i.mentors.join(", ") || "-"}</td>
                 <td className="px-4 py-3 capitalize">{i.status}</td>
                 <td className="px-4 py-3 text-right">
                   <Link href={`/app/staff/incubation/${i.id}`} className="font-medium text-brand hover:underline">Open</Link>

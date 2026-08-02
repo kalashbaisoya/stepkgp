@@ -105,34 +105,34 @@ export default function ValidationDirectory({ ideaState, setIdeaState, onNext, o
 
   return (
     <div className="space-y-6">
-      <div className="p-4 rounded-2xl bg-white border border-stone-200 shadow-xs flex items-center justify-between">
+      <div className="clay p-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-stone-900">Stage 2: Faculty & Market Validation</h2>
-          <p className="text-xs text-stone-500">
+          <h2 className="text-lg font-bold">Stage 2: Faculty &amp; Market Validation</h2>
+          <p className="text-xs text-muted-foreground">
             Connect your startup idea with IIT Kharagpur faculty labs and alumni mentors.
           </p>
         </div>
-        <div className="text-xs font-semibold text-stone-600 bg-stone-100 px-3 py-1.5 rounded-lg border border-stone-200">
-          Selected: <strong className="text-stone-900">{ideaState.selectedFaculty.length} Faculty</strong> • <strong className="text-stone-900">{ideaState.selectedAlumni.length} Alumni</strong>
+        <div className="clay-inset text-xs font-semibold text-muted-foreground px-3.5 py-2.5">
+          Selected: <strong className="text-foreground">{ideaState.selectedFaculty.length} Faculty</strong> • <strong className="text-foreground">{ideaState.selectedAlumni.length} Alumni</strong>
         </div>
       </div>
 
       {dispatchSuccess && (
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-bold flex items-center justify-between">
+        <div className="clay clay-mint p-4 text-xs font-semibold flex items-center justify-between gap-3">
           <span>🎉 {dispatchSuccess}</span>
-          <button onClick={() => setDispatchSuccess(null)} className="text-emerald-700 hover:text-emerald-950 font-bold">✕ Close</button>
+          <button onClick={() => setDispatchSuccess(null)} className="font-bold opacity-70 hover:opacity-100">✕ Close</button>
         </div>
       )}
 
       {loading ? (
-        <div className="p-12 text-center text-stone-500 text-xs font-semibold animate-pulse">
-          Indexing IIT Kharagpur Faculty Directory & Research Labs...
+        <div className="clay-inset p-12 text-center text-muted-foreground text-xs font-semibold animate-pulse">
+          Indexing IIT Kharagpur Faculty Directory &amp; Research Labs...
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* IIT KGP Faculty List */}
           <div className="space-y-4">
-            <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+            <h3 className="text-sm font-bold flex items-center gap-2">
               <span>🔬</span> Scraped IIT KGP Faculty Mentors ({faculty.length})
             </h3>
 
@@ -150,30 +150,26 @@ export default function ValidationDirectory({ ideaState, setIdeaState, onNext, o
                   <div
                     key={fac.id}
                     onClick={() => toggleFacultySelect(fac.name)}
-                    className={`p-4 rounded-xl border cursor-pointer transition ${
-                      isSelected
-                        ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-md'
-                        : 'bg-white border-stone-200 text-stone-800 hover:border-stone-400'
-                    }`}
+                    className={`clay clay-hover p-4 cursor-pointer ${isSelected ? 'clay-dark' : 'clay-plain'}`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start gap-2">
                       <div>
-                        <h4 className="text-xs font-bold">{fac.name}</h4>
-                        <p className={`text-[11px] ${isSelected ? 'text-stone-300' : 'text-stone-500'}`}>
+                        <h4 className="text-sm font-bold">{fac.name}</h4>
+                        <p className="text-[13px] opacity-70">
                           {fac.department} • <em>{fac.labName}</em>
                         </p>
                       </div>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                        isSelected ? 'bg-amber-400 text-stone-950' : 'bg-stone-100 text-stone-600'
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                        isSelected ? 'bg-white/15' : 'bg-black/6'
                       }`}>
                         {isSelected ? '✓ SELECTED' : '+ ADD'}
                       </span>
                     </div>
 
-                    <div className="mt-3 flex flex-wrap gap-1">
+                    <div className="mt-3 flex flex-wrap gap-1.5">
                       {areas.map((a: string) => (
-                        <span key={a} className={`text-[9px] px-2 py-0.5 rounded ${
-                          isSelected ? 'bg-stone-800 text-stone-300' : 'bg-stone-100 text-stone-600'
+                        <span key={a} className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${
+                          isSelected ? 'bg-white/12' : 'bg-black/6'
                         }`}>
                           {a}
                         </span>
@@ -187,7 +183,7 @@ export default function ValidationDirectory({ ideaState, setIdeaState, onNext, o
 
           {/* Alumni Mentor List */}
           <div className="space-y-4">
-            <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+            <h3 className="text-sm font-bold flex items-center gap-2">
               <span>🎓</span> IIT KGP Alumni Mentors ({alumni.length})
             </h3>
 
@@ -198,26 +194,22 @@ export default function ValidationDirectory({ ideaState, setIdeaState, onNext, o
                   <div
                     key={alum.id}
                     onClick={() => toggleAlumniSelect(alum.name)}
-                    className={`p-4 rounded-xl border cursor-pointer transition ${
-                      isSelected
-                        ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-md'
-                        : 'bg-white border-stone-200 text-stone-800 hover:border-stone-400'
-                    }`}
+                    className={`clay clay-hover p-4 cursor-pointer ${isSelected ? 'clay-dark' : 'clay-plain'}`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start gap-2">
                       <div>
-                        <h4 className="text-xs font-bold">{alum.name}</h4>
-                        <p className={`text-[11px] ${isSelected ? 'text-stone-300' : 'text-stone-500'}`}>
+                        <h4 className="text-sm font-bold">{alum.name}</h4>
+                        <p className="text-[13px] opacity-70">
                           {alum.role} at <strong>{alum.company}</strong> ({alum.batch})
                         </p>
                       </div>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                        isSelected ? 'bg-amber-400 text-stone-950' : 'bg-stone-100 text-stone-600'
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                        isSelected ? 'bg-white/15' : 'bg-black/6'
                       }`}>
                         {isSelected ? '✓ SELECTED' : '+ ADD'}
                       </span>
                     </div>
-                    <div className="mt-2 text-[10px] font-semibold opacity-80">
+                    <div className="mt-2 text-xs font-semibold opacity-70">
                       Domain: {alum.domain} • {alum.location}
                     </div>
                   </div>
@@ -229,20 +221,20 @@ export default function ValidationDirectory({ ideaState, setIdeaState, onNext, o
       )}
 
       {/* Action Controls */}
-      <div className="flex items-center justify-between p-4 rounded-2xl bg-white border border-stone-200 shadow-xs">
+      <div className="clay flex flex-wrap items-center justify-between gap-3 p-4">
         <button
           onClick={handleDispatchBriefs}
           disabled={dispatching}
-          className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-stone-950 font-bold text-xs shadow-xs transition disabled:opacity-50"
+          className="clay-btn clay-sun px-5 py-2.5 text-xs"
         >
           {dispatching ? 'Dispatching Research Briefs...' : '✉️ Dispatch Automated Research Briefs'}
         </button>
 
-        <div className="flex gap-3">
-          <button onClick={onPrev} className="px-4 py-2 rounded-lg bg-stone-100 text-stone-700 text-xs font-semibold">
+        <div className="flex gap-2.5">
+          <button onClick={onPrev} className="clay-btn clay-plain px-4 py-2.5 text-xs">
             ← Back
           </button>
-          <button onClick={onNext} className="px-6 py-2 rounded-lg bg-stone-900 text-stone-50 text-xs font-bold">
+          <button onClick={onNext} className="clay-btn clay-dark px-6 py-2.5 text-xs">
             Proceed to Surds BI →
           </button>
         </div>

@@ -36,7 +36,7 @@ export function FieldRenderer({
                 value={String(value ?? "")}
                 onChange={(e) => onChange(e.target.value)}
                 rows={4}
-                className="flex w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="clay-field text-sm"
               />
             );
           case "SELECT":
@@ -45,7 +45,7 @@ export function FieldRenderer({
                 id={id}
                 value={String(value ?? "")}
                 onChange={(e) => onChange(e.target.value)}
-                className="flex h-10 w-full rounded-md border border-border bg-surface px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="clay-field h-11 text-sm"
               >
                 <option value="">Select…</option>
                 {options.map((o) => (

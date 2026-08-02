@@ -69,7 +69,7 @@ export function ShowcaseEditor({ entry }: { entry: Entry }) {
         <div className="sm:col-span-2"><Label>Logo URL</Label><Input value={e.logoUrl} onChange={(ev) => set({ logoUrl: ev.target.value })} /></div>
         <div className="sm:col-span-2">
           <Label>Description</Label>
-          <textarea value={e.description} onChange={(ev) => set({ description: ev.target.value })} rows={3} className="w-full rounded-md border border-border bg-surface p-3 text-sm" />
+          <textarea value={e.description} onChange={(ev) => set({ description: ev.target.value })} rows={3} className="clay-field text-sm" />
         </div>
       </div>
 
@@ -97,7 +97,7 @@ function ListEditor({ title, items, onChange, placeholder }: { title: string; it
             <button onClick={() => onChange(items.filter((_, j) => j !== i))} className="text-status-danger">✕</button>
           </div>
         ))}
-        <button onClick={() => onChange([...items, ""])} className="rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted">+ Add</button>
+        <button onClick={() => onChange([...items, ""])} className="clay-sm px-2.5 py-1 text-xs hover:bg-muted">+ Add</button>
       </div>
     </div>
   );

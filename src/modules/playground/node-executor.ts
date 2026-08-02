@@ -179,7 +179,7 @@ export async function executeNode4(input: StartupIdeaInput): Promise<NodeExecuti
       linkedinPost,
       xThread,
       elevatorPitch,
-      headline: `${input.title} — Building Next-Gen ${input.category}`,
+      headline: `${input.title}: Building Next-Gen ${input.category}`,
     },
   };
 }

@@ -18,9 +18,9 @@ export default function LoginPage({
   const params = use(searchParams);
   const [state, action] = useActionState(loginAction, initial);
   const notice = params.reset
-    ? "Password updated — please sign in."
+    ? "Password updated. Please sign in."
     : params.verified
-      ? "Email verified — please sign in."
+      ? "Email verified. Please sign in."
       : undefined;
 
   return (

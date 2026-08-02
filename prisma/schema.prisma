@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -155,7 +155,7 @@ model NotificationTemplate {
   title        String // in-app title
   emailSubject String
   body         String // shared body (both channels)
-  channels     Json? // ["inapp", "email"]
+  channels     String[] @default(["inapp", "email"])
   updatedAt    DateTime @updatedAt
 }
 
@@ -672,7 +672,7 @@ model FundingRecord {
   id           String     @id @default(cuid())
   incubationId String
   source       String
-  amount       Float
+  amount       Decimal    @db.Decimal(14, 2)
   date         DateTime   @default(now())
   notes        String?
   incubation   Incubation @relation(fields: [incubationId], references: [id], onDelete: Cascade)
@@ -716,7 +716,7 @@ model ShowcaseEntry {
   logoUrl      String?
   batch        String? // cohort/year label, e.g. "2006"
   stage        String? // Seed / Growth / Acquired / Established
-  tags         Json? // array of tag strings
+  tags         String[] @default([])
   location     String?
   published    Boolean     @default(false)
   featured     Boolean     @default(false) // show on the homepage featured section
@@ -747,7 +747,7 @@ model DocumentRequirement {
   key          String
   label        String
   required     Boolean  @default(true)
-  allowedTypes Json? // array of allowed MIME types
+  allowedTypes String[] @default([])
   maxSizeMb    Int      @default(10)
   order        Int      @default(0)
   category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -777,6 +777,7 @@ model FacultyMember {
   department             String
   email                  String   @unique
   labName                String
+  officialUrl            String?  // department / profile page produced by the scraper
   researchAreas          Json     // string[]
   availableForMentorship Boolean  @default(true)
   createdAt              DateTime @default(now())

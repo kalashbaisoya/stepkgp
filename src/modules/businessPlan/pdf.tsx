@@ -26,7 +26,7 @@ export type BusinessPlanPdfData = {
 
 function BusinessPlanDoc({ data }: { data: BusinessPlanPdfData }) {
   return (
-    <Document title={`Business Plan — ${data.startupName}`}>
+    <Document title={`Business Plan: ${data.startupName}`}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.brand}>STEP · IIT Kharagpur</Text>
@@ -46,7 +46,7 @@ function BusinessPlanDoc({ data }: { data: BusinessPlanPdfData }) {
           </View>
         ))}
         <Text style={styles.footer} fixed>
-          Science &amp; Technology Entrepreneurs&apos; Park, IIT Kharagpur — Confidential
+          Science &amp; Technology Entrepreneurs&apos; Park, IIT Kharagpur · Confidential
         </Text>
       </Page>
     </Document>
@@ -78,7 +78,7 @@ const a = StyleSheet.create({
 
 function ApplicationDoc({ data }: { data: ApplicationPdfData }) {
   return (
-    <Document title={`Application — ${data.startupName}`}>
+    <Document title={`Application: ${data.startupName}`}>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.brand}>STEP · IIT Kharagpur</Text>
@@ -94,7 +94,7 @@ function ApplicationDoc({ data }: { data: ApplicationPdfData }) {
             {s.fields.map((f, j) => (
               <View key={j} style={a.row}>
                 <Text style={a.label}>{f.label}</Text>
-                <Text style={a.value}>{f.value || "—"}</Text>
+                <Text style={a.value}>{f.value || "-"}</Text>
               </View>
             ))}
           </View>
@@ -109,7 +109,7 @@ function ApplicationDoc({ data }: { data: ApplicationPdfData }) {
         )) : <Text style={styles.empty}>None.</Text>}
 
         <Text style={styles.footer} fixed>
-          Science &amp; Technology Entrepreneurs&apos; Park, IIT Kharagpur — Confidential
+          Science &amp; Technology Entrepreneurs&apos; Park, IIT Kharagpur · Confidential
         </Text>
       </Page>
 
@@ -123,7 +123,7 @@ function ApplicationDoc({ data }: { data: ApplicationPdfData }) {
           </View>
         ))}
         <Text style={styles.footer} fixed>
-          Science &amp; Technology Entrepreneurs&apos; Park, IIT Kharagpur — Confidential
+          Science &amp; Technology Entrepreneurs&apos; Park, IIT Kharagpur · Confidential
         </Text>
       </Page>
     </Document>

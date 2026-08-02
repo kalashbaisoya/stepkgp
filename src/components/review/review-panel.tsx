@@ -71,7 +71,7 @@ export function ReviewPanel({
   return (
     <aside className="space-y-6 lg:sticky lg:top-6 lg:self-start">
       {/* Scorecard */}
-      <div className="rounded-xl border border-border bg-surface p-5">
+      <div className="clay p-5">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-semibold">Scorecard</h2>
           <span className="text-sm text-muted-foreground">{total} / {max}</span>
@@ -94,14 +94,14 @@ export function ReviewPanel({
             ))}
             <div>
               <label className="mb-1 block text-sm font-medium">Recommendation</label>
-              <select value={recommendation} onChange={(e) => setRecommendation(e.target.value)} className="h-9 w-full rounded-md border border-border bg-surface px-2 text-sm">
+              <select value={recommendation} onChange={(e) => setRecommendation(e.target.value)} className="clay-field h-10 text-sm">
                 <option value="">Select…</option>
                 <option value="recommend">Recommend</option>
                 <option value="hold">Hold</option>
                 <option value="reject">Reject</option>
               </select>
             </div>
-            <textarea value={rationale} onChange={(e) => setRationale(e.target.value)} rows={2} placeholder="Rationale (optional)" className="w-full rounded-md border border-border bg-surface p-2 text-sm" />
+            <textarea value={rationale} onChange={(e) => setRationale(e.target.value)} rows={2} placeholder="Rationale (optional)" className="clay-field text-sm" />
             <Button onClick={saveScores} disabled={pending} className="w-full">
               {myAssignment?.status === "completed" ? "Update review" : "Submit review"}
             </Button>
@@ -115,7 +115,7 @@ export function ReviewPanel({
       </div>
 
       {/* Aggregate */}
-      <div className="rounded-xl border border-border bg-surface p-5">
+      <div className="clay p-5">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="font-semibold">All reviewers</h2>
           {averageTotal !== null && <span className="text-sm text-muted-foreground">avg {averageTotal}</span>}
@@ -135,11 +135,11 @@ export function ReviewPanel({
       </div>
 
       {/* Internal notes */}
-      <div className="rounded-xl border border-border bg-surface p-5">
+      <div className="clay p-5">
         <h2 className="mb-2 font-semibold">Internal notes</h2>
         {canNote && (
           <div className="mb-3">
-            <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2} placeholder="Add an internal note…" className="w-full rounded-md border border-border bg-surface p-2 text-sm" />
+            <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={2} placeholder="Add an internal note…" className="clay-field text-sm" />
             <Button variant="secondary" onClick={saveNote} disabled={pending || !note.trim()} className="mt-2 w-full">Add note</Button>
           </div>
         )}

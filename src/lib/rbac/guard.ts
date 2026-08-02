@@ -26,7 +26,7 @@ export function can(user: CurrentUser | null, permission: string): boolean {
 }
 
 /**
- * Role-appropriate landing page after login — so an admin lands on the admin
+ * Role-appropriate landing page after login, so an admin lands on the admin
  * console rather than the applicant portal, staff on the pipeline, etc.
  */
 export function roleLandingPath(user: CurrentUser | null): string {

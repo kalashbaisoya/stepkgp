@@ -72,7 +72,7 @@ export function CompanyDirectory({
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search companies, founders, industries…"
             aria-label="Search companies"
-            className="h-12 w-full rounded-lg border border-border bg-surface pl-11 pr-4 text-sm outline-none transition-colors focus:border-brand"
+            className="h-12 w-full clay pl-11 pr-4 text-sm outline-none transition-colors focus:border-brand"
           />
         </div>
 
@@ -88,7 +88,7 @@ export function CompanyDirectory({
         </div>
 
         {results.length === 0 && (
-          <div className="mt-6 rounded-lg border border-dashed border-border p-16 text-center">
+          <div className="mt-6 clay-inset p-16 text-center">
             <p className="font-medium">No companies match your search.</p>
             <p className="mt-1 text-sm text-muted-foreground">Try clearing filters or a different keyword.</p>
           </div>
@@ -105,7 +105,7 @@ function CompanyRow({ c }: { c: ShowcaseProfile }) {
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <h3 className="text-lg font-bold tracking-tight group-hover:text-brand">{c.name}</h3>
-          {c.batch && <span className="rounded bg-brand-subtle px-2 py-0.5 text-xs font-semibold text-brand">Batch {c.batch}</span>}
+          {c.batch && <span className="clay-chip clay-soft text-xs">Batch {c.batch}</span>}
           {c.stage && <span className="text-xs font-medium text-muted-foreground">{c.stage}</span>}
         </div>
         <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{c.description}</p>

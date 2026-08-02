@@ -19,7 +19,7 @@ export function generateMVPSpec(input: StartupIdeaInput): MVPSpec {
   const isAgri = input.category.toLowerCase().includes("agri") || input.category.toLowerCase().includes("hardware");
 
   return {
-    title: `${input.title} — Technical MVP Architecture & Specification`,
+    title: `${input.title}: Technical MVP Architecture & Specification`,
     recommendedStack: {
       frontend: "Next.js 15 (React 19, Tailwind CSS v4, Lucide Icons)",
       backend: "Node.js / Express (or Next.js Route Handlers) + Python FastAPI microservices",

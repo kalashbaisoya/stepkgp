@@ -27,7 +27,7 @@ function TemplateRow({ template }: { template: Template }) {
     set({ channels: t.channels.includes(c) ? t.channels.filter((x) => x !== c) : [...t.channels, c] });
 
   return (
-    <div className="rounded-xl border border-border bg-surface">
+    <div className="clay">
       <button onClick={() => setOpen((o) => !o)} className="flex w-full items-center justify-between px-5 py-4 text-left">
         <div>
           <span className="font-medium">{t.title}</span>
@@ -47,7 +47,7 @@ function TemplateRow({ template }: { template: Template }) {
           </div>
           <div>
             <label className="text-xs text-muted-foreground">Body</label>
-            <textarea value={t.body} onChange={(e) => set({ body: e.target.value })} rows={3} className="w-full rounded-md border border-border bg-surface p-3 text-sm" />
+            <textarea value={t.body} onChange={(e) => set({ body: e.target.value })} rows={3} className="clay-field text-sm" />
           </div>
           <div className="flex items-center gap-4 text-sm">
             <span className="text-muted-foreground">Channels:</span>

@@ -39,7 +39,7 @@ export default async function AppDashboard() {
           <Link
             key={a.id}
             href={`/app/applications/${a.id}`}
-            className="block rounded-xl border border-border bg-surface p-5 transition-colors hover:border-brand"
+            className="clay clay-hover block p-5"
           >
             <div className="flex items-center justify-between">
               <div>

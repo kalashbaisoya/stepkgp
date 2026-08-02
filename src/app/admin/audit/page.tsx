@@ -20,18 +20,18 @@ export default async function AuditPage({
   return (
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Audit log</h1>
-      <p className="mt-2 text-muted-foreground">Every significant action is recorded — who did what, and when.</p>
+      <p className="mt-2 text-muted-foreground">Every significant action is recorded: who did what, and when.</p>
 
       <form className="mt-6 flex flex-wrap gap-3" method="get">
-        <input name="action" defaultValue={action ?? ""} placeholder="Filter by action…" className="h-9 w-56 rounded-md border border-border bg-surface px-3 text-sm" />
-        <select name="targetType" defaultValue={targetType ?? ""} className="h-9 rounded-md border border-border bg-surface px-2 text-sm">
+        <input name="action" defaultValue={action ?? ""} placeholder="Filter by action…" className="h-9 w-56 clay-field text-sm" />
+        <select name="targetType" defaultValue={targetType ?? ""} className="h-9 clay-field text-sm">
           <option value="">All targets</option>
           {facets.targetTypes.map((t) => <option key={t} value={t}>{t}</option>)}
         </select>
         <button type="submit" className="h-9 rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground">Filter</button>
       </form>
 
-      <div className="mt-6 overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="mt-6 overflow-hidden clay">
         <table className="w-full text-sm">
           <thead className="border-b border-border bg-surface-2 text-left text-muted-foreground">
             <tr>

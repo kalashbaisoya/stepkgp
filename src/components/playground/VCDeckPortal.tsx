@@ -48,30 +48,30 @@ export default function VCDeckPortal({ ideaState }: Props) {
   };
 
   return (
-    <div className="p-6 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-6">
-      <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+    <div className="clay p-6 space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-4">
         <div>
-          <h2 className="text-lg font-bold text-stone-900">Stage 5: VC Pitch Deck Dispatch & Incubation Portal</h2>
-          <p className="text-xs text-stone-500">
+          <h2 className="text-lg font-bold">Stage 5: VC Pitch Deck Dispatch &amp; Incubation Portal</h2>
+          <p className="text-xs text-muted-foreground">
             Upload your pitch deck to trigger automated AI evaluation and dispatch to partner VCs.
           </p>
         </div>
-        <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-900">
+        <span className="clay-chip clay-mint text-xs">
           STEP Approved Pipeline
         </span>
       </div>
 
       {/* Drag & Drop File Upload Area */}
-      <div className="p-6 rounded-xl border-2 border-dashed border-stone-300 hover:border-stone-400 bg-stone-50 text-center transition space-y-3">
+      <div className="clay-inset p-6 text-center space-y-3">
         <div className="text-3xl">📄</div>
         <div>
-          <h3 className="text-xs font-bold text-stone-800">
+          <h3 className="text-sm font-bold">
             {pitchDeck ? `Selected Deck: ${pitchDeck.name}` : 'Upload Pitch Deck (PDF / PPTX)'}
           </h3>
-          <p className="text-[10px] text-stone-500">Max file size 25MB • Standard STEP Format</p>
+          <p className="text-xs text-muted-foreground">Max file size 25MB • Standard STEP Format</p>
         </div>
 
-        <label className="inline-block px-4 py-2 rounded-lg bg-stone-900 text-stone-50 text-xs font-bold cursor-pointer hover:bg-stone-800 transition">
+        <label className="clay-btn clay-dark inline-flex px-4 py-2 text-xs">
           {pitchDeck ? 'Change File' : 'Choose File'}
           <input type="file" accept=".pdf,.pptx" onChange={handleFileUpload} className="hidden" />
         </label>
@@ -81,30 +81,30 @@ export default function VCDeckPortal({ ideaState }: Props) {
       <button
         onClick={handleVCDispatch}
         disabled={dispatching}
-        className="w-full py-3 rounded-xl bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs shadow-md transition disabled:opacity-50 flex items-center justify-center gap-2"
+        className="clay-btn clay-primary w-full py-3 text-xs"
       >
         <span>🚀</span> {dispatching ? 'Running AI Evaluation & VC Dispatch...' : 'Dispatch Pitch Deck to Partner VCs'}
       </button>
 
       {/* Dispatch Results Panel */}
       {dispatchResult && (
-        <div className="p-5 rounded-xl bg-emerald-50 border border-emerald-300 space-y-4">
-          <div className="flex justify-between items-center border-b border-emerald-200 pb-2">
-            <h3 className="text-xs font-bold text-emerald-950 flex items-center gap-2">
+        <div className="clay clay-mint p-5 space-y-4">
+          <div className="flex flex-wrap justify-between items-center gap-2 border-b border-black/8 pb-2">
+            <h3 className="text-sm font-bold flex items-center gap-2">
               <span>🎉</span> {dispatchResult.dispatchStatus}
             </h3>
-            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-emerald-700 text-white">
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-black/8">
               Score: {dispatchResult.evaluation.score}/100
             </span>
           </div>
 
           <div className="space-y-2">
-            <h4 className="text-[11px] font-bold text-emerald-900">Partner VCs Included in Dispatch:</h4>
+            <h4 className="text-[13px] font-bold">Partner VCs Included in Dispatch:</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {dispatchResult.dispatchedVCs.map((vc: any, idx: number) => (
-                <div key={idx} className="p-2.5 rounded-lg bg-white border border-emerald-200 text-xs">
-                  <div className="font-bold text-stone-900">{vc.name}</div>
-                  <div className="text-[10px] text-stone-500">{vc.domain} • {vc.ticketSize}</div>
+                <div key={idx} className="clay-sm clay-plain p-3 text-xs">
+                  <div className="font-bold">{vc.name}</div>
+                  <div className="text-xs text-muted-foreground">{vc.domain} • {vc.ticketSize}</div>
                 </div>
               ))}
             </div>

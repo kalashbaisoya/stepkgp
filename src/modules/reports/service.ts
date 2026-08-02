@@ -27,7 +27,7 @@ export async function getDashboard(cycleId?: string) {
   const selectionRate = decided > 0 ? Math.round((selected / decided) * 100) : 0;
 
   const catName = Object.fromEntries(categories.map((c) => [c.id, c.name]));
-  const byCategory = byCategoryRaw.map((c) => ({ name: catName[c.categoryId] ?? "—", count: c._count._all })).sort((a, b) => b.count - a.count);
+  const byCategory = byCategoryRaw.map((c) => ({ name: catName[c.categoryId] ?? "-", count: c._count._all })).sort((a, b) => b.count - a.count);
 
   // Pipeline (status) breakdown, excluding draft, in lifecycle order.
   const states = await db.lifecycleState.findMany({ orderBy: { order: "asc" } });

@@ -54,7 +54,7 @@ export const BLOCK_CATALOG: Record<BlockType, BlockDef> = {
     defaultData: {
       eyebrow: "Science & Technology Entrepreneurs' Park",
       heading: "Where deep-tech ventures begin.",
-      subheading: "India's pioneering technology incubator at IIT Kharagpur — turning research into companies since 1986.",
+      subheading: "India's pioneering technology incubator at IIT Kharagpur, turning research into companies since 1986.",
       ctaLabel: "Apply to the 2026 Cohort",
       ctaHref: "/apply",
       secondaryLabel: "Explore startups",
@@ -87,7 +87,7 @@ export const BLOCK_CATALOG: Record<BlockType, BlockDef> = {
     defaultData: {
       eyebrow: "STEP · IIT Kharagpur",
       heading: "Where deep-tech ventures begin.",
-      subheading: "India's pioneering technology incubator at IIT Kharagpur — from research to market since 1986.",
+      subheading: "India's pioneering technology incubator at IIT Kharagpur, taking research to market since 1986.",
       ctaLabel: "Apply to the 2026 Cohort",
       ctaHref: "/apply",
       secondaryLabel: "Explore startups",

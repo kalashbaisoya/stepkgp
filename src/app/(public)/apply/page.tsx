@@ -4,7 +4,7 @@ import { getOpenCycle, getRequirementsForCategory } from "@/modules/cycles/servi
 
 export const metadata: Metadata = { title: "Apply" };
 
-// Open/closed state is time-sensitive — evaluate per request, not at build.
+// Open/closed state is time-sensitive: evaluate per request, not at build.
 export const dynamic = "force-dynamic";
 
 // Apply landing (Phase 7). Shows the open cycle, eligible categories, and the
@@ -50,7 +50,7 @@ export default async function ApplyPage() {
       <h2 className="mt-10 text-lg font-semibold">Who can apply</h2>
       <div className="mt-4 space-y-4">
         {perCategory.map((cat) => (
-          <div key={cat.key} className="rounded-xl border border-border bg-surface p-5">
+          <div key={cat.key} className="clay p-5">
             <h3 className="font-medium">{cat.name}</h3>
             {cat.docs.length > 0 ? (
               <>
@@ -78,7 +78,7 @@ export default async function ApplyPage() {
         <Link href="/auth/register" className="inline-flex h-12 items-center rounded-md bg-brand px-6 text-base font-medium text-brand-foreground hover:opacity-90">
           Create account &amp; apply
         </Link>
-        <Link href="/auth/login" className="inline-flex h-12 items-center rounded-md border border-border bg-surface px-6 text-base font-medium hover:bg-muted">
+        <Link href="/auth/login" className="inline-flex h-12 items-center clay-sm px-6 text-base font-medium hover:bg-muted">
           Log in
         </Link>
       </div>

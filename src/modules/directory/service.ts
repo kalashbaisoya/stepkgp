@@ -52,7 +52,7 @@ function toProfile(e: {
   };
 }
 
-/** Published startups for the public directory — cached, revalidated on publish/edit. */
+/** Published startups for the public directory. Cached, revalidated on publish/edit. */
 export const listPublishedShowcase = unstable_cache(
   async () => {
     const rows = await db.showcaseEntry.findMany({ where: { published: true }, orderBy: { name: "asc" } });

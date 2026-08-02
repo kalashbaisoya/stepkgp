@@ -55,7 +55,7 @@ export async function notifyMany(userIds: string[], templateKey: string, vars?: 
   await Promise.all(Array.from(new Set(userIds)).map((id) => notify(id, templateKey, vars, href)));
 }
 
-/** Users holding a given permission-bearing role (e.g. staff) — for internal alerts. */
+/** Users holding a given permission-bearing role (e.g. staff), for internal alerts. */
 export async function usersWithRole(...roleKeys: string[]) {
   const rows = await db.user.findMany({
     where: { roles: { some: { role: { key: { in: roleKeys } } } }, deletedAt: null },

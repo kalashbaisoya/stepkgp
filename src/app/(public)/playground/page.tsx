@@ -35,12 +35,12 @@ export type StartupIdeaState = {
 };
 
 const STAGES = [
-  { id: 1, name: 'Idea & Problem Discovery', icon: '💡', desc: 'Browse Seeded Issues or Blueprint Your Idea' },
-  { id: 2, name: 'Faculty & Market Validation', icon: '🔬', desc: 'IIT KGP Research Lookup & Alumni Reachout' },
-  { id: 3, name: 'Surds Business Intelligence', icon: '📊', desc: 'TAM/SAM, Competitor Analysis & Viability' },
-  { id: 4, name: 'Social Launchpack', icon: '🚀', desc: 'LinkedIn Post & Elevator Pitch Generator' },
-  { id: 5, name: 'VC Dispatch & Legal Vault', icon: '⚖️', desc: 'Incubation Pitch & Compliance Checklist' },
-  { id: 6, name: 'Co-Founder & Talent Matchmaking', icon: '🤝', desc: 'Find Co-Founders, CTOs & Engineers' },
+  { id: 1, name: 'Idea & Problem Discovery', icon: '💡', tint: 'clay-sun', desc: 'Browse Seeded Issues or Blueprint Your Idea' },
+  { id: 2, name: 'Faculty & Market Validation', icon: '🔬', tint: 'clay-sky', desc: 'IIT KGP Research Lookup & Alumni Reachout' },
+  { id: 3, name: 'Surds Business Intelligence', icon: '📊', tint: 'clay-mint', desc: 'TAM/SAM, Competitor Analysis & Viability' },
+  { id: 4, name: 'Social Launchpack', icon: '🚀', tint: 'clay-lilac', desc: 'LinkedIn Post & Elevator Pitch Generator' },
+  { id: 5, name: 'VC Dispatch & Legal Vault', icon: '⚖️', tint: 'clay-rose', desc: 'Incubation Pitch & Compliance Checklist' },
+  { id: 6, name: 'Co-Founder & Talent Matchmaking', icon: '🤝', tint: 'clay-soft', desc: 'Find Co-Founders, CTOs & Engineers' },
 ];
 
 export default function StartupPlaygroundPage() {
@@ -153,32 +153,32 @@ export default function StartupPlaygroundPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-800 selection:bg-stone-900 selection:text-stone-50 font-sans pb-24 relative overflow-hidden">
-      {/* Background Soft Subtle Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+    <div className="min-h-screen bg-background text-foreground font-sans pb-24 relative">
+      {/* Soft clay backdrop */}
+      <div className="clay-blobs absolute inset-x-0 top-0 h-[36rem] pointer-events-none" aria-hidden />
 
       {/* Top Header Navigation */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#FAF9F6]/90 border-b border-stone-200/90 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4">
+        <div className="clay max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 px-5 py-4 backdrop-blur-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-stone-900 flex items-center justify-center font-black text-stone-50 shadow-xs">
+            <div className="clay-sm clay-primary w-11 h-11 flex items-center justify-center text-lg">
               ⚡
             </div>
             <div>
-              <h1 className="text-xl font-extrabold tracking-tight text-stone-900">
+              <h1 className="text-xl font-extrabold tracking-tight">
                 STEP Startup Playground
               </h1>
-              <p className="text-xs text-stone-500 font-medium">
-                IIT Kharagpur Incubation & Node Graph Execution Engine
+              <p className="text-xs text-muted-foreground font-medium">
+                IIT Kharagpur Incubation &amp; Node Graph Execution Engine
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
             {/* Govt & IP Services Direct Action Button */}
             <button
               onClick={() => setGovtOpen(true)}
-              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-400 text-stone-950 hover:bg-amber-500 border border-stone-900 transition shadow-2xs flex items-center gap-1.5"
+              className="clay-btn clay-sun text-xs px-3.5 py-2"
             >
               <span>🏛️</span> Govt &amp; IP Services
             </button>
@@ -186,7 +186,7 @@ export default function StartupPlaygroundPage() {
             {/* Statewise Policies & SOPs Direct Action Button */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-900 text-stone-50 hover:bg-stone-800 border border-stone-900 transition shadow-2xs flex items-center gap-1.5"
+              className="clay-btn clay-dark text-xs px-3.5 py-2"
             >
               <span>📜</span> Statewise Policies &amp; SOPs
             </button>
@@ -194,7 +194,7 @@ export default function StartupPlaygroundPage() {
             {/* Hybrid Search Button */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-white border border-stone-300 text-stone-700 hover:bg-stone-100 transition shadow-2xs flex items-center gap-1.5"
+              className="clay-btn clay-plain text-xs px-3.5 py-2"
             >
               <span>🔍</span> Search Ecosystem
             </button>
@@ -202,7 +202,7 @@ export default function StartupPlaygroundPage() {
             {/* Claim Profile Button */}
             <button
               onClick={() => setProfileOpen(true)}
-              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-100 border border-amber-300 text-amber-900 hover:bg-amber-200 transition shadow-2xs flex items-center gap-1.5"
+              className="clay-btn clay-soft text-xs px-3.5 py-2"
             >
               <span>👤</span> Claim Profile
             </button>
@@ -210,7 +210,7 @@ export default function StartupPlaygroundPage() {
             {/* MVP Spec Builder */}
             <button
               onClick={() => setMvpOpen(true)}
-              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-950 hover:bg-emerald-200 transition shadow-2xs flex items-center gap-1.5"
+              className="clay-btn clay-mint text-xs px-3.5 py-2"
             >
               <span>⚙️</span> MVP Spec Builder
             </button>
@@ -218,9 +218,9 @@ export default function StartupPlaygroundPage() {
             {/* System Docs Link */}
             <Link
               href="/playground/docs"
-              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-900 text-stone-50 hover:bg-stone-800 transition shadow-2xs flex items-center gap-1.5"
+              className="clay-btn clay-sky text-xs px-3.5 py-2"
             >
-              <span>📚</span> Docs & System Guide
+              <span>📚</span> Docs &amp; System Guide
             </Link>
           </div>
         </div>
@@ -231,36 +231,36 @@ export default function StartupPlaygroundPage() {
         <PlaygroundHero onStartBuilding={scrollToWorkspace} />
 
         {/* Workspace Toolbar: Execute Graph & View Toggle */}
-        <div id="playground-workspace" className="scroll-mt-24 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl border border-stone-200 shadow-xs">
+        <div id="playground-workspace" className="clay scroll-mt-28 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4">
           <div className="flex items-center gap-3">
             <button
               onClick={handleExecuteFullGraph}
               disabled={executingNode}
-              className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs shadow-xs transition flex items-center gap-2 disabled:opacity-50"
+              className="clay-btn clay-dark px-4 py-2.5 text-xs"
             >
               <span>⚡</span> {executingNode ? 'Executing Node Engine...' : 'Run Full Graph Execution'}
             </button>
 
-            <span className="text-xs text-stone-500 font-medium hidden md:inline">
+            <span className="text-xs text-muted-foreground font-medium hidden md:inline">
               Executes Nodes 1–5 backend pipeline synchronously
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-stone-400 font-bold">Topology Layout:</span>
-            <div className="flex bg-stone-100 p-1 rounded-lg border border-stone-200">
+            <span className="text-xs text-muted-foreground font-semibold">Topology Layout:</span>
+            <div className="clay-inset flex gap-1 p-1.5 rounded-[1rem]">
               <button
                 onClick={() => setViewMode('canvas')}
-                className={`text-xs font-bold px-3 py-1 rounded-md transition ${
-                  viewMode === 'canvas' ? 'bg-stone-900 text-stone-50 shadow-2xs' : 'text-stone-700 hover:text-stone-950'
+                className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition ${
+                  viewMode === 'canvas' ? 'clay-sm clay-dark' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 📐 Canvas Graph
               </button>
               <button
                 onClick={() => setViewMode('stepper')}
-                className={`text-xs font-bold px-3 py-1 rounded-md transition ${
-                  viewMode === 'stepper' ? 'bg-stone-900 text-stone-50 shadow-2xs' : 'text-stone-700 hover:text-stone-950'
+                className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition ${
+                  viewMode === 'stepper' ? 'clay-sm clay-dark' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 📊 Linear Stepper
@@ -281,19 +281,20 @@ export default function StartupPlaygroundPage() {
               }}
             />
           ) : (
-            <div className="p-6 rounded-xl bg-white border border-stone-200/90 shadow-xs">
-              <div className="flex justify-between items-center mb-6">
+            <div className="clay p-6">
+              <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-stone-900">STAGE {currentStage} OF {STAGES.length}</span>
-                  <span className="text-stone-300">•</span>
-                  <span className="text-sm font-semibold text-stone-700">{STAGES[currentStage - 1].name}</span>
+                  <span className="clay-chip clay-soft text-[13px] uppercase tracking-wider">
+                    Stage {currentStage} of {STAGES.length}
+                  </span>
+                  <span className="text-sm font-semibold text-foreground/80">{STAGES[currentStage - 1].name}</span>
                 </div>
-                <div className="text-xs font-semibold text-stone-500">
+                <div className="text-xs font-semibold text-muted-foreground">
                   Progress: {Math.round((currentStage / STAGES.length) * 100)}%
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3">
                 {STAGES.map((s) => {
                   const isActive = s.id === currentStage;
                   const isCompleted = s.id < currentStage;
@@ -304,24 +305,22 @@ export default function StartupPlaygroundPage() {
                         setCurrentStage(s.id);
                         handleExecuteBackendNode(s.id);
                       }}
-                      className={`flex flex-col p-3.5 rounded-xl border text-left transition-all relative ${
-                        isActive
-                          ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-md ring-2 ring-stone-900/10'
-                          : isCompleted
-                          ? 'bg-stone-100/90 border-stone-300 text-stone-800 hover:border-stone-400'
-                          : 'bg-white border-stone-200 text-stone-400 hover:border-stone-300'
+                      className={`clay-btn clay-plain flex flex-col items-stretch justify-start gap-2 p-4 text-left ${
+                        isActive ? 'ring-2 ring-brand' : ''
                       }`}
                     >
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-lg">{s.icon}</span>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                          isActive ? 'bg-stone-50 text-stone-950' : isCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-stone-100 text-stone-500'
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`clay-sm ${s.tint} flex h-10 w-10 items-center justify-center text-lg`}>
+                          {s.icon}
+                        </span>
+                        <span className={`text-[13px] font-bold px-2.5 py-1 rounded-full ${
+                          isActive ? 'bg-brand text-white' : 'bg-black/6 text-muted-foreground'
                         }`}>
                           {isCompleted ? '✓ DONE' : isActive ? 'ACTIVE' : `STEP ${s.id}`}
                         </span>
                       </div>
-                      <span className="text-xs font-bold truncate">{s.name}</span>
-                      <span className="text-[10px] opacity-75 truncate">{s.desc}</span>
+                      <span className="text-sm font-bold leading-snug">{s.name}</span>
+                      <span className="text-xs text-muted-foreground font-medium leading-snug">{s.desc}</span>
                     </button>
                   );
                 })}
@@ -337,23 +336,23 @@ export default function StartupPlaygroundPage() {
         <HalfBakedNewsletterSection />
 
         {/* Active Stage Workspace Banner */}
-        <div className="p-4 md:p-5 rounded-xl bg-white border border-stone-300 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="clay p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <span className="text-2xl p-2 rounded-lg bg-amber-100 border border-amber-300">
+            <span className={`clay-sm ${STAGES[currentStage - 1].tint} text-2xl flex h-12 w-12 items-center justify-center`}>
               {STAGES[currentStage - 1].icon}
             </span>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900 px-2 py-0.5 rounded bg-amber-100 inline-block mb-1">
-                STAGE WORKSPACE {currentStage}
+              <span className="clay-chip clay-soft text-xs uppercase tracking-wider mb-1.5">
+                Stage workspace {currentStage}
               </span>
-              <h3 className="text-base font-bold text-stone-900 leading-tight">
+              <h3 className="text-base font-bold leading-tight">
                 {STAGES[currentStage - 1].name}
               </h3>
             </div>
           </div>
-          <div className="text-xs font-semibold text-stone-700 bg-stone-50 px-3.5 py-2 rounded-lg border border-stone-200 flex items-center gap-2">
-            <span>Selected Idea:</span>
-            <strong className="text-stone-900 font-bold px-2 py-0.5 rounded bg-amber-100">
+          <div className="clay-inset text-xs font-semibold text-foreground/80 px-3.5 py-2.5 flex flex-wrap items-center gap-2">
+            <span className="text-muted-foreground">Selected Idea:</span>
+            <strong className="clay-chip clay-sun text-[13px]">
               {ideaState.title}
             </strong>
           </div>
@@ -390,30 +389,30 @@ export default function StartupPlaygroundPage() {
         </div>
 
         {/* Navigation Controls */}
-        <div className="mt-12 flex items-center justify-between p-4 rounded-xl bg-white border border-stone-200 shadow-xs">
+        <div className="clay mt-12 flex flex-wrap items-center justify-between gap-3 p-4">
           <button
             disabled={currentStage === 1}
             onClick={handlePrevStage}
-            className="px-5 py-2.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-300 disabled:opacity-40 disabled:cursor-not-allowed font-semibold text-xs transition"
+            className="clay-btn clay-plain px-5 py-2.5 text-xs"
           >
             ← Previous Stage
           </button>
 
-          <div className="text-xs text-stone-500 hidden sm:block">
-            Currently working on: <span className="text-stone-900 font-bold">{ideaState.title}</span>
+          <div className="text-xs text-muted-foreground hidden sm:block">
+            Currently working on: <span className="text-foreground font-bold">{ideaState.title}</span>
           </div>
 
           {currentStage < STAGES.length ? (
             <button
               onClick={handleNextStage}
-              className="px-6 py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs shadow-sm transition"
+              className="clay-btn clay-dark px-6 py-2.5 text-xs"
             >
               Continue to {STAGES[currentStage].name} →
             </button>
           ) : (
             <button
               onClick={() => alert('Congratulations! Your startup package is ready for STEP Incubation Review.')}
-              className="px-6 py-2.5 rounded-lg bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-sm transition"
+              className="clay-btn clay-mint px-6 py-2.5 text-xs"
             >
               🎉 Submit to STEP Incubation
             </button>

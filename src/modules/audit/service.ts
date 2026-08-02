@@ -37,7 +37,7 @@ export async function queryAudit(opts: {
       action: r.action,
       targetType: r.targetType,
       targetId: r.targetId,
-      actor: r.actorId ? actorName[r.actorId] ?? "—" : "system",
+      actor: r.actorId ? actorName[r.actorId] ?? "-" : "system",
       ip: r.ip,
       at: r.createdAt,
       before: r.before,

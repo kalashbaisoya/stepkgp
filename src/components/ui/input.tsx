@@ -8,13 +8,7 @@ export const Input = React.forwardRef<
   <input
     ref={ref}
     type={type}
-    className={cn(
-      "flex h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-sm",
-      "placeholder:text-muted-foreground",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background",
-      "disabled:cursor-not-allowed disabled:opacity-50",
-      className,
-    )}
+    className={cn("clay-field h-11 text-sm", className)}
     {...props}
   />
 ));
@@ -26,7 +20,7 @@ export function Label({
 }: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
-      className={cn("mb-1.5 block text-sm font-medium text-foreground", className)}
+      className={cn("mb-1.5 block text-sm font-semibold text-foreground", className)}
       {...props}
     />
   );

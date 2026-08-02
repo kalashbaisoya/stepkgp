@@ -132,7 +132,7 @@ export function FormBuilder({
         </div>
         <div className="flex items-center gap-3">
           {note && <span className="text-sm text-status-success">{note}</span>}
-          <div className="flex rounded-md border border-border p-0.5 text-sm">
+          <div className="clay-inset flex gap-1 p-1 text-sm">
             <button onClick={() => setMode("edit")} className={`rounded px-3 py-1 ${mode === "edit" ? "bg-muted font-medium" : "text-muted-foreground"}`}>Edit</button>
             <button onClick={() => setMode("preview")} className={`rounded px-3 py-1 ${mode === "preview" ? "bg-muted font-medium" : "text-muted-foreground"}`}>Preview</button>
           </div>
@@ -146,7 +146,7 @@ export function FormBuilder({
       ) : (
         <div className="space-y-6">
           {sections.map((section, si) => (
-            <div key={section.id} className="rounded-xl border border-border bg-surface p-5">
+            <div key={section.id} className="clay p-5">
               <div className="mb-4 flex items-center gap-2">
                 <Input value={section.title} onChange={(e) => updateSection(si, { title: e.target.value, key: slug(e.target.value) })} className="max-w-xs font-medium" />
                 <div className="ml-auto flex items-center gap-1 text-muted-foreground">
@@ -202,7 +202,7 @@ function FieldEditor({
   const meta = FIELD_TYPES[field.type];
   const v = field.validation ?? {};
   return (
-    <div className="rounded-lg border border-border bg-surface-2 p-3">
+    <div className="clay clay-well p-3">
       <div className="flex flex-wrap items-end gap-3">
         <div className="min-w-[9rem] flex-1">
           <span className="mb-1 block text-xs text-muted-foreground">Label</span>
@@ -217,7 +217,7 @@ function FieldEditor({
           <select
             value={field.type}
             onChange={(e) => onChange({ type: e.target.value as FieldType })}
-            className="h-10 w-full rounded-md border border-border bg-surface px-2 text-sm"
+            className="clay-field h-11 text-sm"
           >
             {FIELD_TYPE_KEYS.map((t) => <option key={t} value={t}>{FIELD_TYPES[t].label}</option>)}
           </select>
@@ -283,7 +283,7 @@ function FieldEditor({
           <select
             value={field.conditional?.field ?? ""}
             onChange={(e) => onChange({ conditional: e.target.value ? { field: e.target.value, equals: field.conditional?.equals ?? "" } : null })}
-            className="h-10 w-full rounded-md border border-border bg-surface px-2 text-sm"
+            className="clay-field h-11 text-sm"
           >
             <option value="">(always show)</option>
             {allKeys.map((k) => <option key={k} value={k}>{k}</option>)}
@@ -304,7 +304,7 @@ function Preview({ sections }: { sections: FormSectionDef[] }) {
   const [values, setValues] = useState<Record<string, unknown>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   return (
-    <div className="rounded-xl border border-border bg-surface p-6">
+    <div className="clay p-6">
       <FormRenderer
         sections={sections}
         values={values}
@@ -321,7 +321,7 @@ function Preview({ sections }: { sections: FormSectionDef[] }) {
         >
           Validate
         </Button>
-        <span className="text-sm text-muted-foreground">Preview only — validation runs the compiled rules.</span>
+        <span className="text-sm text-muted-foreground">Preview only. Validation runs the compiled rules.</span>
       </div>
     </div>
   );

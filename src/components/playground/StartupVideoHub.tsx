@@ -60,18 +60,18 @@ export default function StartupVideoHub() {
   const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
 
   return (
-    <div className="p-6 md:p-8 rounded-none bg-white border-2 border-stone-900 shadow-[6px_6px_0px_0px_rgba(28,25,23,1)] space-y-6">
+    <div className="clay-lg p-6 md:p-8 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b-2 border-stone-900 pb-4">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-none bg-amber-400 text-stone-950 text-[10px] font-black uppercase tracking-wider border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(28,25,23,1)] mb-1">
-            📺 STEP FOUNDER ACADEMY
-          </div>
-          <h2 className="text-xl font-black text-stone-900 tracking-tight">
-            Founder Masterclasses & Course Hub
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-border/70 pb-4">
+        <div className="space-y-1.5">
+          <span className="clay-chip clay-sun text-xs uppercase tracking-wider">
+            📺 STEP Founder Academy
+          </span>
+          <h2 className="text-xl font-extrabold tracking-tight">
+            Founder Masterclasses &amp; Course Hub
           </h2>
-          <p className="text-xs text-stone-600 font-medium">
-            Curated Y Combinator & Stanford founder talks covering every stage of the incubation journey.
+          <p className="text-xs text-muted-foreground font-medium">
+            Curated Y Combinator &amp; Stanford founder talks covering every stage of the incubation journey.
           </p>
         </div>
       </div>
@@ -82,40 +82,40 @@ export default function StartupVideoHub() {
           <div
             key={video.id}
             onClick={() => setActiveVideo(video)}
-            className="p-3.5 rounded-none bg-[#FAF9F5] border-2 border-stone-900 hover:border-amber-500 transition-all cursor-pointer flex flex-col justify-between group shadow-[4px_4px_0px_0px_rgba(28,25,23,1)] hover:shadow-[6px_6px_0px_0px_rgba(217,119,6,1)] hover:-translate-y-0.5"
+            className="clay clay-hover clay-plain p-3.5 cursor-pointer flex flex-col justify-between group"
           >
             <div className="space-y-3">
               {/* Thumbnail Container */}
-              <div className="relative aspect-video rounded-none overflow-hidden border-2 border-stone-900 bg-stone-950">
+              <div className="clay-inset relative aspect-video overflow-hidden rounded-2xl">
                 <img
                   src={video.thumbnail}
                   alt={video.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 opacity-90 group-hover:opacity-100"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-stone-950/20 group-hover:bg-stone-950/0 transition-colors flex items-center justify-center">
-                  <div className="w-10 h-10 rounded-none bg-amber-400 text-stone-950 border-2 border-stone-900 flex items-center justify-center text-sm font-black shadow-[2px_2px_0px_0px_rgba(28,25,23,1)] group-hover:scale-110 transition-transform">
+                <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <div className="clay-sm clay-primary w-11 h-11 rounded-full flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
                     ▶
                   </div>
                 </div>
-                <span className="absolute bottom-2 right-2 text-[9px] font-black bg-stone-900 text-stone-50 px-2 py-0.5 rounded-none border border-stone-900">
+                <span className="absolute bottom-2 right-2 text-[11px] font-semibold bg-black/55 text-white px-2 py-0.5 rounded-full backdrop-blur">
                   {video.duration}
                 </span>
               </div>
 
-              <span className="text-[10px] font-black px-2 py-0.5 rounded-none bg-stone-900 text-stone-50 border border-stone-900 inline-block">
+              <span className="clay-chip clay-sky text-xs">
                 {video.category}
               </span>
 
-              <h3 className="text-xs font-black text-stone-900 group-hover:text-amber-800 transition line-clamp-2 leading-snug">
+              <h3 className="text-sm font-bold group-hover:text-brand transition line-clamp-2 leading-snug">
                 {video.title}
               </h3>
 
-              <p className="text-[11px] text-stone-600 font-medium line-clamp-2 leading-relaxed">
+              <p className="text-[13px] text-muted-foreground font-medium line-clamp-2 leading-relaxed">
                 {video.description}
               </p>
             </div>
 
-            <div className="mt-4 pt-3 border-t-2 border-stone-900 flex items-center justify-between text-[10px] font-black text-stone-900">
+            <div className="mt-4 pt-3 border-t border-border/70 flex items-center justify-between text-xs font-bold">
               <span>Watch Video</span>
               <span className="group-hover:translate-x-1 transition">→</span>
             </div>
@@ -125,24 +125,25 @@ export default function StartupVideoHub() {
 
       {/* Embedded Video Modal */}
       {activeVideo && (
-        <div className="fixed inset-0 z-50 bg-stone-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FAF9F5] border-4 border-stone-900 rounded-none max-w-3xl w-full p-6 space-y-4 shadow-[12px_12px_0px_0px_rgba(28,25,23,1)]">
-            <div className="flex justify-between items-center border-b-2 border-stone-900 pb-3">
-              <div>
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-none bg-amber-400 text-stone-950 border border-stone-900">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="clay-lg max-w-3xl w-full p-6 space-y-4">
+            <div className="flex justify-between items-start gap-3 border-b border-border/70 pb-3">
+              <div className="space-y-1.5">
+                <span className="clay-chip clay-sun text-xs uppercase">
                   {activeVideo.category}
                 </span>
-                <h3 className="text-sm font-black text-stone-900 mt-1">{activeVideo.title}</h3>
+                <h3 className="text-sm font-bold">{activeVideo.title}</h3>
               </div>
               <button
                 onClick={() => setActiveVideo(null)}
-                className="w-8 h-8 rounded-none bg-stone-900 text-stone-50 font-black text-xs border border-stone-900 hover:bg-amber-400 hover:text-stone-950 transition"
+                aria-label="Close video"
+                className="clay-btn clay-plain w-9 h-9 shrink-0 rounded-full text-xs"
               >
                 ✕
               </button>
             </div>
 
-            <div className="aspect-video w-full rounded-none overflow-hidden border-2 border-stone-900 shadow-md">
+            <div className="clay-inset aspect-video w-full overflow-hidden rounded-2xl">
               <iframe
                 src={`https://www.youtube.com/embed/${activeVideo.embedId}?autoplay=1`}
                 title={activeVideo.title}
@@ -152,13 +153,13 @@ export default function StartupVideoHub() {
               />
             </div>
 
-            <div className="flex justify-between items-center text-xs font-semibold text-stone-700">
+            <div className="flex flex-wrap justify-between items-center gap-3 text-xs font-medium text-muted-foreground">
               <p>{activeVideo.description}</p>
               <a
                 href={activeVideo.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3 py-1.5 rounded-none bg-stone-900 text-stone-50 font-black text-xs hover:bg-amber-400 hover:text-stone-950 transition shrink-0 border border-stone-900"
+                className="clay-btn clay-primary px-4 py-2 text-xs shrink-0"
               >
                 Open on YouTube ↗
               </a>

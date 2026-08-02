@@ -100,27 +100,27 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
   return (
     <div className="space-y-6">
       {/* Sub-Header Mode Switcher */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-none bg-white border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)]">
+      <div className="clay flex flex-col sm:flex-row items-center justify-between gap-4 p-5">
         <div>
-          <h2 className="text-base font-black text-stone-900">Stage 1: Idea & Problem Discovery</h2>
-          <p className="text-xs text-stone-600 font-medium">
-            Select a verified problem seeded by alumni & professors, or blueprint your custom idea.
+          <h2 className="text-base font-bold">Stage 1: Idea &amp; Problem Discovery</h2>
+          <p className="text-xs text-muted-foreground font-medium">
+            Select a verified problem seeded by alumni &amp; professors, or blueprint your custom idea.
           </p>
         </div>
 
-        <div className="flex bg-[#FAF9F5] p-1 rounded-none border-2 border-stone-900 shadow-[2px_2px_0px_0px_rgba(28,25,23,1)] w-full sm:w-auto">
+        <div className="clay-inset flex gap-1 p-1.5 rounded-[1rem] w-full sm:w-auto">
           <button
             onClick={() => setActiveTab('feed')}
-            className={`flex-1 sm:flex-initial text-xs font-black px-4 py-2 rounded-none transition border-2 ${
-              activeTab === 'feed' ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-[2px_2px_0px_0px_rgba(217,119,6,1)]' : 'bg-transparent text-stone-700 hover:text-stone-950 border-transparent'
+            className={`flex-1 sm:flex-initial text-xs font-semibold px-4 py-2 rounded-xl transition ${
+              activeTab === 'feed' ? 'clay-sm clay-dark' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             🌱 Seeded Issues Feed ({problems.length})
           </button>
           <button
             onClick={() => setActiveTab('custom')}
-            className={`flex-1 sm:flex-initial text-xs font-black px-4 py-2 rounded-none transition border-2 ${
-              activeTab === 'custom' ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-[2px_2px_0px_0px_rgba(217,119,6,1)]' : 'bg-transparent text-stone-700 hover:text-stone-950 border-transparent'
+            className={`flex-1 sm:flex-initial text-xs font-semibold px-4 py-2 rounded-xl transition ${
+              activeTab === 'custom' ? 'clay-sm clay-dark' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             ✍️ Custom Blueprint
@@ -137,12 +137,12 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="🔍 Search seeded problems by keyword, domain (AgriTech, Robotics, MedTech...)..."
-              className="flex-1 px-4 py-2.5 rounded-none bg-white border-2 border-stone-900 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-stone-900 text-stone-900 shadow-[3px_3px_0px_0px_rgba(28,25,23,1)]"
+              className="clay-field flex-1 text-xs font-medium"
             />
           </div>
 
           {loading ? (
-            <div className="p-12 text-center text-stone-600 text-xs font-black animate-pulse">
+            <div className="clay-inset p-12 text-center text-muted-foreground text-xs font-semibold animate-pulse">
               Loading Seeded Problems from STEP Database...
             </div>
           ) : (
@@ -159,40 +159,36 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
                 return (
                   <div
                     key={prob.id}
-                    className={`p-5 rounded-none border-2 transition-all flex flex-col justify-between ${
-                      isSelected
-                        ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-[6px_6px_0px_0px_rgba(217,119,6,1)]'
-                        : 'bg-white border-stone-900 text-stone-800 shadow-[4px_4px_0px_0px_rgba(28,25,23,1)] hover:shadow-[6px_6px_0px_0px_rgba(28,25,23,1)]'
+                    className={`clay clay-hover p-5 flex flex-col justify-between ${
+                      isSelected ? 'clay-dark' : 'clay-plain'
                     }`}
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2">
-                        <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-none border border-stone-900 ${
-                          isSelected ? 'bg-amber-400 text-stone-950' : 'bg-[#FAF9F5] text-stone-900'
-                        }`}>
+                        <span className={`clay-chip text-xs ${isSelected ? 'clay-sun' : 'clay-soft'}`}>
                           {prob.category}
                         </span>
-                        <span className={`text-xs font-bold ${isSelected ? 'text-stone-300' : 'text-stone-600'}`}>
+                        <span className="text-xs font-semibold opacity-70">
                           ▲ {prob.upvotes} Founder Upvotes
                         </span>
                       </div>
 
-                      <h3 className="text-base font-black leading-snug">{prob.title}</h3>
-                      <p className={`text-xs leading-relaxed font-medium ${isSelected ? 'text-stone-300' : 'text-stone-700'}`}>
+                      <h3 className="text-base font-bold leading-snug">{prob.title}</h3>
+                      <p className="text-xs leading-relaxed font-medium opacity-75">
                         {prob.description}
                       </p>
 
                       {/* Author Tag */}
-                      <div className={`text-[11px] font-bold flex items-center gap-1.5 ${isSelected ? 'text-amber-300' : 'text-stone-800'}`}>
+                      <div className="text-[13px] font-semibold flex items-center gap-1.5 opacity-80">
                         <span>👤</span> Seeded by {prob.authorName} ({prob.authorRole})
                       </div>
                     </div>
 
-                    <div className="mt-5 pt-4 border-t-2 border-stone-900 flex items-center justify-between">
-                      <div className="flex flex-wrap gap-1">
+                    <div className={`mt-5 pt-4 border-t ${isSelected ? 'border-white/15' : 'border-border/70'} flex flex-wrap items-center justify-between gap-3`}>
+                      <div className="flex flex-wrap gap-1.5">
                         {tags.map((t: string) => (
-                          <span key={t} className={`text-[9px] font-bold px-2 py-0.5 rounded-none border border-stone-900 ${
-                            isSelected ? 'bg-stone-800 text-amber-300' : 'bg-stone-100 text-stone-800'
+                          <span key={t} className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                            isSelected ? 'bg-white/12' : 'bg-black/6'
                           }`}>
                             #{t}
                           </span>
@@ -201,11 +197,7 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
 
                       <button
                         onClick={() => handleSelectProblem(prob)}
-                        className={`text-xs font-black px-4 py-2 rounded-none border-2 border-stone-900 transition ${
-                          isSelected
-                            ? 'bg-amber-400 hover:bg-amber-500 text-stone-950 shadow-[2px_2px_0px_0px_rgba(28,25,23,1)]'
-                            : 'bg-stone-900 hover:bg-stone-800 text-stone-50 shadow-[2px_2px_0px_0px_rgba(217,119,6,1)]'
-                        }`}
+                        className={`clay-btn text-xs px-4 py-2 ${isSelected ? 'clay-sun' : 'clay-primary'}`}
                       >
                         {isSelected ? '✓ Selected Idea' : 'Select Idea'}
                       </button>
@@ -219,27 +211,27 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
           <div className="flex justify-end pt-4">
             <button
               onClick={onNext}
-              className="px-6 py-3 rounded-none bg-stone-900 hover:bg-stone-800 text-stone-50 font-black text-xs border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(217,119,6,1)] transition"
+              className="clay-btn clay-primary px-6 py-3 text-xs"
             >
-              Confirm Idea & Proceed to Validation →
+              Confirm Idea &amp; Proceed to Validation →
             </button>
           </div>
         </div>
       ) : (
-        /* Custom Blueprint Form - Rectangular Neo-Brutalist Layout */
-        <form onSubmit={handleCustomSubmit} className="p-6 rounded-none bg-white border-2 border-stone-900 shadow-[6px_6px_0px_0px_rgba(28,25,23,1)] space-y-6">
-          <div className="flex items-center justify-between border-b-2 border-stone-900 pb-3">
-            <h3 className="text-base font-black text-stone-900 uppercase tracking-wider flex items-center gap-2">
-              <span>✍️</span> BLUEPRINT CUSTOM STARTUP IDEA
+        /* Custom Blueprint Form */
+        <form onSubmit={handleCustomSubmit} className="clay p-6 space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-3">
+            <h3 className="text-base font-bold flex items-center gap-2">
+              <span>✍️</span> Blueprint a custom startup idea
             </h3>
-            <span className="text-[10px] font-black px-2.5 py-0.5 rounded-none bg-amber-400 text-stone-950 border border-stone-900">
+            <span className="clay-chip clay-sun text-xs">
               STEP Incubator Format
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <label className="text-xs font-black uppercase text-stone-900 flex items-center gap-1">
+              <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <span>📌</span> Startup Title
               </label>
               <input
@@ -248,18 +240,18 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
                 value={customIdea.title}
                 onChange={(e) => setCustomIdea({ ...customIdea, title: e.target.value })}
                 placeholder="e.g. Autonomous Agri-Drone Mesh Network"
-                className="w-full px-4 py-3 rounded-none bg-[#FAF9F5] border-2 border-stone-900 text-xs font-semibold focus:ring-2 focus:ring-amber-400 text-stone-900 shadow-[3px_3px_0px_0px_rgba(28,25,23,1)]"
+                className="clay-field text-xs font-semibold"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-black uppercase text-stone-900 flex items-center gap-1">
+              <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <span>🏷️</span> Category / Domain
               </label>
               <select
                 value={customIdea.category}
                 onChange={(e) => setCustomIdea({ ...customIdea, category: e.target.value })}
-                className="w-full px-4 py-3 rounded-none bg-[#FAF9F5] border-2 border-stone-900 text-xs font-bold focus:ring-2 focus:ring-amber-400 text-stone-900 shadow-[3px_3px_0px_0px_rgba(28,25,23,1)]"
+                className="clay-field text-xs font-semibold"
               >
                 <option value="DeepTech / Robotics">DeepTech / Robotics</option>
                 <option value="MedTech / BioTech">MedTech / BioTech</option>
@@ -271,7 +263,7 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-black uppercase text-stone-900 flex items-center gap-1">
+            <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
               <span>⚠️</span> Problem Statement
             </label>
             <textarea
@@ -280,13 +272,13 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
               value={customIdea.problemStatement}
               onChange={(e) => setCustomIdea({ ...customIdea, problemStatement: e.target.value })}
               placeholder="Describe the specific problem or market pain point you are solving..."
-              className="w-full px-4 py-3 rounded-none bg-[#FAF9F5] border-2 border-stone-900 text-xs font-medium focus:ring-2 focus:ring-amber-400 text-stone-900 shadow-[3px_3px_0px_0px_rgba(28,25,23,1)]"
+              className="clay-field text-xs font-medium"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-2">
-              <label className="text-xs font-black uppercase text-stone-900 flex items-center gap-1">
+              <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <span>💡</span> Proposed Solution
               </label>
               <textarea
@@ -295,12 +287,12 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
                 value={customIdea.proposedSolution}
                 onChange={(e) => setCustomIdea({ ...customIdea, proposedSolution: e.target.value })}
                 placeholder="Explain your technical solution, product, or service..."
-                className="w-full px-4 py-3 rounded-none bg-[#FAF9F5] border-2 border-stone-900 text-xs font-medium focus:ring-2 focus:ring-amber-400 text-stone-900 shadow-[3px_3px_0px_0px_rgba(28,25,23,1)]"
+                className="clay-field text-xs font-medium"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-black uppercase text-stone-900 flex items-center gap-1">
+              <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <span>🎯</span> Target Audience / Market
               </label>
               <textarea
@@ -309,7 +301,7 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
                 value={customIdea.targetAudience}
                 onChange={(e) => setCustomIdea({ ...customIdea, targetAudience: e.target.value })}
                 placeholder="Who are your primary buyers, users, or industry partners?"
-                className="w-full px-4 py-3 rounded-none bg-[#FAF9F5] border-2 border-stone-900 text-xs font-medium focus:ring-2 focus:ring-amber-400 text-stone-900 shadow-[3px_3px_0px_0px_rgba(28,25,23,1)]"
+                className="clay-field text-xs font-medium"
               />
             </div>
           </div>
@@ -318,7 +310,7 @@ export default function SeededProblemFeed({ ideaState, setIdeaState, onNext }: P
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-3 rounded-none bg-stone-900 hover:bg-stone-800 text-stone-50 font-black text-xs border-2 border-stone-900 shadow-[4px_4px_0px_0px_rgba(217,119,6,1)] transition active:translate-x-0.5 active:translate-y-0.5 disabled:opacity-50"
+              className="clay-btn clay-primary px-6 py-3 text-xs"
             >
               {isSubmitting ? 'Saving to STEP Database...' : 'Save Blueprint & Proceed →'}
             </button>

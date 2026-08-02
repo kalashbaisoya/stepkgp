@@ -13,11 +13,11 @@ export default async function FormsList() {
     <div>
       <h1 className="text-2xl font-semibold tracking-tight">Forms</h1>
       <p className="mt-2 text-muted-foreground">
-        Build application form templates — fields, validation, and options — with no code.
+        Build application form templates with no code: fields, validation, and options.
         Publishing creates an immutable version so past submissions stay valid.
       </p>
 
-      <div className="mt-8 overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="mt-8 overflow-hidden clay">
         <table className="w-full text-sm">
           <thead className="border-b border-border bg-surface-2 text-left text-muted-foreground">
             <tr>
@@ -32,7 +32,7 @@ export default async function FormsList() {
               <tr key={t.key}>
                 <td className="px-4 py-3 font-medium">{t.name}</td>
                 <td className="px-4 py-3 text-muted-foreground">{t.sectionCount}</td>
-                <td className="px-4 py-3 text-muted-foreground">{t.publishedVersion ? `v${t.publishedVersion}` : "— (draft only)"}</td>
+                <td className="px-4 py-3 text-muted-foreground">{t.publishedVersion ? `v${t.publishedVersion}` : "draft only"}</td>
                 <td className="px-4 py-3 text-right">
                   <Link href={`/admin/forms/${t.key}`} className="font-medium text-brand hover:underline">
                     Edit

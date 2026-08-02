@@ -28,7 +28,7 @@ export default async function ReportsPage({
           <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
           <p className="mt-2 text-muted-foreground">Applications, selection, incubation, funding and reviewer metrics.</p>
         </div>
-        <a href={`/api/admin/reports/export?report=summary${cycle ? `&cycle=${cycle}` : ""}`} className="inline-flex h-10 items-center rounded-md border border-border bg-surface px-4 text-sm font-medium hover:bg-muted">
+        <a href={`/api/admin/reports/export?report=summary${cycle ? `&cycle=${cycle}` : ""}`} className="clay-btn clay-plain h-11 px-5 text-sm">
           Export CSV
         </a>
       </div>

@@ -15,7 +15,7 @@ export function StartApplication({
 }) {
   const [pending, start] = useTransition();
   return (
-    <section className="rounded-xl border border-border bg-surface p-6">
+    <section className="clay p-6">
       <h2 className="text-sm font-medium text-muted-foreground">Start a new application</h2>
       <p className="mt-1 text-lg font-semibold">{cycleName}</p>
       <p className="mt-1 text-sm text-muted-foreground">Choose the category you&rsquo;re applying under:</p>

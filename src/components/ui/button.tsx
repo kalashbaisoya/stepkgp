@@ -5,18 +5,18 @@ type Variant = "primary" | "secondary" | "ghost" | "destructive" | "link" | "dar
 type Size = "sm" | "md" | "lg";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand text-brand-foreground hover:bg-brand-hover",
-  secondary: "bg-surface text-foreground border border-border hover:bg-muted",
-  dark: "bg-navy text-white hover:opacity-90",
-  ghost: "text-foreground hover:bg-muted",
-  destructive: "bg-status-danger text-white hover:opacity-90",
+  primary: "clay-btn clay-primary hover:bg-brand-hover",
+  secondary: "clay-btn clay-plain",
+  dark: "clay-btn clay-dark",
+  ghost: "rounded-[0.875rem] text-foreground hover:bg-muted transition-colors",
+  destructive: "clay-btn bg-status-danger text-white [--clay-ink:#fff]",
   link: "text-brand underline-offset-4 hover:underline p-0 h-auto",
 };
 
 const sizes: Record<Size, string> = {
-  sm: "h-8 px-3 text-sm",
-  md: "h-10 px-4 text-sm",
-  lg: "h-12 px-6 text-base",
+  sm: "h-9 px-3.5 text-sm",
+  md: "h-11 px-5 text-sm",
+  lg: "h-13 px-7 text-base",
 };
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -24,16 +24,16 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: Size;
 }
 
-/** Base button primitive — YC-style: square-ish, confident, high contrast. */
+/** Base button primitive. Clay: soft, rounded, lifts on hover, presses on click. */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", ...props }, ref) => (
     <button
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors",
+        "inline-flex items-center justify-center gap-2 font-semibold",
         "disabled:pointer-events-none disabled:opacity-50",
         variants[variant],
-        sizes[size],
+        variant !== "link" && sizes[size],
         className,
       )}
       {...props}

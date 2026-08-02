@@ -73,7 +73,7 @@ export function CyclesManager({
         <Button onClick={() => setForm(emptyForm())}>+ New cycle</Button>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="overflow-hidden clay">
         <table className="w-full text-sm">
           <thead className="border-b border-border bg-surface-2 text-left text-muted-foreground">
             <tr>
@@ -89,8 +89,8 @@ export function CyclesManager({
               <tr key={c.id}>
                 <td className="px-4 py-3 font-medium">{c.name || `${c.year} Cohort`}</td>
                 <td className={`px-4 py-3 ${statusColor[c.status]}`}>{c.status}</td>
-                <td className="px-4 py-3 text-muted-foreground">{c.formTemplateKey || "—"}</td>
-                <td className="px-4 py-3 text-muted-foreground">{c.categoryKeys.join(", ") || "—"}</td>
+                <td className="px-4 py-3 text-muted-foreground">{c.formTemplateKey || "-"}</td>
+                <td className="px-4 py-3 text-muted-foreground">{c.categoryKeys.join(", ") || "-"}</td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-2 text-xs">
                     <button onClick={() => setForm(c)} className="text-brand hover:underline">Edit</button>
@@ -108,7 +108,7 @@ export function CyclesManager({
       </div>
 
       {form && (
-        <div className="mt-6 rounded-xl border border-border bg-surface p-6">
+        <div className="mt-6 clay p-6">
           <h2 className="text-lg font-semibold">{form.id ? "Edit cycle" : "New cycle"}</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
@@ -132,7 +132,7 @@ export function CyclesManager({
               <select
                 value={form.formTemplateKey}
                 onChange={(e) => setForm({ ...form, formTemplateKey: e.target.value })}
-                className="h-10 w-full rounded-md border border-border bg-surface px-2 text-sm"
+                className="clay-field h-11 text-sm"
               >
                 <option value="">Select template…</option>
                 {templates.map((t) => <option key={t.key} value={t.key}>{t.name}</option>)}

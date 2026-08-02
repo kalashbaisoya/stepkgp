@@ -23,7 +23,7 @@ export default async function ApplicationPage({
     return (
       <div className="mx-auto max-w-2xl">
         <Link href="/app" className="text-sm text-muted-foreground hover:text-foreground">← Dashboard</Link>
-        <div className="mt-4 rounded-xl border border-border bg-surface p-8 text-center">
+        <div className="mt-4 clay p-8 text-center">
           <span className="inline-flex items-center rounded-full bg-status-info/10 px-3 py-1 text-sm font-medium capitalize text-status-info">
             ● {app.status}
           </span>
@@ -50,7 +50,7 @@ export default async function ApplicationPage({
           <h1 className="mt-1 text-2xl font-semibold tracking-tight">Your application</h1>
           <p className="text-sm text-muted-foreground">Progress saves automatically. You can leave and continue anytime.</p>
         </div>
-        <a href={`/api/applications/${app.id}/full`} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center rounded-md border border-border bg-surface px-4 text-sm font-medium hover:bg-muted">
+        <a href={`/api/applications/${app.id}/full`} target="_blank" rel="noopener noreferrer" className="clay-btn clay-plain h-11 px-5 text-sm">
           Preview full application
         </a>
       </div>

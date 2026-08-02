@@ -25,7 +25,7 @@ export default async function MenteeDetail({
       <p className="text-sm capitalize text-muted-foreground">{inc.status} · Month {inc.monthsElapsed}/11</p>
 
       <div className="mt-6 grid gap-6 sm:grid-cols-2">
-        <section className="rounded-xl border border-border bg-surface p-5">
+        <section className="clay p-5">
           <h2 className="mb-3 font-semibold">Milestones</h2>
           <ul className="space-y-1.5 text-sm">
             {inc.milestones.map((m) => (
@@ -37,7 +37,7 @@ export default async function MenteeDetail({
             {inc.milestones.length === 0 && <li className="text-muted-foreground">No milestones.</li>}
           </ul>
         </section>
-        <section className="rounded-xl border border-border bg-surface p-5">
+        <section className="clay p-5">
           <h2 className="mb-3 font-semibold">Review schedule</h2>
           <ul className="space-y-1 text-sm">
             {inc.reviews.map((r) => (

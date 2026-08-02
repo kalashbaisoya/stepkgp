@@ -2,7 +2,7 @@ import "server-only";
 
 /**
  * Minimal in-memory fixed-window rate limiter for auth/OTP endpoints (Phase 9 §7).
- * Single-instance only — swapped for a Redis-backed limiter when scaling horizontally.
+ * Single-instance only. Swapped for a Redis-backed limiter when scaling horizontally.
  */
 const buckets = new Map<string, { count: number; resetAt: number }>();
 

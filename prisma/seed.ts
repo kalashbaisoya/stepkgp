@@ -1,5 +1,5 @@
 /**
- * Seed script — idempotent. Provisions the foundation:
+ * Seed script. Idempotent, and provisions the foundation:
  *   - default organization (single-tenant v1)
  *   - RBAC roles + permission catalog + role↔permission mapping
  *   - an initial super-admin user (credentials from env or defaults for local dev)
@@ -12,7 +12,7 @@ import bcrypt from "bcryptjs";
 
 const db = new PrismaClient();
 
-// Permission catalog (Phase 9 §4.1) — resource:action.
+// Permission catalog (Phase 9 §4.1): resource:action.
 const PERMISSIONS = [
   "user:manage",
   "role:manage",
@@ -170,7 +170,7 @@ async function main() {
 
 // ---- CMS content (Milestone 2) ----
 async function seedCms() {
-  // Pages with published blocks — real STEP IIT Kharagpur content.
+  // Pages with published blocks: real STEP IIT Kharagpur content.
   const SECTORS = [
     { name: "Deep-tech" }, { name: "Robotics" }, { name: "Life sciences" },
     { name: "Enterprise software" }, { name: "Fintech" }, { name: "Hardware" }, { name: "Clean-tech" },
@@ -194,7 +194,7 @@ async function seedCms() {
       { year: "1986", title: "STEP established", body: "One of India's earliest science & technology entrepreneurs' parks, set up at IIT Kharagpur." },
       { year: "1987", title: "DST recognition", body: "Approved by the Department of Science & Technology, Government of India." },
       { year: "1989", title: "Operations begin", body: "STEP begins incubating its first ventures on the IIT Kharagpur campus." },
-      { year: "Today", title: "100+ startups", body: "A portfolio spanning deep-tech, robotics, life sciences, fintech and more — with global success stories." },
+      { year: "Today", title: "100+ startups", body: "A portfolio spanning deep-tech, robotics, life sciences, fintech and more, with global success stories." },
     ],
   };
 
@@ -209,13 +209,13 @@ async function seedCms() {
             eyebrow: "Science & Technology Entrepreneurs' Park",
             heading: "Where deep-tech ventures begin.",
             subheading:
-              "India's pioneering technology incubator at IIT Kharagpur — turning research into companies since 1986. 100+ startups nurtured and counting.",
+              "India's pioneering technology incubator at IIT Kharagpur, turning research into companies since 1986. 100+ startups nurtured and counting.",
             ctaLabel: "Apply to the 2026 Cohort",
             ctaHref: "/apply",
             secondaryLabel: "Explore startups",
             secondaryHref: "/startups",
             slides: [
-              { src: "/images/kgp-main-building.webp", caption: "IIT Kharagpur — Main Building" },
+              { src: "/images/kgp-main-building.webp", caption: "IIT Kharagpur, Main Building" },
               { src: "/images/step-office.webp", caption: "STEP campus office" },
               { src: "/images/gopali-tea-garden.webp", caption: "Kharagpur" },
             ],
@@ -228,7 +228,7 @@ async function seedCms() {
         },
         { type: "featuredStartups", data: { eyebrow: "Portfolio", title: "Companies built at STEP", subtitle: "Ventures that began at STEP and went on to national and global impact." } },
         {
-          // NOTE: placeholder quotes — replace with real, approved founder testimonials
+          // NOTE: placeholder quotes. Replace with real, approved founder testimonials
           // via Admin → Content. We do not publish quotes attributed to real people
           // without their sign-off.
           type: "testimonials",
@@ -249,7 +249,7 @@ async function seedCms() {
           data: {
             heading: "From the Managing Director",
             quote:
-              "For nearly four decades, STEP has provided a nurturing environment for entrepreneurs — a conduit between IIT Kharagpur and the world, turning research outcomes into commercially viable ventures.",
+              "For nearly four decades, STEP has provided a nurturing environment for entrepreneurs, acting as a conduit between IIT Kharagpur and the world, turning research outcomes into commercially viable ventures.",
             name: "Prof. Siddhartha Das",
             role: "Managing Director, STEP IIT Kharagpur",
             photoUrl: "",
@@ -269,7 +269,7 @@ async function seedCms() {
           data: {
             title: "About STEP, IIT Kharagpur",
             body:
-              "The Science & Technology Entrepreneurs' Park (STEP) at IIT Kharagpur was set up in 1986 as one of India's earliest technology incubators, with support from DST New Delhi, DST West Bengal, IDBI, IFCI and ICICI.\n\nUnder the mandate of the National Science & Technology Entrepreneurship Development Board (NSTEDB), STEP has come a long way in promoting entrepreneurship by providing a conducive environment for nurturing and mentoring prospective entrepreneurs. It works in harmony with the institute's other incubation programmes and acts as a conduit between IIT Kharagpur and the external world — facilitating technology transfer and converting research outcomes into commercially viable propositions.\n\nOver nearly four decades, STEP has nurtured 100+ incubations, several of which have become global success stories.",
+              "The Science & Technology Entrepreneurs' Park (STEP) at IIT Kharagpur was set up in 1986 as one of India's earliest technology incubators, with support from DST New Delhi, DST West Bengal, IDBI, IFCI and ICICI.\n\nUnder the mandate of the National Science & Technology Entrepreneurship Development Board (NSTEDB), STEP has come a long way in promoting entrepreneurship by providing a conducive environment for nurturing and mentoring prospective entrepreneurs. It works in harmony with the institute's other incubation programmes and acts as a conduit between IIT Kharagpur and the external world, facilitating technology transfer and converting research outcomes into commercially viable propositions.\n\nOver nearly four decades, STEP has nurtured 100+ incubations, several of which have become global success stories.",
           },
         },
         { type: "timeline", data: TIMELINE },
@@ -287,7 +287,7 @@ async function seedCms() {
           data: {
             title: "Incubation at STEP",
             body:
-              "STEP offers Phase-II incubation for ventures emerging from IIT Kharagpur as well as external startups. Incubatees receive campus infrastructure, mentorship, funding connections, and access to the institute's research and alumni network — with a structured lifecycle from application through graduation.",
+              "STEP offers Phase-II incubation for ventures emerging from IIT Kharagpur as well as external startups. Incubatees receive campus infrastructure, mentorship, funding connections, and access to the institute's research and alumni network, with a structured lifecycle from application through graduation.",
           },
         },
         { type: "facilities", data: FACILITIES },
@@ -316,7 +316,7 @@ async function seedCms() {
               { q: "Who can apply to STEP?", a: "IIT Kharagpur students, faculty and staff, as well as external startups, may apply during an open cohort." },
               { q: "What does incubation include?", a: "Office/lab space, mentorship, funding connections, and access to the IIT Kharagpur ecosystem." },
               { q: "How long is the incubation?", a: "The core incubation runs up to 11 months, after which startups graduate from the programme." },
-              { q: "How do I apply?", a: "Create an account and complete the online application — including a structured business plan — during an open cohort." },
+              { q: "How do I apply?", a: "Create an account and complete the online application, including a structured business plan, during an open cohort." },
             ],
           },
         },
@@ -611,12 +611,12 @@ async function seedNotificationTemplates() {
     { key: "application.clarification_requested", title: "Clarification requested", emailSubject: "Action needed on your STEP application", body: "Hi {{name}}, our team has requested a clarification on your application. Please review and respond." },
     { key: "application.presentation_scheduled", title: "Presentation scheduled", emailSubject: "Your STEP presentation is scheduled", body: "Hi {{name}}, a presentation has been scheduled for your application. Details will follow." },
     { key: "application.interview", title: "Interview stage", emailSubject: "You've advanced to the interview stage", body: "Hi {{name}}, your application has advanced to the interview stage at STEP." },
-    { key: "application.selected", title: "Congratulations — selected!", emailSubject: "Congratulations! You've been selected by STEP", body: "Hi {{name}}, we're delighted to inform you that your application has been selected. Next steps will follow." },
+    { key: "application.selected", title: "Congratulations, you have been selected!", emailSubject: "Congratulations! You've been selected by STEP", body: "Hi {{name}}, we're delighted to inform you that your application has been selected. Next steps will follow." },
     { key: "application.rejected", title: "Application update", emailSubject: "Update on your STEP application", body: "Hi {{name}}, thank you for applying to STEP. After careful review, your application was not selected this cycle." },
     { key: "application.agreement_pending", title: "Agreement pending", emailSubject: "Next steps: incubation agreement", body: "Hi {{name}}, please complete your incubation agreement to proceed." },
     { key: "application.incubated", title: "Welcome to incubation", emailSubject: "Welcome to STEP incubation", body: "Hi {{name}}, your startup is now incubated at STEP. Welcome aboard!" },
     { key: "incubation.milestone_11m", title: "11-month milestone reached", emailSubject: "Your incubation has reached 11 months", body: "Hi {{name}}, your incubation at STEP has reached the 11-month milestone. Our team will be in touch about graduation." },
-    { key: "incubation.graduated", title: "Congratulations — graduated!", emailSubject: "You've graduated from STEP", body: "Hi {{name}}, congratulations on graduating from STEP incubation. We're proud to have you in our alumni network." },
+    { key: "incubation.graduated", title: "Congratulations on graduating!", emailSubject: "You've graduated from STEP", body: "Hi {{name}}, congratulations on graduating from STEP incubation. We're proud to have you in our alumni network." },
     { key: "mentor.assigned", title: "New mentee assigned", emailSubject: "You've been assigned a new mentee", body: "Hi {{name}}, a new startup has been assigned to you for mentorship at STEP." },
     { key: "review.assigned", title: "New application to review", emailSubject: "You have a new application to review", body: "Hi {{name}}, a new application has been assigned to you for review." },
   ];
@@ -673,7 +673,7 @@ async function seedShowcase() {
       location: "Chandigarh, India",
       tags: ["AI/ML", "Food Quality", "Deep Tech", "Hardware"],
       description:
-        "AI-powered quality assessment for food and agriculture — combining spectroscopy, imaging and machine learning to test quality in seconds across the agri value chain.",
+        "AI-powered quality assessment for food and agriculture, combining spectroscopy, imaging and machine learning to test quality in seconds across the agri value chain.",
       website: "https://www.agnext.com",
       logoUrl: logo("agnext.com"),
       funding: "Substantial funding raised",
@@ -735,7 +735,7 @@ async function seedShowcase() {
       ],
       achievements: [
         "Education technology platform",
-        "Founders later started SplashLearn — a global edtech success",
+        "Founders later started SplashLearn, a global edtech success",
       ],
       socials: [],
     },
@@ -748,7 +748,7 @@ async function seedShowcase() {
       location: "Noida, India",
       tags: ["Power Quality", "Hardware", "Clean Energy"],
       description:
-        "Power quality and energy solutions — designing and manufacturing systems that improve efficiency and reliability for industrial power users.",
+        "Power quality and energy solutions. Designing and manufacturing systems that improve efficiency and reliability for industrial power users.",
       website: "https://www.p2power.co.in",
       logoUrl: logo("p2power.co.in"),
       funding: "Bootstrapped",
@@ -768,7 +768,7 @@ async function seedShowcase() {
       location: "Noida, India",
       tags: ["Security", "DLP", "Enterprise", "SaaS"],
       description:
-        "Data security and insider-threat management — DLP and behavioural analytics that help enterprises protect sensitive information.",
+        "Data security and insider-threat management, with DLP and behavioural analytics that help enterprises protect sensitive information.",
       website: "https://www.dataresolve.com",
       logoUrl: logo("dataresolve.com"),
       funding: "Venture backed",
@@ -785,7 +785,7 @@ async function seedShowcase() {
       location: "India",
       tags: ["Materials", "Deep Tech", "Manufacturing"],
       description:
-        "Advanced ceramics and materials technology — engineering high-performance ceramic components for demanding industrial applications.",
+        "Advanced ceramics and materials technology. Engineering high-performance ceramic components for demanding industrial applications.",
       website: "https://www.antslab.in",
       logoUrl: logo("antslab.in"),
       funding: "Bootstrapped",
@@ -802,7 +802,7 @@ async function seedShowcase() {
       location: "Bengaluru, India",
       tags: ["Trading", "Low Latency", "Fintech"],
       description:
-        "Trading and fintech software — low-latency infrastructure, analytics and real-time execution tooling for brokerages and capital markets.",
+        "Trading and fintech software. Low-latency infrastructure, analytics and real-time execution tooling for brokerages and capital markets.",
       website: "https://www.tradelab.in",
       logoUrl: logo("tradelab.in"),
       funding: "Profitable",
@@ -829,7 +829,7 @@ async function seedShowcase() {
     },
   ];
 
-  // Additional STEP companies — published (searchable in the directory) but NOT
+  // Additional STEP companies: published (searchable in the directory) but NOT
   // featured on the homepage. Founder data is best-effort from public sources.
   const moreEntries = [
     {
@@ -866,7 +866,7 @@ async function seedShowcase() {
       location: "Gopali, Kharagpur, India",
       tags: ["Solar", "Marine", "Blue Economy", "Deep Tech"],
       description:
-        "Solar-powered marine solutions for the blue economy — designing electro-mechanical systems, solar motor boats and remote monitoring for waterways. Incubated at STEP Gopali, IIT Kharagpur.",
+        "Solar-powered marine solutions for the blue economy. Designing electro-mechanical systems, solar motor boats and remote monitoring for waterways. Incubated at STEP Gopali, IIT Kharagpur.",
       website: "https://maribussolar.com",
       logoUrl: logo("maribussolar.com"),
       funding: "Early stage",
@@ -914,7 +914,7 @@ async function seedShowcase() {
       location: "Bhubaneswar, India",
       tags: ["Drones", "UAV", "Robotics", "Hardware"],
       description:
-        "Drone technology company designing, manufacturing and deploying advanced all-terrain UAVs — tested in extreme conditions from high-altitude Ladakh to high-temperature desert environments.",
+        "Drone technology company designing, manufacturing and deploying advanced all-terrain UAVs, tested in extreme conditions from high-altitude Ladakh to high-temperature desert environments.",
       website: "https://weevildrone.co.in",
       logoUrl: logo("weevildrone.co.in"),
       funding: "Early stage",
@@ -938,7 +938,7 @@ async function seedShowcase() {
       location: "West Bengal, India",
       tags: ["Agriculture", "Aquaculture", "AgriTech"],
       description:
-        "Agro and aquaculture products and services — building sustainable agriculture and aquaculture solutions for farmers and producers.",
+        "Agro and aquaculture products and services. Building sustainable agriculture and aquaculture solutions for farmers and producers.",
       website: "https://shrishtikhetra.com",
       logoUrl: logo("shrishtikhetra.com"),
       funding: "Early stage",

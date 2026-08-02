@@ -56,6 +56,39 @@ type FacultyItem = {
   mentorshipAvailable: boolean;
 };
 
+/** Badge reflects what the link actually opens, so "PDF" only ever means a download. */
+function linkBadge(form: any) {
+  if (form.isDirectDownload || form.documentType === 'PDF') return '📄 PDF ↗';
+  if (form.documentType === 'Direct Form') return '📝 Form ↗';
+  return '🔗 Open ↗';
+}
+
+/** One official form / PDF row. The state chip is hidden inside a state group. */
+function FormLink({ form, showState }: { form: any; showState: boolean }) {
+  return (
+    <a
+      href={form.directUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="clay-sm clay-plain p-3 text-left transition hover:-translate-y-0.5 flex items-center justify-between group"
+    >
+      <div className="min-w-0">
+        <div className="flex items-center gap-1.5">
+          <span className="clay-chip clay-sun text-[11px] uppercase">{form.category}</span>
+          {showState && (
+            <span className="text-xs font-semibold text-muted-foreground">[{form.state}]</span>
+          )}
+        </div>
+        <h5 className="font-bold text-sm mt-1 group-hover:text-brand line-clamp-1">{form.title}</h5>
+        <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{form.description}</p>
+      </div>
+      <span className="text-brand font-bold text-xs shrink-0 ml-2 group-hover:translate-x-0.5 transition">
+        {linkBadge(form)}
+      </span>
+    </a>
+  );
+}
+
 export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
   const [query, setQuery] = useState('');
   const [selectedState, setSelectedState] = useState<string>('all');
@@ -130,13 +163,31 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
     groupedByDept[f.department].push(f);
   });
 
+  // On the "All States & Central" tab the form list mixes every state together,
+  // so bucket it by state and give each bucket its own heading. Central sits
+  // first, then states alphabetically.
+  const formsByState: Record<string, any[]> = {};
+  directForms.forEach((df) => {
+    const key = df.state || 'Central';
+    if (!formsByState[key]) formsByState[key] = [];
+    formsByState[key].push(df);
+  });
+
+  const formStateOrder = Object.keys(formsByState).sort((a, b) => {
+    if (a === 'Central') return -1;
+    if (b === 'Central') return 1;
+    return a.localeCompare(b);
+  });
+
+  const showStateGroups = selectedState === 'all' && formStateOrder.length > 1;
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-start justify-center pt-12 p-4">
-      <div className="bg-white rounded-xl border border-stone-200 shadow-2xl max-w-3xl w-full flex flex-col max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-start justify-center pt-12 p-4">
+      <div className="clay-lg max-w-3xl w-full flex flex-col max-h-[90vh] overflow-hidden">
         {/* Top Header & Search Input */}
-        <div className="p-4 border-b border-stone-200 space-y-3 bg-stone-50/80 sticky top-0 z-10">
+        <div className="p-4 border-b border-border/70 space-y-3 bg-surface-2 sticky top-0 z-10 rounded-t-[2rem]">
           <div className="flex items-center gap-3">
             <span className="text-lg">🔍</span>
             <input
@@ -145,23 +196,23 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
               placeholder="Search policies, SOPs, faculty, alumni, student skills..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full text-sm font-medium focus:outline-none text-stone-900 placeholder:text-stone-400 bg-transparent"
+              className="w-full text-sm font-medium focus:outline-none text-foreground placeholder:text-muted-foreground bg-transparent"
             />
             {totalMatches > 0 && (
-              <span className="text-[10px] font-bold px-2 py-1 rounded bg-stone-200 text-stone-700 shrink-0">
+              <span className="clay-chip clay-soft text-xs shrink-0">
                 {totalMatches} Results
               </span>
             )}
             <button
               onClick={onClose}
-              className="text-stone-400 hover:text-stone-700 font-bold text-xs px-2.5 py-1 bg-stone-200 rounded"
+              className="clay-btn clay-plain h-8 w-8 rounded-full text-xs"
             >
               ESC
             </button>
           </div>
 
           {/* State-Specific Navigation Tabs */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-stone-200 no-scrollbar">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-border/70 no-scrollbar">
             {STATES.map((st) => {
               const isActive = selectedState === st.id;
               return (
@@ -170,8 +221,8 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
                   onClick={() => setSelectedState(st.id)}
                   className={`text-xs font-bold px-3.5 py-1.5 rounded-t-lg transition-all shrink-0 border-b-2 ${
                     isActive
-                      ? 'bg-stone-900 text-amber-300 border-amber-400 shadow-xs'
-                      : 'bg-white text-stone-600 border-transparent hover:bg-stone-100 hover:text-stone-900'
+                      ? 'clay-sm clay-dark'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   {st.name}
@@ -183,15 +234,15 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
 
         {/* State-Specific Info Banner (When a specific State Tab is selected) */}
         {selectedState !== 'all' && (
-          <div className="px-4 py-2.5 bg-gradient-to-r from-stone-900 to-slate-900 text-stone-100 text-xs flex items-center justify-between border-b border-stone-800 shrink-0">
+          <div className="clay clay-dark mx-4 mt-3 px-4 py-3 text-xs flex flex-wrap gap-2 items-center justify-between shrink-0">
             <div className="flex items-center gap-2">
-              <span className="text-amber-400 font-bold">🏛️ {selectedState} Startup Ecosystem Hub</span>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30">
+              <span className="font-bold">🏛️ {selectedState} Startup Ecosystem Hub</span>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-white/15 font-semibold">
                 OFFICIAL PORTAL &amp; SCHEMES
               </span>
             </div>
-            <div className="text-[11px] text-stone-400">
-              Direct Forms: <strong className="text-white">{directForms.length}</strong> | Synced Schemes: <strong className="text-amber-300">{results.filter(r => r.type === 'policy').length}</strong>
+            <div className="text-[13px] text-muted-foreground">
+              Direct Forms: <strong className="text-white">{directForms.length}</strong> | Synced Schemes: <strong>{results.filter(r => r.type === 'policy').length}</strong>
             </div>
           </div>
         )}
@@ -199,8 +250,8 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
         {/* Scrollable Results List for Long Databases */}
         <div className="p-4 overflow-y-auto space-y-3 flex-1 text-xs font-medium max-h-[70vh] divide-y-0 scroll-smooth">
           {loading && (
-            <div className="text-center py-10 text-stone-400 animate-pulse space-y-2">
-              <div className="w-6 h-6 border-2 border-stone-900 border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="text-center py-10 text-muted-foreground animate-pulse space-y-2">
+              <div className="w-6 h-6 border-2 border-brand border-t-transparent rounded-full animate-spin mx-auto" />
               <div>{selectedState === 'iitkgp' ? 'Loading IIT Kharagpur Faculty Database...' : 'Fetching & matching database entries...'}</div>
             </div>
           )}
@@ -210,10 +261,10 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
             <div className="space-y-4">
               {/* Department Filter Bar */}
               <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
-                <span className="text-[10px] font-bold text-stone-500 uppercase tracking-wider shrink-0">Department:</span>
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider shrink-0">Department:</span>
                 <button
                   onClick={() => setSelectedDept('all')}
-                  className={`text-[10px] font-bold px-2.5 py-1 rounded-md transition shrink-0 ${selectedDept === 'all' ? 'bg-stone-900 text-amber-300' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}
+                  className={`text-xs font-semibold px-2.5 py-1.5 transition shrink-0 ${selectedDept === 'all' ? 'clay-sm clay-dark' : 'clay-sm clay-plain text-muted-foreground'}`}
                 >
                   All ({faculties.length})
                 </button>
@@ -224,7 +275,7 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
                     <button
                       key={d.code}
                       onClick={() => setSelectedDept(d.code)}
-                      className={`text-[10px] font-bold px-2.5 py-1 rounded-md transition shrink-0 ${selectedDept === d.code ? 'bg-stone-900 text-amber-300' : 'bg-stone-100 text-stone-600 hover:bg-stone-200'}`}
+                      className={`text-xs font-semibold px-2.5 py-1.5 transition shrink-0 ${selectedDept === d.code ? 'clay-sm clay-dark' : 'clay-sm clay-plain text-muted-foreground'}`}
                     >
                       {d.code} ({count})
                     </button>
@@ -233,17 +284,17 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
               </div>
 
               {/* Stats Bar */}
-              <div className="flex items-center justify-between p-3 bg-stone-900 rounded-xl text-white">
+              <div className="clay clay-dark flex flex-wrap gap-2 items-center justify-between p-3.5">
                 <div className="flex items-center gap-3">
-                  <span className="text-amber-400 font-bold">🔬 IIT Kharagpur Faculty & R&D Database</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30 font-bold">
+                  <span className="font-bold">🔬 IIT Kharagpur Faculty & R&D Database</span>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-white/15 font-semibold">
                     {filteredFaculties.length} FACULTY MEMBERS
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 font-bold">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-white/15 font-semibold">
                     {Object.keys(groupedByDept).length} DEPARTMENTS
                   </span>
                 </div>
-                <span className="text-[10px] text-stone-400">
+                <span className="text-xs text-muted-foreground">
                   65 Academic Units Scraped
                 </span>
               </div>
@@ -252,9 +303,9 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
               {Object.entries(groupedByDept).map(([dept, members]) => (
                 <div key={dept} className="space-y-2">
                   <div className="flex items-center gap-2 pt-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                    <h4 className="text-xs font-black text-stone-900 uppercase tracking-wide">{dept}</h4>
-                    <span className="text-[10px] font-bold text-stone-500 bg-stone-200 px-1.5 py-0.5 rounded">{members.length}</span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-brand" />
+                    <h4 className="text-sm font-bold uppercase tracking-wide">{dept}</h4>
+                    <span className="text-xs font-bold text-muted-foreground bg-black/6 px-2 py-0.5 rounded-full">{members.length}</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -264,31 +315,31 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
                         href={f.officialUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-white hover:bg-stone-50 rounded-xl border border-stone-200 hover:border-amber-400 transition group shadow-2xs"
+                        className="clay clay-hover clay-plain p-3.5 text-left group"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0">
-                            <h5 className="font-bold text-stone-900 text-xs group-hover:text-amber-800 truncate">{f.name}</h5>
-                            <p className="text-[10px] text-stone-500 font-semibold truncate">{f.labName}</p>
+                            <h5 className="font-bold text-sm group-hover:text-brand truncate">{f.name}</h5>
+                            <p className="text-xs text-muted-foreground font-semibold truncate">{f.labName}</p>
                           </div>
-                          <span className="text-amber-600 shrink-0 text-[10px] font-bold group-hover:translate-x-0.5 transition">↗</span>
+                          <span className="text-brand shrink-0 text-xs font-bold group-hover:translate-x-0.5 transition">↗</span>
                         </div>
                         <div className="flex flex-wrap gap-1 mt-1.5">
                           {f.researchAreas.slice(0, 3).map((area, i) => (
-                            <span key={i} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200">
+                            <span key={i} className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-black/6 text-muted-foreground">
                               {area}
                             </span>
                           ))}
                           {f.researchAreas.length > 3 && (
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">
+                            <span className="clay-chip clay-sun text-[11px]">
                               +{f.researchAreas.length - 3} more
                             </span>
                           )}
                         </div>
-                        <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-stone-100">
-                          <span className="text-[9px] text-stone-400 truncate">{f.email}</span>
+                        <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-border/70">
+                          <span className="text-[11px] text-muted-foreground truncate">{f.email}</span>
                           {f.mentorshipAvailable && (
-                            <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">✓ Mentorship</span>
+                            <span className="clay-chip clay-mint text-[11px]">✓ Mentorship</span>
                           )}
                         </div>
                       </a>
@@ -298,9 +349,9 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
               ))}
 
               {filteredFaculties.length === 0 && (
-                <div className="text-center py-10 text-stone-500">
+                <div className="text-center py-10 text-muted-foreground">
                   <p>No faculty members match &quot;{query}&quot;{selectedDept !== 'all' ? ` in department ${selectedDept}` : ''}.</p>
-                  <p className="text-[11px] text-stone-400 mt-1">Try a broader search or select &quot;All&quot; departments.</p>
+                  <p className="text-[13px] text-muted-foreground mt-1">Try a broader search or select &quot;All&quot; departments.</p>
                 </div>
               )}
             </div>
@@ -310,52 +361,77 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
 
           {/* Direct State Application Forms & Policy PDFs */}
           {selectedState !== 'iitkgp' && !loading && directForms.length > 0 && (
-            <div className="mb-4 space-y-2 p-3 bg-amber-500/10 rounded-xl border border-amber-500/30">
-              <div className="flex items-center justify-between">
-                <span className="font-bold text-amber-900 text-[11px] uppercase tracking-wider flex items-center gap-1.5">
+            <div className="mb-4 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="font-bold text-[13px] uppercase tracking-wider flex items-center gap-1.5">
                   <span>📑 Direct Official Application Forms &amp; Policy PDFs</span>
-                  <span className="px-1.5 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px]">
+                  <span className="clay-chip clay-sun text-xs">
                     {directForms.length} DIRECT LINKS
                   </span>
                 </span>
-                <span className="text-[10px] text-stone-500">Redirects directly to official document / form</span>
+                <span className="text-xs text-muted-foreground">Redirects directly to official document / form</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                {directForms.map((df) => (
-                  <a
-                    key={df.id}
-                    href={df.directUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2.5 bg-white hover:bg-amber-50 rounded-lg border border-amber-200 hover:border-amber-400 transition flex items-center justify-between group shadow-2xs"
-                  >
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[9px] font-bold uppercase px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-300">
-                          {df.category}
+              {showStateGroups ? (
+                <>
+                  {/* Jump bar: hop straight to a state instead of scrolling */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {formStateOrder.map((stateName) => (
+                      <button
+                        key={stateName}
+                        onClick={() =>
+                          document
+                            .getElementById(`forms-${stateName.replace(/\s+/g, '-')}`)
+                            ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }
+                        className="clay-chip clay-plain text-xs transition hover:-translate-y-0.5"
+                      >
+                        {stateName === 'Central' ? '🇮🇳 Central' : stateName}
+                        <span className="opacity-60">{formsByState[stateName].length}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Each state gets its own box, so the groups read as separate blocks */}
+                  {formStateOrder.map((stateName) => (
+                    <section
+                      key={stateName}
+                      id={`forms-${stateName.replace(/\s+/g, '-')}`}
+                      className="clay clay-sun space-y-3 p-4 scroll-mt-4"
+                    >
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h4 className="clay-chip clay-dark text-[13px] uppercase tracking-wider">
+                          {stateName === 'Central' ? '🇮🇳 Central' : stateName}
+                        </h4>
+                        <span className="text-xs font-semibold opacity-70">
+                          {formsByState[stateName].length} link
+                          {formsByState[stateName].length === 1 ? '' : 's'}
                         </span>
-                        <span className="text-[10px] font-semibold text-stone-500">[{df.state}]</span>
                       </div>
-                      <h5 className="font-bold text-stone-900 text-xs mt-1 group-hover:text-amber-900 line-clamp-1">
-                        {df.title}
-                      </h5>
-                      <p className="text-[10px] text-stone-600 line-clamp-1 mt-0.5">{df.description}</p>
-                    </div>
-                    <span className="text-amber-700 font-bold text-xs shrink-0 ml-2 group-hover:translate-x-0.5 transition">
-                      {df.isDirectDownload ? "📄 PDF ↗" : "📝 Form ↗"}
-                    </span>
-                  </a>
-                ))}
-              </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {formsByState[stateName].map((df) => (
+                          <FormLink key={df.id} form={df} showState={false} />
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+                </>
+              ) : (
+                <div className="clay clay-sun grid grid-cols-1 sm:grid-cols-2 gap-2 p-4">
+                  {directForms.map((df) => (
+                    <FormLink key={df.id} form={df} showState />
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
           {selectedState !== 'iitkgp' && !loading && results.length === 0 && directForms.length === 0 && (
-            <div className="text-center py-12 text-stone-500 space-y-1">
+            <div className="text-center py-12 text-muted-foreground space-y-1">
               <p>No matching policies, SOPs, or entities found for &quot;{query}&quot; in {selectedState}.</p>
-              <p className="text-[11px] text-stone-400">
-                Try selecting <strong className="text-stone-700">&quot;Uttar Pradesh (StartInUP)&quot;</strong> or <strong className="text-stone-700">&quot;Gujarat (Policies & SOPs)&quot;</strong>.
+              <p className="text-[13px] text-muted-foreground">
+                Try selecting <strong className="text-foreground/80">&quot;Uttar Pradesh (StartInUP)&quot;</strong> or <strong className="text-foreground/80">&quot;Gujarat (Policies & SOPs)&quot;</strong>.
               </p>
             </div>
           )}
@@ -371,53 +447,53 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
                   key={`${item.type}-${item.id}`}
                   className={`p-4 rounded-xl border transition space-y-2 ${
                     isGujaratSop
-                      ? 'bg-amber-50/80 border-amber-300 hover:border-amber-400'
+                      ? 'clay clay-hover clay-sun'
                       : isUpScheme
-                      ? 'bg-emerald-50/60 border-emerald-300 hover:border-emerald-400'
+                      ? 'clay clay-hover clay-mint'
                       : isGujaratScheme
-                      ? 'bg-amber-50/40 border-amber-200 hover:border-amber-300'
-                      : 'bg-stone-50/60 border-stone-200 hover:border-stone-400'
+                      ? 'clay clay-hover clay-soft'
+                      : 'clay clay-hover clay-plain'
                   }`}
                 >
                   <div className="flex justify-between items-start gap-2">
                     <div className="flex items-center gap-2">
                       <span
-                        className={`text-[9px] font-extrabold uppercase px-2 py-0.5 rounded ${
+                        className={`text-[11px] font-extrabold uppercase px-2 py-0.5 rounded ${
                           isGujaratSop
-                            ? 'bg-amber-900 text-amber-50'
+                            ? 'clay-chip clay-sun'
                             : isUpScheme
-                            ? 'bg-emerald-800 text-emerald-50'
+                            ? 'clay-chip clay-mint'
                             : item.type === 'policy'
-                            ? 'bg-stone-900 text-stone-50'
-                            : 'bg-stone-200 text-stone-800'
+                            ? 'clay-chip clay-dark'
+                            : 'clay-chip clay-plain'
                         }`}
                       >
                         {isGujaratSop ? 'GUJARAT SOP' : isUpScheme ? 'STARTINUP UP' : item.type}
                       </span>
-                      <h4 className="text-xs font-black text-stone-900">{item.title}</h4>
+                      <h4 className="text-sm font-bold">{item.title}</h4>
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
                       {item.presentedAt && (
-                        <span className="text-[10px] font-semibold text-stone-500 bg-stone-200/80 px-2 py-0.5 rounded">
+                        <span className="text-xs font-semibold text-muted-foreground bg-black/6 px-2 py-0.5 rounded-full">
                           📅 Presented: {item.presentedAt}
                         </span>
                       )}
-                      <span className="text-[10px] font-bold text-stone-500">
+                      <span className="text-xs font-bold text-muted-foreground">
                         Score: {item.relevanceScore}%
                       </span>
                     </div>
                   </div>
 
-                  <p className="text-[11px] font-semibold text-stone-700">{item.subtitle}</p>
-                  <p className="text-[11px] text-stone-600 leading-relaxed">{item.description}</p>
+                  <p className="text-[13px] font-semibold text-foreground/80">{item.subtitle}</p>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed">{item.description}</p>
 
-                  <div className="flex justify-between items-center pt-2 border-t border-stone-200/60 mt-2">
+                  <div className="flex justify-between items-center pt-2 border-t border-border/70 mt-2">
                     <div className="flex flex-wrap gap-1">
                       {item.tags.map((tag, idx) => (
                         <span
                           key={idx}
-                          className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-stone-200/70 text-stone-700"
+                          className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-black/6 text-muted-foreground"
                         >
                           {tag}
                         </span>
@@ -429,7 +505,7 @@ export default function EcosystemSearchModal({ isOpen, onClose }: Props) {
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[10px] font-black text-stone-900 hover:underline flex items-center gap-1 shrink-0"
+                        className="text-xs font-bold hover:underline flex items-center gap-1 shrink-0"
                       >
                         {isUpScheme ? 'View StartInUP Official Portal ↗' : 'View Details ↗'}
                       </a>

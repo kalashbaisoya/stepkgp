@@ -64,7 +64,7 @@ export default async function StartupProfile({
             <Section title="Founders">
               <div className="grid gap-4 sm:grid-cols-2">
                 {p.founders.map((f, i) => (
-                  <div key={i} className="flex items-center gap-3 rounded-lg border border-border bg-surface p-4">
+                  <div key={i} className="flex items-center gap-3 clay p-4">
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-subtle text-sm font-bold text-brand">
                       {f.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
                     </span>
@@ -96,7 +96,7 @@ export default async function StartupProfile({
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {p.gallery.map((src, i) => (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img key={i} src={src} alt="" className="aspect-video w-full rounded-lg border border-border object-cover" />
+                  <img key={i} src={src} alt="" className="aspect-video w-full clay object-cover" />
                 ))}
               </div>
             </Section>
@@ -115,7 +115,7 @@ export default async function StartupProfile({
 
         {/* Sidebar facts */}
         <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="rounded-lg border border-border bg-surface p-5">
+          <div className="clay p-5">
             <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Company</h3>
             <dl className="mt-4 space-y-3 text-sm">
               <Fact label="Industry" value={p.sector} />

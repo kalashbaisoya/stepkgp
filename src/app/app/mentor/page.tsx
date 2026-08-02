@@ -15,7 +15,7 @@ export default async function MentorDashboard() {
       <p className="mt-2 text-muted-foreground">Startups you mentor.</p>
       <div className="mt-8 space-y-3">
         {mentees.map((m) => (
-          <Link key={m.id} href={`/app/mentor/${m.id}`} className="flex items-center justify-between rounded-xl border border-border bg-surface p-5 transition-colors hover:border-brand">
+          <Link key={m.id} href={`/app/mentor/${m.id}`} className="clay clay-hover flex items-center justify-between p-5">
             <div>
               <p className="font-medium">{m.startupName || m.applicant}</p>
               <p className="text-sm capitalize text-muted-foreground">{m.status} · Month {m.monthsElapsed}/11 · {m.milestoneCount} milestones</p>

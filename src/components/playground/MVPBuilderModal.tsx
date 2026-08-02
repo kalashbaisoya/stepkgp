@@ -58,24 +58,24 @@ export default function MVPBuilderModal({ isOpen, onClose, ideaState }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl border border-stone-200 shadow-xl max-w-3xl w-full max-h-[90vh] flex flex-col relative overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="clay-lg max-w-3xl w-full max-h-[90vh] flex flex-col relative overflow-hidden">
         {/* Header */}
-        <div className="p-6 border-b border-stone-200 flex justify-between items-start">
+        <div className="p-6 border-b border-border/70 flex justify-between items-start gap-3">
           <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+            <span className="clay-chip clay-mint text-xs uppercase tracking-wider">
               STEP MVP ENGINEERING SPEC GENERATOR
             </span>
-            <h2 className="text-xl font-black text-stone-900 mt-1">
+            <h2 className="text-xl font-extrabold mt-1.5">
               Architecture & System Blueprint Builder
             </h2>
-            <p className="text-xs text-stone-600 font-medium">
-              Generating engineering specs for <strong className="text-stone-900">{ideaState.title}</strong>
+            <p className="text-xs text-muted-foreground font-medium">
+              Generating engineering specs for <strong className="text-foreground">{ideaState.title}</strong>
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-stone-400 hover:text-stone-700 font-bold text-sm"
+            className="clay-btn clay-plain h-9 w-9 shrink-0 rounded-full text-xs"
           >
             ✕
           </button>
@@ -85,21 +85,21 @@ export default function MVPBuilderModal({ isOpen, onClose, ideaState }: Props) {
         <div className="p-6 overflow-y-auto space-y-6 text-xs font-medium">
           {!spec ? (
             <div className="py-12 text-center space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-stone-900 text-stone-50 flex items-center justify-center text-xl mx-auto shadow-sm">
+              <div className="clay-sm clay-primary w-14 h-14 flex items-center justify-center text-xl mx-auto">
                 ⚙️
               </div>
               <div>
-                <h3 className="text-sm font-bold text-stone-900">
+                <h3 className="text-sm font-bold">
                   Ready to construct technical architecture?
                 </h3>
-                <p className="text-xs text-stone-500 max-w-md mx-auto mt-1">
+                <p className="text-xs text-muted-foreground max-w-md mx-auto mt-1">
                   Evaluates domain requirements, recommends optimal tech stack, designs database & API microservices, and compiles a 4-week sprint roadmap.
                 </p>
               </div>
               <button
                 onClick={handleGenerateSpec}
                 disabled={loading}
-                className="px-6 py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold shadow-sm transition disabled:opacity-50"
+                className="clay-btn clay-dark px-6 py-2.5"
               >
                 {loading ? 'Analyzing & Building Architecture...' : '⚡ Generate Engineering Blueprint'}
               </button>
@@ -108,56 +108,56 @@ export default function MVPBuilderModal({ isOpen, onClose, ideaState }: Props) {
             <div className="space-y-6">
               {/* Stack Grid */}
               <div>
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-3">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">
                   Recommended Tech Stack
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-stone-50 border border-stone-200">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase">FRONTEND</span>
-                    <p className="text-xs font-bold text-stone-900 mt-0.5">{spec.recommendedStack.frontend}</p>
+                  <div className="clay-inset p-3">
+                    <span className="text-xs font-bold text-muted-foreground uppercase">FRONTEND</span>
+                    <p className="text-xs font-bold mt-0.5">{spec.recommendedStack.frontend}</p>
                   </div>
-                  <div className="p-3 rounded-lg bg-stone-50 border border-stone-200">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase">BACKEND & API</span>
-                    <p className="text-xs font-bold text-stone-900 mt-0.5">{spec.recommendedStack.backend}</p>
+                  <div className="clay-inset p-3">
+                    <span className="text-xs font-bold text-muted-foreground uppercase">BACKEND & API</span>
+                    <p className="text-xs font-bold mt-0.5">{spec.recommendedStack.backend}</p>
                   </div>
-                  <div className="p-3 rounded-lg bg-stone-50 border border-stone-200">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase">DATABASE & ORM</span>
-                    <p className="text-xs font-bold text-stone-900 mt-0.5">{spec.recommendedStack.database}</p>
+                  <div className="clay-inset p-3">
+                    <span className="text-xs font-bold text-muted-foreground uppercase">DATABASE & ORM</span>
+                    <p className="text-xs font-bold mt-0.5">{spec.recommendedStack.database}</p>
                   </div>
-                  <div className="p-3 rounded-lg bg-stone-50 border border-stone-200">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase">AI / EDGE PIPELINE</span>
-                    <p className="text-xs font-bold text-stone-900 mt-0.5">{spec.recommendedStack.aiMlPipeline}</p>
+                  <div className="clay-inset p-3">
+                    <span className="text-xs font-bold text-muted-foreground uppercase">AI / EDGE PIPELINE</span>
+                    <p className="text-xs font-bold mt-0.5">{spec.recommendedStack.aiMlPipeline}</p>
                   </div>
                 </div>
               </div>
 
               {/* Architecture Diagram */}
               <div>
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">
                   System Architecture Diagram
                 </h3>
-                <pre className="p-4 rounded-xl bg-stone-900 text-stone-100 font-mono text-[11px] leading-relaxed overflow-x-auto">
+                <pre className="clay clay-dark p-4 font-mono text-[13px] leading-relaxed overflow-x-auto">
                   {spec.architectureDiagram}
                 </pre>
               </div>
 
               {/* 4-Week Sprint Roadmap */}
               <div>
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-3">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">
                   4-Week MVP Sprint Roadmap
                 </h3>
                 <div className="space-y-3">
                   {spec.fourWeekSprintRoadmap.map((sprint) => (
-                    <div key={sprint.week} className="p-3 rounded-lg bg-white border border-stone-200 space-y-1.5">
+                    <div key={sprint.week} className="clay-sm clay-plain p-3 space-y-1.5">
                       <div className="flex justify-between items-center">
-                        <span className="text-xs font-black text-stone-900">
+                        <span className="text-xs font-bold">
                           Week {sprint.week}: {sprint.focus}
                         </span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-950">
+                        <span className="clay-chip clay-mint text-xs">
                           Sprint {sprint.week}
                         </span>
                       </div>
-                      <ul className="list-disc list-inside text-stone-600 text-[11px] space-y-0.5">
+                      <ul className="list-disc list-inside text-muted-foreground text-[13px] space-y-0.5">
                         {sprint.deliverables.map((d, i) => (
                           <li key={i}>{d}</li>
                         ))}
@@ -172,20 +172,20 @@ export default function MVPBuilderModal({ isOpen, onClose, ideaState }: Props) {
 
         {/* Footer Actions */}
         {spec && (
-          <div className="p-4 border-t border-stone-200 bg-stone-50 flex justify-between items-center">
-            <span className="text-xs text-stone-500 font-medium">
+          <div className="p-4 border-t border-border/70 bg-surface-2 flex flex-wrap gap-3 justify-between items-center">
+            <span className="text-xs text-muted-foreground font-medium">
               Blueprint compiled and verified for STEP Incubation review.
             </span>
             <div className="flex gap-2">
               <button
                 onClick={handleCopySpec}
-                className="px-4 py-2 rounded-lg bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-xs transition"
+                className="clay-btn clay-plain px-4 py-2 text-xs"
               >
                 {copied ? '✓ Copied Markdown' : 'Copy Markdown Spec'}
               </button>
               <button
                 onClick={onClose}
-                className="px-4 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs transition"
+                className="clay-btn clay-dark px-4 py-2 text-xs"
               >
                 Done
               </button>

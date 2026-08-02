@@ -100,7 +100,7 @@ export function IncubationManager({
           </ul>
           {canManage && (
             <div className="mt-3 flex gap-2">
-              <select value={mentor} onChange={(e) => setMentor(e.target.value)} className="h-9 flex-1 rounded-md border border-border bg-surface px-2 text-sm">
+              <select value={mentor} onChange={(e) => setMentor(e.target.value)} className="clay-field h-10 flex-1 text-sm">
                 <option value="">Select mentor…</option>
                 {mentorOptions.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
               </select>
@@ -178,7 +178,7 @@ export function IncubationManager({
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-xl border border-border bg-surface p-5">
+    <section className="clay p-5">
       <h2 className="mb-3 font-semibold">{title}</h2>
       {children}
     </section>

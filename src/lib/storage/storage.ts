@@ -5,7 +5,7 @@ import { join, dirname } from "node:path";
 /**
  * Object-storage adapter (Phase 9 §6). Milestone 5 ships a local-filesystem
  * implementation for development; production swaps in an S3-compatible client
- * (R2/S3) behind the same interface — callers never change. Binaries never touch
+ * (R2/S3) behind the same interface, so callers never change. Binaries never touch
  * the DB; only the returned storage key is persisted.
  */
 

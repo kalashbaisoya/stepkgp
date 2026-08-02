@@ -40,7 +40,7 @@ export function DocumentsManager({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5">
+    <div className="clay p-5">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-medium">{categoryName}</h2>
         <div className="flex items-center gap-3">
@@ -50,7 +50,7 @@ export function DocumentsManager({
       </div>
       <div className="space-y-2">
         {reqs.map((r, i) => (
-          <div key={i} className="flex flex-wrap items-center gap-2 rounded-md border border-border p-2">
+          <div key={i} className="flex flex-wrap items-center gap-2 clay-sm p-2">
             <Input value={r.label} onChange={(e) => update(i, { label: e.target.value, key: slug(e.target.value) })} placeholder="Document name" className="min-w-[10rem] flex-1" />
             <Input value={r.allowedTypes.join(",")} onChange={(e) => update(i, { allowedTypes: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })} placeholder="pdf,jpg" className="w-32" />
             <div className="flex items-center gap-1">

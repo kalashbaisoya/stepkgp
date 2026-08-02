@@ -43,7 +43,7 @@ export async function GET(req: Request) {
       officialUrl: f.officialUrl || `https://www.iitkgp.ac.in`,
       researchAreas: f.researchAreas as string[],
       lastScrapedAt: f.updatedAt?.toISOString() || "",
-      mentorshipAvailable: f.mentorshipAvailable ?? true,
+      mentorshipAvailable: f.availableForMentorship ?? true,
     }));
 
     return NextResponse.json({

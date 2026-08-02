@@ -1,20 +1,22 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+// Plus Jakarta Sans: rounded, low-contrast letterforms that read smoothly
+// against the soft clay surfaces.
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-jakarta",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "STEP · IIT Kharagpur — Incubation Management Platform",
+    default: "STEP · IIT Kharagpur Incubation Management Platform",
     template: "%s · STEP IIT KGP",
   },
   description:
-    "Science & Technology Entrepreneurs' Park, IIT Kharagpur — building deep-tech ventures since 1986.",
+    "Science & Technology Entrepreneurs' Park, IIT Kharagpur. Building deep-tech ventures since 1986.",
   metadataBase: new URL(process.env.APP_URL ?? "http://localhost:3000"),
   robots: {
     index: true,
@@ -36,14 +38,14 @@ const jsonLd = {
   url: process.env.APP_URL ?? "http://localhost:3000",
   logo: `${process.env.APP_URL ?? "http://localhost:3000"}/icon.png`,
   description:
-    "Science & Technology Entrepreneurs' Park, IIT Kharagpur — building deep-tech ventures since 1986.",
+    "Science & Technology Entrepreneurs' Park, IIT Kharagpur. Building deep-tech ventures since 1986.",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={jakarta.variable} suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"

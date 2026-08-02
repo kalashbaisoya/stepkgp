@@ -52,66 +52,66 @@ export default function SocialLaunchpack({ ideaState, onNext, onPrev }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="p-4 rounded-2xl bg-white border border-stone-200 shadow-xs flex items-center justify-between">
+      <div className="clay p-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-stone-900">Stage 4: Social Launchpack & Pitch Generator</h2>
-          <p className="text-xs text-stone-500">
-            Generate viral LinkedIn posts, X threads & elevator pitches for STEP campus validation.
+          <h2 className="text-lg font-bold">Stage 4: Social Launchpack &amp; Pitch Generator</h2>
+          <p className="text-xs text-muted-foreground">
+            Generate viral LinkedIn posts, X threads &amp; elevator pitches for STEP campus validation.
           </p>
         </div>
         <button
           onClick={fetchLaunchpack}
-          className="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-300"
+          className="clay-btn clay-plain text-xs px-4 py-2.5"
         >
           🔄 Regenerate Copy
         </button>
       </div>
 
       {loading ? (
-        <div className="p-12 text-center text-stone-500 text-xs font-semibold animate-pulse">
-          Generating AI Launchpack Copy for "{ideaState.title}"...
+        <div className="clay-inset p-12 text-center text-muted-foreground text-xs font-semibold animate-pulse">
+          Generating AI Launchpack Copy for &ldquo;{ideaState.title}&rdquo;...
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* LinkedIn Post Copy */}
-          <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-3 flex flex-col justify-between">
+          <div className="clay p-5 space-y-3 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="flex justify-between items-center border-b border-stone-100 pb-2">
-                <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+              <div className="flex justify-between items-center gap-2 border-b border-border/70 pb-2">
+                <h3 className="text-sm font-bold flex items-center gap-2">
                   <span>💼</span> Generated LinkedIn Post
                 </h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-800">Ready</span>
+                <span className="clay-chip clay-sky text-xs">Ready</span>
               </div>
-              <pre className="text-xs text-stone-800 bg-stone-50 p-4 rounded-xl font-sans whitespace-pre-wrap leading-relaxed border border-stone-200">
+              <pre className="clay-inset text-xs p-4 font-sans whitespace-pre-wrap leading-relaxed">
                 {launchCopy?.linkedinPost}
               </pre>
             </div>
 
             <button
               onClick={() => copyToClipboard(launchCopy?.linkedinPost, 'linkedin')}
-              className="w-full py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs shadow-xs transition"
+              className="clay-btn clay-dark w-full py-2.5 text-xs"
             >
               {copied === 'linkedin' ? '✓ Copied to Clipboard!' : '📋 Copy LinkedIn Post'}
             </button>
           </div>
 
           {/* Elevator Pitch */}
-          <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-3 flex flex-col justify-between">
+          <div className="clay p-5 space-y-3 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="flex justify-between items-center border-b border-stone-100 pb-2">
-                <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+              <div className="flex justify-between items-center gap-2 border-b border-border/70 pb-2">
+                <h3 className="text-sm font-bold flex items-center gap-2">
                   <span>🎤</span> 30-Second Elevator Pitch
                 </h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800">Pitch Deck</span>
+                <span className="clay-chip clay-sun text-xs">Pitch Deck</span>
               </div>
-              <div className="text-xs text-stone-800 bg-stone-50 p-4 rounded-xl leading-relaxed border border-stone-200 italic font-serif">
+              <div className="clay-inset text-xs p-4 leading-relaxed italic">
                 {launchCopy?.elevatorPitch}
               </div>
             </div>
 
             <button
               onClick={() => copyToClipboard(launchCopy?.elevatorPitch, 'pitch')}
-              className="w-full py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold text-xs shadow-xs transition"
+              className="clay-btn clay-dark w-full py-2.5 text-xs"
             >
               {copied === 'pitch' ? '✓ Copied to Clipboard!' : '📋 Copy Elevator Pitch'}
             </button>
@@ -119,11 +119,11 @@ export default function SocialLaunchpack({ ideaState, onNext, onPrev }: Props) {
         </div>
       )}
 
-      <div className="flex justify-between pt-4">
-        <button onClick={onPrev} className="px-4 py-2 rounded-lg bg-stone-100 text-stone-700 text-xs font-semibold">
+      <div className="clay flex flex-wrap justify-between gap-3 p-4">
+        <button onClick={onPrev} className="clay-btn clay-plain px-4 py-2.5 text-xs">
           ← Back
         </button>
-        <button onClick={onNext} className="px-6 py-2 rounded-lg bg-stone-900 text-stone-50 text-xs font-bold">
+        <button onClick={onNext} className="clay-btn clay-dark px-6 py-2.5 text-xs">
           Proceed to VC Pitch Portal →
         </button>
       </div>

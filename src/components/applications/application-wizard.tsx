@@ -159,7 +159,7 @@ export function ApplicationWizard(props: Props) {
           </span>
         </div>
 
-        <div className="rounded-xl border border-border bg-surface p-6">
+        <div className="clay p-6">
           {step.kind === "section" && (
             <FormRenderer sections={[step.section]} values={values} onChange={onField} errors={errors} />
           )}
@@ -211,7 +211,7 @@ function BusinessPlanStep({ sections, onChange }: { sections: BpSection[]; onCha
   return (
     <div className="space-y-6">
       <p className="text-sm text-muted-foreground">
-        Complete your business plan here — no separate document needed. Required sections and word limits are set by the incubation centre.
+        Complete your business plan here, no separate document needed. Required sections and word limits are set by the incubation centre.
       </p>
       {sections.map((s) => {
         const w = words(s.content);
@@ -272,7 +272,7 @@ function DocumentsStep({
       {requirements.map((r) => {
         const uploaded = documents.find((d) => d.requirementKey === r.key);
         return (
-          <div key={r.key} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border p-4">
+          <div key={r.key} className="flex flex-wrap items-center justify-between gap-3 clay p-4">
             <div>
               <p className="font-medium">
                 {r.label} {r.required ? <span className="text-status-danger">*</span> : <span className="text-xs text-muted-foreground">(optional)</span>}
@@ -281,7 +281,7 @@ function DocumentsStep({
               {uploaded && <p className="mt-1 text-sm text-status-success">✓ {uploaded.fileName}</p>}
               {error[r.key] && <p className="mt-1 text-sm text-status-danger">{error[r.key]}</p>}
             </div>
-            <label className="cursor-pointer rounded-md border border-border px-3 py-2 text-sm hover:bg-muted">
+            <label className="clay-btn clay-plain cursor-pointer px-4 py-2.5 text-sm">
               {busy === r.key ? "Uploading…" : uploaded ? "Replace" : "Upload"}
               <input type="file" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(r.key, f); }} />
             </label>
@@ -323,7 +323,7 @@ function ReviewStep({
         {sections.map((s) => (
           <div key={s.key}>
             <h4 className="text-sm font-medium text-muted-foreground">{s.title}</h4>
-            <dl className="mt-2 divide-y divide-border rounded-lg border border-border">
+            <dl className="mt-2 divide-y divide-border clay overflow-hidden">
               {s.fields.map((f) => (
                 <div key={f.key} className="flex justify-between gap-4 px-3 py-2 text-sm">
                   <dt className="text-muted-foreground">{f.label}</dt>
@@ -358,7 +358,7 @@ function ReviewStep({
               const up = documents.find((d) => d.requirementKey === r.key);
               return (
                 <li key={r.key} className={up ? "text-status-success" : r.required ? "text-status-danger" : "text-muted-foreground"}>
-                  {up ? "✓" : r.required ? "⚠" : "○"} {r.label}{up ? ` — ${up.fileName}` : r.required ? " — missing" : " (optional)"}
+                  {up ? "✓" : r.required ? "⚠" : "○"} {r.label}{up ? `: ${up.fileName}` : r.required ? " (missing)" : " (optional)"}
                 </li>
               );
             })}
@@ -388,8 +388,8 @@ function ReviewStep({
 }
 
 function formatValue(v: unknown): string {
-  if (v === undefined || v === null || v === "") return "—";
-  if (Array.isArray(v)) return v.length ? v.join(", ") : "—";
+  if (v === undefined || v === null || v === "") return "-";
+  if (Array.isArray(v)) return v.length ? v.join(", ") : "-";
   if (typeof v === "boolean") return v ? "Yes" : "No";
   return String(v);
 }

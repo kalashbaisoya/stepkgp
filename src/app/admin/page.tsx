@@ -10,7 +10,7 @@ export default function AdminDashboard() {
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         <Link
           href="/admin/cms/pages"
-          className="rounded-xl border border-border bg-surface p-6 transition-colors hover:border-brand"
+          className="clay clay-hover p-6"
         >
           <h2 className="font-medium">Content (CMS)</h2>
           <p className="mt-1 text-sm text-muted-foreground">

@@ -41,19 +41,19 @@ export default function PlaygroundDocsPage() {
   const activeDoc = docs.find((d) => d.slug === activeSlug);
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-stone-900 font-sans selection:bg-stone-900 selection:text-stone-50 pb-24">
+    <div className="min-h-screen bg-background text-foreground font-sans pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-[#FAF9F6]/90 backdrop-blur-md border-b border-stone-200 px-6 py-4">
+      <header className="sticky top-0 z-40 bg-[#FAF9F6]/90 backdrop-blur-md border-b border-border/70 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
               href="/playground"
-              className="text-xs font-semibold text-stone-600 hover:text-stone-900 transition flex items-center gap-1"
+              className="text-xs font-semibold text-muted-foreground hover:text-foreground transition flex items-center gap-1"
             >
               ← Back to Playground Workspace
             </Link>
-            <span className="text-stone-300">•</span>
-            <span className="text-xs font-bold uppercase tracking-wider text-stone-700">
+            <span className="text-muted-foreground">•</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-foreground/80">
               System Docs & Execution Guide
             </span>
           </div>
@@ -61,7 +61,7 @@ export default function PlaygroundDocsPage() {
           <div className="flex items-center gap-2">
             <Link
               href="/playground"
-              className="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-900 text-stone-50 hover:bg-stone-800 transition"
+              className="clay-btn clay-dark text-xs px-4 py-2.5"
             >
               Open Interactive Topology Canvas →
             </Link>
@@ -73,12 +73,12 @@ export default function PlaygroundDocsPage() {
       <main className="max-w-7xl mx-auto px-4 md:px-6 pt-8 grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Sidebar Navigation */}
         <aside className="md:col-span-1 space-y-4">
-          <div className="p-4 rounded-xl bg-white border border-stone-200 shadow-xs">
-            <h3 className="text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-3">
+          <div className="clay p-4">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">
               Learning Modules
             </h3>
             {loading ? (
-              <div className="text-xs text-stone-400 animate-pulse">Loading guides...</div>
+              <div className="text-xs text-muted-foreground animate-pulse">Loading guides...</div>
             ) : (
               <nav className="space-y-1">
                 {docs.map((doc) => {
@@ -89,14 +89,14 @@ export default function PlaygroundDocsPage() {
                       onClick={() => setActiveSlug(doc.slug)}
                       className={`w-full text-left text-xs font-bold p-2.5 rounded-lg transition-all ${
                         isActive
-                          ? 'bg-stone-900 text-stone-50 shadow-xs'
-                          : 'text-stone-700 hover:bg-stone-100'
+                          ? 'clay-sm clay-dark'
+                          : 'text-muted-foreground hover:text-foreground'
                       }`}
                     >
                       <div className="truncate">{doc.title}</div>
                       <div
-                        className={`text-[10px] truncate mt-0.5 ${
-                          isActive ? 'text-stone-300' : 'text-stone-500'
+                        className={`text-xs truncate mt-0.5 ${
+                          isActive ? 'opacity-70' : 'text-muted-foreground'
                         }`}
                       >
                         {doc.summary}
@@ -108,11 +108,11 @@ export default function PlaygroundDocsPage() {
             )}
           </div>
 
-          <div className="p-4 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-900 space-y-2">
-            <h4 className="text-xs font-bold flex items-center gap-1.5">
+          <div className="clay clay-sun p-4 space-y-2">
+            <h4 className="text-sm font-bold flex items-center gap-1.5">
               <span>💡</span> Need Technical Support?
             </h4>
-            <p className="text-xs leading-relaxed text-amber-800 font-medium">
+            <p className="text-xs leading-relaxed font-medium opacity-80">
               Join STEP IIT Kharagpur office hours every Wednesday at 4 PM in the Science Park building.
             </p>
           </div>
@@ -121,15 +121,15 @@ export default function PlaygroundDocsPage() {
         {/* Documentation Content Viewer */}
         <section className="md:col-span-3">
           {activeDoc ? (
-            <article className="p-6 md:p-8 rounded-xl bg-white border border-stone-200 shadow-xs space-y-6">
-              <div className="border-b border-stone-200 pb-4">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-stone-100 text-stone-700">
+            <article className="clay-lg p-6 md:p-8 space-y-6">
+              <div className="border-b border-border/70 pb-4">
+                <span className="clay-chip clay-soft text-xs uppercase tracking-wider">
                   CATEGORY: {activeDoc.category}
                 </span>
-                <h1 className="text-2xl font-black tracking-tight text-stone-900 mt-2">
+                <h1 className="text-2xl font-bold tracking-tight text-foreground mt-2">
                   {activeDoc.title}
                 </h1>
-                <p className="text-sm text-stone-600 font-medium mt-1">
+                <p className="text-sm text-muted-foreground font-medium mt-1">
                   {activeDoc.summary}
                 </p>
               </div>
@@ -139,21 +139,21 @@ export default function PlaygroundDocsPage() {
                 {activeDoc.content.split('\n\n').map((paragraph, idx) => {
                   if (paragraph.startsWith('# ')) {
                     return (
-                      <h2 key={idx} className="text-lg font-extrabold text-stone-900 pt-2">
+                      <h2 key={idx} className="text-lg font-extrabold text-foreground pt-2">
                         {paragraph.replace('# ', '')}
                       </h2>
                     );
                   }
                   if (paragraph.startsWith('## ')) {
                     return (
-                      <h3 key={idx} className="text-base font-bold text-stone-800 pt-1">
+                      <h3 key={idx} className="text-base font-bold text-foreground pt-1">
                         {paragraph.replace('## ', '')}
                       </h3>
                     );
                   }
                   if (paragraph.startsWith('### ')) {
                     return (
-                      <h4 key={idx} className="text-sm font-bold text-stone-800">
+                      <h4 key={idx} className="text-sm font-bold text-foreground">
                         {paragraph.replace('### ', '')}
                       </h4>
                     );
@@ -161,13 +161,13 @@ export default function PlaygroundDocsPage() {
                   if (paragraph.startsWith('```')) {
                     const code = paragraph.replace(/```[a-z]*/g, '').trim();
                     return (
-                      <pre key={idx} className="p-3 rounded-lg bg-stone-900 text-stone-100 font-mono text-[11px] overflow-x-auto">
+                      <pre key={idx} className="clay-sm clay-dark p-3.5 font-mono text-[13px] overflow-x-auto">
                         <code>{code}</code>
                       </pre>
                     );
                   }
                   return (
-                    <p key={idx} className="text-stone-700 leading-relaxed">
+                    <p key={idx} className="text-foreground/80 leading-relaxed">
                       {paragraph}
                     </p>
                   );
@@ -175,7 +175,7 @@ export default function PlaygroundDocsPage() {
               </div>
             </article>
           ) : (
-            <div className="p-12 text-center text-stone-500 font-medium">
+            <div className="p-12 text-center text-muted-foreground font-medium">
               Select a documentation module from the left navigation bar.
             </div>
           )}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getNavigation } from "@/modules/cms/service";
 
-// Public shell — YC-inspired: minimal, high-contrast, orange accent.
+// Public shell. Claymorphism: soft raised surfaces on warm paper, orange accent.
 export default async function PublicLayout({
   children,
 }: {
@@ -14,18 +14,18 @@ export default async function PublicLayout({
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+      <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4">
+        <div className="clay mx-auto flex h-16 max-w-7xl items-center justify-between px-4 backdrop-blur-xl sm:px-6">
           <Link href="/" className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/logo.png" alt="" className="h-8 w-8 object-contain" />
+            <img src="/images/logo.png" alt="" className="clay-sm h-9 w-9 object-contain p-1" />
             <span className="text-[15px] font-bold tracking-tight">
               STEP<span className="text-brand">.</span>
               <span className="ml-1.5 font-medium text-muted-foreground">IIT Kharagpur</span>
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-8 text-sm md:flex">
+          <nav className="hidden items-center gap-6 text-sm lg:flex">
             {primary.map((item) => (
               <Link key={item.id} href={item.href} className="font-medium text-foreground/80 transition-colors hover:text-brand">
                 {item.label}
@@ -33,26 +33,23 @@ export default async function PublicLayout({
             ))}
             <Link
               href="/playground?search=open"
-              className="font-semibold text-amber-600 transition-colors hover:underline flex items-center gap-1.5"
+              className="clay-chip clay-sun text-xs transition-transform hover:-translate-y-0.5"
             >
-              <span>🏛️</span> Govt &amp; IP Services
+              <span>🏛️</span> Govt &amp; IP
             </Link>
             <Link
               href="/playground?search=open"
-              className="font-semibold text-brand transition-colors hover:underline flex items-center gap-1.5"
+              className="clay-chip clay-soft text-xs transition-transform hover:-translate-y-0.5"
             >
-              <span>📜</span> Statewise Policies &amp; SOPs
+              <span>📜</span> Policies &amp; SOPs
             </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <Link href="/auth/login" className="hidden text-sm font-medium text-foreground/80 transition-colors hover:text-brand sm:block">
               Sign in
             </Link>
-            <Link
-              href="/apply"
-              className="inline-flex h-9 items-center rounded-md bg-brand px-4 text-sm font-semibold text-brand-foreground transition-colors hover:bg-brand-hover"
-            >
+            <Link href="/apply" className="clay-btn clay-primary h-10 px-5 text-sm">
               Apply
             </Link>
           </div>
@@ -61,18 +58,18 @@ export default async function PublicLayout({
 
       <div className="flex-1">{children}</div>
 
-      <footer className="border-t border-border bg-surface-2">
+      <footer className="mt-16 rounded-t-[2rem] bg-surface-2 shadow-[inset_0_3px_6px_-2px_var(--clay-shade)]">
         <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/images/logo.png" alt="" className="h-9 w-9 object-contain" />
+              <img src="/images/logo.png" alt="" className="clay-sm h-10 w-10 object-contain p-1" />
               <span className="text-[15px] font-bold tracking-tight">
                 STEP<span className="text-brand">.</span> IIT Kharagpur
               </span>
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Science &amp; Technology Entrepreneurs&rsquo; Park — India&rsquo;s pioneering technology
+              Science &amp; Technology Entrepreneurs&rsquo; Park. India&rsquo;s pioneering technology
               incubator, backing founders out of IIT Kharagpur since 1986.
             </p>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
@@ -122,13 +119,13 @@ export default async function PublicLayout({
               <a href="https://www.indiascienceandtechnology.gov.in/" target="_blank" rel="noreferrer" className="hover:text-brand flex items-center gap-1">
                 <span>🔬</span> India Science &amp; Tech (ISTI)
               </a>
-              <a href="/api/search/gujarat-sitemap" target="_blank" rel="noreferrer" className="hover:text-brand font-semibold text-foreground pt-1 border-t border-border">
+              <a href="/api/search/gujarat-sitemap" target="_blank" rel="noreferrer" className="clay-chip clay-plain mt-2 self-start text-[11px] transition-transform hover:-translate-y-0.5">
                 🗺️ Portal Sitemaps &amp; API Feeds ↗
               </a>
             </nav>
           </div>
         </div>
-        <div className="border-t border-border">
+        <div className="border-t border-border/70">
           <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <span>© {new Date().getFullYear()} STEP, IIT Kharagpur. All rights reserved.</span>
             <span>Supported by DST · IDBI · IFCI · ICICI · NSTEDB · DPIIT · MeitY</span>

@@ -15,7 +15,7 @@ export function ScanButton() {
         disabled={pending}
         onClick={() => start(async () => {
           const res = await runElevenMonthScanAction();
-          setMsg(res.ok ? `Scan complete — ${res.flagged} flagged.` : "Scan failed.");
+          setMsg(res.ok ? `Scan complete. ${res.flagged} flagged.` : "Scan failed.");
         })}
       >
         {pending ? "Scanning…" : "Run 11-month scan"}

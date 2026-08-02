@@ -124,13 +124,13 @@ export function PageEditor({
         )}
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface p-4">
+      <div className="mt-6 flex flex-wrap items-center gap-2 clay p-4">
         <span className="text-sm text-muted-foreground">Add block:</span>
         {BLOCK_TYPES.map((t) => (
           <button
             key={t}
             onClick={() => addBlock(t)}
-            className="rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-muted"
+            className="clay-sm px-2.5 py-1 text-xs font-medium hover:bg-muted"
           >
             + {BLOCK_CATALOG[t].label}
           </button>
@@ -157,7 +157,7 @@ function BlockCard({
 }) {
   const def = BLOCK_CATALOG[block.type];
   return (
-    <div className="rounded-xl border border-border bg-surface p-5">
+    <div className="clay p-5">
       <div className="mb-4 flex items-center justify-between">
         <div>
           <span className="text-sm font-medium">{def.label}</span>
@@ -195,7 +195,7 @@ function FieldEditor({
         <label className="mb-1.5 block text-sm font-medium">{field.label}</label>
         <div className="space-y-2">
           {items.map((item, i) => (
-            <div key={i} className="flex flex-wrap items-start gap-2 rounded-md border border-border p-2">
+            <div key={i} className="flex flex-wrap items-start gap-2 clay-sm p-2">
               {itemFields.map((itf) => (
                 <div key={itf.key} className="flex-1 min-w-[8rem]">
                   <span className="mb-1 block text-xs text-muted-foreground">{itf.label}</span>
@@ -219,7 +219,7 @@ function FieldEditor({
           ))}
           <button
             onClick={() => onChange([...items, Object.fromEntries(itemFields.map((f) => [f.key, ""]))])}
-            className="rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-muted"
+            className="clay-sm px-2.5 py-1 text-xs font-medium hover:bg-muted"
           >
             + Add item
           </button>
@@ -237,7 +237,7 @@ function FieldEditor({
           value={str}
           onChange={(e) => onChange(e.target.value)}
           rows={3}
-          className="flex w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="clay-field text-sm"
         />
       ) : (
         <Input type={field.type === "url" ? "text" : "text"} value={str} onChange={(e) => onChange(e.target.value)} />

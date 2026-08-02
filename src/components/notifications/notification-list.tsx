@@ -21,7 +21,7 @@ export function NotificationList({
   return (
     <div className="mt-6">
       {/* Preferences */}
-      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-xl border border-border bg-surface p-4 text-sm">
+      <div className="mb-6 flex flex-wrap items-center gap-4 clay p-4 text-sm">
         <span className="font-medium">Delivery:</span>
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={inappOn} onChange={(e) => { setInappOn(e.target.checked); start(() => savePreferenceAction(emailOn, e.target.checked).then(() => {})); }} />

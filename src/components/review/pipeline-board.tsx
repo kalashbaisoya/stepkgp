@@ -43,7 +43,7 @@ export function PipelineBoard({
                   onAssign={() => setAssignFor(c.id)}
                 />
               ))}
-              {cards.length === 0 && <div className="rounded-lg border border-dashed border-border p-3 text-center text-xs text-muted-foreground">—</div>}
+              {cards.length === 0 && <div className="clay-inset p-3 text-center text-xs text-muted-foreground">-</div>}
             </div>
           </div>
         );
@@ -69,7 +69,7 @@ function PipelineCard({
 }) {
   const [pending, start] = useTransition();
   return (
-    <div className="rounded-lg border border-border bg-surface p-3 text-sm">
+    <div className="clay p-3 text-sm">
       <Link href={`/app/review/${card.id}`} className="font-medium hover:underline">
         {card.applicant}
       </Link>
@@ -108,7 +108,7 @@ function AssignDialog({
   const [pending, start] = useTransition();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4" onClick={onClose}>
-      <div className="w-full max-w-sm rounded-xl border border-border bg-surface p-6" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-sm clay p-6" onClick={(e) => e.stopPropagation()}>
         <h3 className="font-semibold">Assign reviewers</h3>
         <div className="mt-3 max-h-64 space-y-1.5 overflow-y-auto">
           {reviewers.map((r) => (
@@ -123,7 +123,7 @@ function AssignDialog({
           ))}
         </div>
         <div className="mt-4 flex justify-end gap-2">
-          <button onClick={onClose} className="rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted">Cancel</button>
+          <button onClick={onClose} className="clay-btn clay-plain px-4 py-2 text-sm">Cancel</button>
           <button
             disabled={pending || selected.length === 0}
             onClick={() => start(async () => { await assignReviewersAction(applicationId, selected); onClose(); })}

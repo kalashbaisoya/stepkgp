@@ -4,7 +4,7 @@ import { CompanyDirectory } from "@/components/directory/company-directory";
 
 export const metadata: Metadata = {
   title: "Companies",
-  description: "Startups incubated at STEP, IIT Kharagpur — from deep-tech and agritech to fintech and SaaS.",
+  description: "Startups incubated at STEP, IIT Kharagpur, from deep-tech and agritech to fintech and SaaS.",
 };
 
 export default async function StartupsPage() {
@@ -20,7 +20,7 @@ export default async function StartupsPage() {
             STEP <span className="text-brand">companies</span>
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Since 1986, STEP at IIT Kharagpur has helped founders turn research into companies —
+            Since 1986, STEP at IIT Kharagpur has helped founders turn research into companies,
             spanning agritech, deep-tech, fintech, materials and enterprise software.
           </p>
           <div className="mt-8 flex flex-wrap gap-x-12 gap-y-4">

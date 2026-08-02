@@ -48,7 +48,7 @@ export function BpConfigEditor({ initial }: { initial: Def[] }) {
 
       <div className="space-y-2">
         {defs.map((d, i) => (
-          <div key={i} className="rounded-lg border border-border bg-surface p-4">
+          <div key={i} className="clay p-4">
             <div className="flex flex-wrap items-end gap-3">
               <div className="min-w-[10rem] flex-1">
                 <span className="mb-1 block text-xs text-muted-foreground">Title</span>
@@ -79,7 +79,7 @@ export function BpConfigEditor({ initial }: { initial: Def[] }) {
           </div>
         ))}
       </div>
-      <button onClick={add} className="mt-3 rounded-md border border-border px-3 py-1.5 text-sm hover:bg-muted">+ Add section</button>
+      <button onClick={add} className="clay-btn clay-plain mt-3 px-4 py-2 text-sm">+ Add section</button>
     </div>
   );
 }

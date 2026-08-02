@@ -21,7 +21,7 @@ export default async function UsersPage({
       <p className="mt-2 text-muted-foreground">Assign roles and manage account access.</p>
 
       <form method="get" className="mt-6 flex gap-2">
-        <input name="q" defaultValue={q ?? ""} placeholder="Search name or email…" className="h-9 w-72 rounded-md border border-border bg-surface px-3 text-sm" />
+        <input name="q" defaultValue={q ?? ""} placeholder="Search name or email…" className="h-9 w-72 clay-field text-sm" />
         <button className="h-9 rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground">Search</button>
       </form>
 

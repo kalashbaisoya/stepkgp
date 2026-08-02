@@ -42,7 +42,7 @@ export function HeroCarousel({
   }
 
   return (
-    <section className="relative isolate overflow-hidden border-b border-border">
+    <section className="relative isolate mx-3 mt-3 overflow-hidden rounded-[2rem] shadow-[0_32px_60px_-32px_var(--clay-drop)] sm:mx-5">
       {/* Slides */}
       <div className="absolute inset-0 -z-10">
         {slides.map((s, idx) => (
@@ -63,12 +63,12 @@ export function HeroCarousel({
 
       <div className="mx-auto flex min-h-[38rem] max-w-6xl flex-col justify-center px-6 py-28 text-white sm:min-h-[42rem]">
         {eyebrow && (
-          <span className="reveal inline-flex w-fit items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest backdrop-blur">
+          <span className="reveal inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest shadow-[inset_0_1px_1px_rgba(255,255,255,0.35)] backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-accent" />
             {eyebrow}
           </span>
         )}
-        <h1 className="reveal mt-6 max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl" style={{ animationDelay: "80ms" }}>
+        <h1 className="reveal mt-6 max-w-3xl text-5xl font-bold leading-[1.08] tracking-tight sm:text-7xl" style={{ animationDelay: "80ms" }}>
           {heading}
         </h1>
         <p className="reveal mt-6 max-w-2xl text-lg text-white/80 sm:text-xl" style={{ animationDelay: "160ms" }}>
@@ -76,22 +76,28 @@ export function HeroCarousel({
         </p>
         <div className="reveal mt-9 flex flex-wrap gap-3" style={{ animationDelay: "240ms" }}>
           {ctaHref && ctaLabel && (
-            <Link href={ctaHref} className="inline-flex h-12 items-center justify-center rounded-full bg-brand px-7 text-sm font-semibold text-brand-foreground shadow-lg transition-opacity hover:opacity-90">
+            <Link href={ctaHref} className="clay-btn clay-primary h-12 px-7 text-sm">
               {ctaLabel}
             </Link>
           )}
           {secondaryHref && secondaryLabel && (
-            <Link href={secondaryHref} className="inline-flex h-12 items-center justify-center rounded-full border border-white/30 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20">
+            <Link
+              href={secondaryHref}
+              className="clay-btn h-12 border-white/25 bg-white/12 px-7 text-sm text-white backdrop-blur [--clay-ink:#fff] hover:bg-white/20"
+            >
               {secondaryLabel}
             </Link>
           )}
         </div>
 
         {stats && stats.length > 0 && (
-          <div className="reveal mt-16 flex flex-wrap gap-x-12 gap-y-6" style={{ animationDelay: "320ms" }}>
+          <div className="reveal mt-14 flex flex-wrap gap-3" style={{ animationDelay: "320ms" }}>
             {stats.map((s, idx) => (
-              <div key={idx}>
-                <div className="text-4xl font-semibold">{s.value}</div>
+              <div
+                key={idx}
+                className="rounded-2xl border border-white/15 bg-white/10 px-6 py-4 shadow-[inset_0_2px_2px_rgba(255,255,255,0.25),0_16px_28px_-20px_rgba(0,0,0,0.6)] backdrop-blur"
+              >
+                <div className="text-3xl font-bold">{s.value}</div>
                 <div className="mt-1 text-sm text-white/70">{s.label}</div>
               </div>
             ))}
@@ -101,7 +107,7 @@ export function HeroCarousel({
 
       {/* Controls */}
       {n > 1 && (
-        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-3">
+        <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-2.5 rounded-full border border-white/15 bg-black/25 px-3 py-2 backdrop-blur">
           {slides.map((_, idx) => (
             <button
               key={idx}
@@ -113,7 +119,7 @@ export function HeroCarousel({
         </div>
       )}
       {slides[i]?.caption && (
-        <div className="absolute bottom-5 right-6 hidden rounded-full bg-black/40 px-3 py-1 text-xs text-white/80 backdrop-blur sm:block">
+        <div className="absolute bottom-5 right-6 hidden rounded-full border border-white/15 bg-black/35 px-3.5 py-1.5 text-xs text-white/80 backdrop-blur sm:block">
           {slides[i].caption}
         </div>
       )}

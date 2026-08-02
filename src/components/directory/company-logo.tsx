@@ -22,7 +22,7 @@ export function CompanyLogo({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-surface",
+        "clay-sm flex shrink-0 items-center justify-center overflow-hidden bg-surface",
         className ?? "h-12 w-12",
       )}
     >

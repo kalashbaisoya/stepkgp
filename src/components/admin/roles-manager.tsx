@@ -40,7 +40,7 @@ function RoleEditor({ role, allPermissions }: { role: Role; allPermissions: stri
   for (const p of allPermissions) { const g = p.split(":")[0]; (groups[g] ??= []).push(p); }
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-6">
+    <div className="clay p-6">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-semibold">{role.name}</h2>
         <div className="flex items-center gap-3">

@@ -19,7 +19,7 @@ export function UsersManager({
   const [pending, start] = useTransition();
 
   return (
-    <div className="mt-6 overflow-hidden rounded-xl border border-border bg-surface">
+    <div className="mt-6 overflow-hidden clay">
       <table className="w-full text-sm">
         <thead className="border-b border-border bg-surface-2 text-left text-muted-foreground">
           <tr>
@@ -33,7 +33,7 @@ export function UsersManager({
           {users.map((u) => (
             <tr key={u.id}>
               <td className="px-4 py-3">
-                <div className="font-medium">{u.name ?? "—"}</div>
+                <div className="font-medium">{u.name ?? "-"}</div>
                 <div className="text-xs text-muted-foreground">{u.email}</div>
               </td>
               <td className="px-4 py-3">

@@ -7,7 +7,7 @@ import type { Block, BlockType } from "./blocks";
 const pageTag = (key: string) => `cms:page:${key}`;
 const navTag = "cms:navigation";
 
-/** Published page blocks for public rendering — cached, tag-revalidated on publish. */
+/** Published page blocks for public rendering. Cached, tag-revalidated on publish. */
 export function getPublishedPage(key: string) {
   return unstable_cache(
     async () => {

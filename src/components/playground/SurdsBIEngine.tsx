@@ -50,91 +50,89 @@ export default function SurdsBIEngine({ ideaState, setIdeaState, onNext, onPrev 
 
   return (
     <div className="space-y-6">
-      <div className="p-4 rounded-2xl bg-white border border-stone-200 shadow-xs flex items-center justify-between">
+      <div className="clay p-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-bold text-stone-900">Stage 3: Surds Business Intelligence Engine</h2>
-          <p className="text-xs text-stone-500">
-            Real-time market sizing, TAM/SAM/SOM breakdown, competitor benchmarking & risk scoring.
+          <h2 className="text-lg font-bold">Stage 3: Surds Business Intelligence Engine</h2>
+          <p className="text-xs text-muted-foreground">
+            Real-time market sizing, TAM/SAM/SOM breakdown, competitor benchmarking &amp; risk scoring.
           </p>
         </div>
         <button
           onClick={fetchBiData}
-          className="text-xs font-bold px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-800 border border-stone-300"
+          className="clay-btn clay-plain text-xs px-4 py-2.5"
         >
           🔄 Re-Scan Market Metrics
         </button>
       </div>
 
       {loading ? (
-        <div className="p-12 text-center text-stone-500 text-xs font-semibold animate-pulse">
-          Surds BI Intelligence Engine Analyzing TAM/SAM/SOM Metrics for "{ideaState.title}"...
+        <div className="clay-inset p-12 text-center text-muted-foreground text-xs font-semibold animate-pulse">
+          Surds BI Intelligence Engine Analyzing TAM/SAM/SOM Metrics for &ldquo;{ideaState.title}&rdquo;...
         </div>
       ) : (
         <div className="space-y-6">
           {/* Key Metrics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Total Addressable Market</span>
-              <div className="text-2xl font-black text-stone-900">{biData?.tam}</div>
-              <p className="text-[11px] text-stone-500">Global Annual TAM</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="clay clay-hover clay-sky p-5 space-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider opacity-70">Total Addressable Market</span>
+              <div className="text-2xl font-extrabold">{biData?.tam}</div>
+              <p className="text-[13px] opacity-70">Global Annual TAM</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">Serviceable Addressable Market</span>
-              <div className="text-2xl font-black text-emerald-700">{biData?.sam}</div>
-              <p className="text-[11px] text-stone-500">India & South Asia SAM</p>
+            <div className="clay clay-hover clay-mint p-5 space-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider opacity-70">Serviceable Addressable Market</span>
+              <div className="text-2xl font-extrabold">{biData?.sam}</div>
+              <p className="text-[13px] opacity-70">India &amp; South Asia SAM</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700">Surds Viability Score</span>
-              <div className="text-2xl font-black text-stone-900">{biData?.viabilityScore} / 100</div>
-              <p className="text-[11px] text-stone-500">High Product-Market Fit</p>
+            <div className="clay clay-hover clay-sun p-5 space-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider opacity-70">Surds Viability Score</span>
+              <div className="text-2xl font-extrabold">{biData?.viabilityScore} / 100</div>
+              <p className="text-[13px] opacity-70">High Product-Market Fit</p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-stone-400">TAM/SAM Precision</span>
-              <div className="text-2xl font-black text-stone-900">{biData?.tamSamScore}%</div>
-              <p className="text-[11px] text-stone-500">Surds Intelligence Index</p>
+            <div className="clay clay-hover clay-lilac p-5 space-y-1">
+              <span className="text-xs font-bold uppercase tracking-wider opacity-70">TAM/SAM Precision</span>
+              <div className="text-2xl font-extrabold">{biData?.tamSamScore}%</div>
+              <p className="text-[13px] opacity-70">Surds Intelligence Index</p>
             </div>
           </div>
 
           {/* Competitor Benchmarking & Risk Radar */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-4">
-              <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
+            <div className="clay p-5 space-y-4">
+              <h3 className="text-sm font-bold flex items-center gap-2">
                 <span>⚔️</span> Competitor Benchmarking
               </h3>
 
               <div className="space-y-3">
                 {biData?.competitors?.map((comp: any, idx: number) => (
-                  <div key={idx} className="p-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs space-y-1">
-                    <div className="flex justify-between font-bold text-stone-900">
+                  <div key={idx} className="clay-inset p-3.5 text-xs space-y-1">
+                    <div className="flex justify-between font-bold">
                       <span>{comp.name}</span>
-                      <span className="text-stone-500">{comp.marketShare} Share</span>
+                      <span className="text-muted-foreground">{comp.marketShare} Share</span>
                     </div>
-                    <p className="text-stone-600">Weakness: {comp.weakness}</p>
+                    <p className="text-muted-foreground">Weakness: {comp.weakness}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-white border border-stone-200 shadow-xs space-y-4">
-              <h3 className="text-sm font-bold text-stone-900 flex items-center gap-2">
-                <span>🛡️</span> Risk Radar & Mitigation
+            <div className="clay p-5 space-y-4">
+              <h3 className="text-sm font-bold flex items-center gap-2">
+                <span>🛡️</span> Risk Radar &amp; Mitigation
               </h3>
 
               <div className="space-y-3">
                 {biData?.riskRadar?.map((risk: any, idx: number) => (
-                  <div key={idx} className="p-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs space-y-1">
-                    <div className="flex justify-between font-bold text-stone-900">
+                  <div key={idx} className="clay-inset p-3.5 text-xs space-y-1">
+                    <div className="flex justify-between items-center gap-2 font-bold">
                       <span>{risk.factor}</span>
-                      <span className={`px-2 py-0.5 rounded text-[10px] ${
-                        risk.level === 'High' ? 'bg-red-100 text-red-800 font-bold' : 'bg-amber-100 text-amber-900 font-bold'
-                      }`}>
+                      <span className={`clay-chip text-xs ${risk.level === 'High' ? 'clay-rose' : 'clay-sun'}`}>
                         {risk.level} Risk
                       </span>
                     </div>
-                    <p className="text-stone-600">Mitigation: {risk.mitigation}</p>
+                    <p className="text-muted-foreground">Mitigation: {risk.mitigation}</p>
                   </div>
                 ))}
               </div>
@@ -143,11 +141,11 @@ export default function SurdsBIEngine({ ideaState, setIdeaState, onNext, onPrev 
         </div>
       )}
 
-      <div className="flex justify-between pt-4">
-        <button onClick={onPrev} className="px-4 py-2 rounded-lg bg-stone-100 text-stone-700 text-xs font-semibold">
+      <div className="clay flex flex-wrap justify-between gap-3 p-4">
+        <button onClick={onPrev} className="clay-btn clay-plain px-4 py-2.5 text-xs">
           ← Back
         </button>
-        <button onClick={onNext} className="px-6 py-2 rounded-lg bg-stone-900 text-stone-50 text-xs font-bold">
+        <button onClick={onNext} className="clay-btn clay-dark px-6 py-2.5 text-xs">
           Proceed to Launchpack →
         </button>
       </div>

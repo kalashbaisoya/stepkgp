@@ -24,7 +24,7 @@ export default async function ShowcaseAdmin() {
         <Button type="submit">Add</Button>
       </form>
 
-      <div className="mt-8 overflow-hidden rounded-xl border border-border bg-surface">
+      <div className="mt-8 overflow-hidden clay">
         <table className="w-full text-sm">
           <thead className="border-b border-border bg-surface-2 text-left text-muted-foreground">
             <tr>
@@ -38,7 +38,7 @@ export default async function ShowcaseAdmin() {
             {entries.map((e) => (
               <tr key={e.id}>
                 <td className="px-4 py-3 font-medium">{e.name}</td>
-                <td className="px-4 py-3 capitalize text-muted-foreground">{e.sector ?? "—"}</td>
+                <td className="px-4 py-3 capitalize text-muted-foreground">{e.sector ?? "-"}</td>
                 <td className={`px-4 py-3 ${e.published ? "text-status-success" : "text-muted-foreground"}`}>{e.published ? "Live" : "Hidden"}</td>
                 <td className="px-4 py-3 text-right">
                   <Link href={`/admin/cms/showcase/${e.id}`} className="font-medium text-brand hover:underline">Edit</Link>

@@ -62,29 +62,29 @@ export default function ProfileRegistrationModal({ isOpen, onClose, onProfileCre
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl border border-stone-200 shadow-xl max-w-lg w-full p-6 space-y-5 relative">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="clay-lg max-w-lg w-full p-6 space-y-5 relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 font-bold text-sm"
+          className="clay-btn clay-plain absolute top-4 right-4 h-9 w-9 rounded-full text-xs"
         >
           ✕
         </button>
 
         <div>
-          <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded">
+          <span className="clay-chip clay-sun text-xs uppercase tracking-wider">
             STEP IIT KGP TALENT REGISTRY
           </span>
-          <h2 className="text-xl font-black text-stone-900 mt-1">
+          <h2 className="text-xl font-extrabold mt-1.5">
             Claim Your Ecosystem Profile
           </h2>
-          <p className="text-xs text-stone-600 font-medium">
+          <p className="text-xs text-muted-foreground font-medium">
             Connect your expertise with active startup graph executions & incubation pipelines.
           </p>
         </div>
 
         {message && (
-          <div className="p-3 text-xs font-semibold rounded-lg bg-stone-100 border border-stone-300 text-stone-900">
+          <div className="clay-inset p-3.5 text-xs font-semibold">
             {message}
           </div>
         )}
@@ -92,17 +92,17 @@ export default function ProfileRegistrationModal({ isOpen, onClose, onProfileCre
         <form onSubmit={handleSubmit} className="space-y-4 text-xs font-medium">
           {/* Role selector */}
           <div>
-            <label className="block text-stone-700 font-bold mb-1">Select Your Primary Role</label>
+            <label className="block font-semibold mb-1.5">Select Your Primary Role</label>
             <div className="grid grid-cols-3 gap-2">
               {(['STUDENT', 'ALUMNI', 'PROFESSOR'] as const).map((r) => (
                 <button
                   type="button"
                   key={r}
                   onClick={() => setRole(r)}
-                  className={`py-2 rounded-lg font-bold border transition ${
+                  className={`py-2.5 text-xs ${
                     role === r
-                      ? 'bg-stone-900 text-stone-50 border-stone-900 shadow-xs'
-                      : 'bg-stone-50 text-stone-700 border-stone-300 hover:bg-stone-100'
+                      ? 'clay-btn clay-dark'
+                      : 'clay-btn clay-plain'
                   }`}
                 >
                   {r}
@@ -113,71 +113,71 @@ export default function ProfileRegistrationModal({ isOpen, onClose, onProfileCre
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-stone-700 font-bold mb-1">Full Name *</label>
+              <label className="block font-semibold mb-1.5">Full Name *</label>
               <input
                 required
                 type="text"
                 placeholder="e.g. Dr. A. K. Deb"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-900 bg-stone-50/50"
+                className="clay-field"
               />
             </div>
             <div>
-              <label className="block text-stone-700 font-bold mb-1">Email Address *</label>
+              <label className="block font-semibold mb-1.5">Email Address *</label>
               <input
                 required
                 type="email"
                 placeholder="e.g. deb@kgp.ac.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-900 bg-stone-50/50"
+                className="clay-field"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-stone-700 font-bold mb-1">Department or Company *</label>
+            <label className="block font-semibold mb-1.5">Department or Company *</label>
             <input
               required
               type="text"
               placeholder="e.g. Dept of Electrical Engg / Robotics Lab"
               value={departmentOrCompany}
               onChange={(e) => setDepartmentOrCompany(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-900 bg-stone-50/50"
+              className="clay-field"
             />
           </div>
 
           <div>
-            <label className="block text-stone-700 font-bold mb-1">Short Bio</label>
+            <label className="block font-semibold mb-1.5">Short Bio</label>
             <textarea
               rows={2}
               placeholder="Focus areas, lab facilities, mentoring interests..."
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-900 bg-stone-50/50"
+              className="clay-field"
             />
           </div>
 
           <div>
-            <label className="block text-stone-700 font-bold mb-1">Key Skills (comma separated)</label>
+            <label className="block font-semibold mb-1.5">Key Skills (comma separated)</label>
             <input
               type="text"
               placeholder="e.g. Edge AI, Computer Vision, Embedded Hardware, PyTorch"
               value={skillsStr}
               onChange={(e) => setSkillsStr(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-900 bg-stone-50/50"
+              className="clay-field"
             />
           </div>
 
           <div>
-            <label className="block text-stone-700 font-bold mb-1">Research / Venture Interests (comma separated)</label>
+            <label className="block font-semibold mb-1.5">Research / Venture Interests (comma separated)</label>
             <input
               type="text"
               placeholder="e.g. Agritech, Drone Mesh Networks, Seed Funding"
               value={interestsStr}
               onChange={(e) => setInterestsStr(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-stone-300 focus:outline-none focus:ring-2 focus:ring-stone-900 bg-stone-50/50"
+              className="clay-field"
             />
           </div>
 
@@ -185,14 +185,14 @@ export default function ProfileRegistrationModal({ isOpen, onClose, onProfileCre
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold"
+              className="clay-btn clay-plain px-4 py-2"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-stone-50 font-bold shadow-sm transition disabled:opacity-50"
+              className="clay-btn clay-dark px-5 py-2.5"
             >
               {loading ? 'Publishing Profile...' : 'Publish Profile →'}
             </button>

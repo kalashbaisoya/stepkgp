@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       >
         STEP · IIT Kharagpur
       </Link>
-      <div className="w-full max-w-sm rounded-xl border border-border bg-surface p-8 shadow-sm">
+      <div className="w-full max-w-sm clay p-8 shadow-sm">
         {children}
       </div>
       <p className="mt-6 text-xs text-muted-foreground">

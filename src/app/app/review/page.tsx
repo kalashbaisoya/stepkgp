@@ -20,7 +20,7 @@ export default async function ReviewDashboard() {
           <Link
             key={a.applicationId}
             href={`/app/review/${a.applicationId}`}
-            className="flex items-center justify-between rounded-xl border border-border bg-surface p-5 transition-colors hover:border-brand"
+            className="clay clay-hover flex items-center justify-between p-5"
           >
             <div>
               <p className="font-medium">{a.cycleName} · {a.categoryName}</p>

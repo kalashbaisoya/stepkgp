@@ -6,7 +6,7 @@ import { getApplication } from "./service";
 
 /**
  * Build ONE combined PDF for an application: a rendered summary (form answers +
- * business plan) followed by every uploaded document merged in — PDFs appended
+ * business plan) followed by every uploaded document merged in. PDFs are appended
  * page-by-page, images embedded as full pages. Unsupported types are noted on a
  * cover line. Used by the one-click "download full application" for applicant + staff.
  */
@@ -19,7 +19,7 @@ export async function buildFullApplicationPdf(applicationId: string): Promise<Bu
     db.application.findUnique({ where: { id: applicationId }, include: { user: { select: { name: true, email: true } } } }),
   ]);
 
-  // 1. Rendered summary (react-pdf) — lazy import to keep @react-pdf off other paths.
+  // 1. Rendered summary (react-pdf). Lazy import keeps @react-pdf off other paths.
   const { renderApplicationPdf } = await import("@/modules/businessPlan/pdf");
   const summaryBuf = await renderApplicationPdf({
     startupName: String(app.values["startup_name"] ?? "Application"),
@@ -60,7 +60,7 @@ export async function buildFullApplicationPdf(applicationId: string): Promise<Bu
       }
       // other types: skipped (already listed in the summary's Documents table)
     } catch {
-      // unreadable/corrupt attachment — skip, summary still lists it
+      // unreadable/corrupt attachment: skip it, the summary still lists it
     }
   }
 
@@ -69,8 +69,8 @@ export async function buildFullApplicationPdf(applicationId: string): Promise<Bu
 }
 
 function formatValue(v: unknown): string {
-  if (v === undefined || v === null || v === "") return "—";
-  if (Array.isArray(v)) return v.length ? v.join(", ") : "—";
+  if (v === undefined || v === null || v === "") return "-";
+  if (Array.isArray(v)) return v.length ? v.join(", ") : "-";
   if (typeof v === "boolean") return v ? "Yes" : "No";
   return String(v);
 }

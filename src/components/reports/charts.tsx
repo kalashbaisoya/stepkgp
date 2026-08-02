@@ -72,7 +72,7 @@ export function ReviewerTable({ rows }: { rows: { name: string; assigned: number
               <td className="px-6 py-2 font-medium">{r.name}</td>
               <td className="px-6 py-2 text-muted-foreground">{r.assigned}</td>
               <td className="px-6 py-2 text-muted-foreground">{r.completed}</td>
-              <td className="px-6 py-2 text-muted-foreground">{r.avgScore ?? "—"}</td>
+              <td className="px-6 py-2 text-muted-foreground">{r.avgScore ?? "-"}</td>
             </tr>
           ))}
           {rows.length === 0 && (

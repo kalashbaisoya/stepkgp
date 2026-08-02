@@ -46,7 +46,7 @@ export default async function ReviewPortal({
           {app.sections.map((s) => (
             <section key={s.key}>
               <h2 className="text-sm font-medium text-muted-foreground">{s.title}</h2>
-              <dl className="mt-2 divide-y divide-border rounded-lg border border-border bg-surface">
+              <dl className="mt-2 divide-y divide-border clay overflow-hidden">
                 {s.fields.map((f) => (
                   <div key={f.key} className="flex justify-between gap-4 px-3 py-2 text-sm">
                     <dt className="text-muted-foreground">{f.label}</dt>
@@ -57,16 +57,16 @@ export default async function ReviewPortal({
             </section>
           ))}
 
-          {/* Business plan — inline */}
+          {/* Business plan, inline */}
           {data.businessPlan.length > 0 && (
             <section>
               <h2 className="text-sm font-medium text-muted-foreground">Business plan</h2>
-              <div className="mt-2 space-y-4 rounded-lg border border-border bg-surface p-4">
+              <div className="mt-2 space-y-4 clay p-4">
                 {data.businessPlan.map((s, i) => (
                   <div key={i}>
                     <h3 className="text-sm font-semibold text-brand">{s.title}</h3>
                     <p className="mt-1 whitespace-pre-line text-sm text-muted-foreground">
-                      {s.content.trim() || "—"}
+                      {s.content.trim() || "-"}
                     </p>
                   </div>
                 ))}
@@ -123,8 +123,8 @@ export default async function ReviewPortal({
 }
 
 function formatValue(v: unknown): string {
-  if (v === undefined || v === null || v === "") return "—";
-  if (Array.isArray(v)) return v.length ? v.join(", ") : "—";
+  if (v === undefined || v === null || v === "") return "-";
+  if (Array.isArray(v)) return v.length ? v.join(", ") : "-";
   if (typeof v === "boolean") return v ? "Yes" : "No";
   return String(v);
 }
