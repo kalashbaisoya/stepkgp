@@ -38,3 +38,9 @@ yarn-error.log*
 /coverage
 /playwright-report
 /test-results
+
+# build artifacts
+tsconfig.tsbuildinfo
+
+# this project uses pnpm; an npm lockfile would be a second source of truth
+package-lock.json
