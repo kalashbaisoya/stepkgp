@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import SeededProblemFeed from '@/components/playground/SeededProblemFeed';
 import ValidationDirectory from '@/components/playground/ValidationDirectory';
 import SurdsBIEngine from '@/components/playground/SurdsBIEngine';
@@ -157,32 +156,9 @@ export default function StartupPlaygroundPage() {
       {/* Soft clay backdrop */}
       <div className="clay-blobs absolute inset-x-0 top-0 h-[36rem] pointer-events-none" aria-hidden />
 
-      {/* Top Header Navigation */}
-      <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4">
-        <div className="clay max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 px-5 py-4 backdrop-blur-xl">
-          <div className="flex items-center gap-3">
-            <div className="clay-sm clay-primary w-11 h-11 flex items-center justify-center text-lg">
-              ⚡
-            </div>
-            <div>
-              <h1 className="text-xl font-extrabold tracking-tight">
-                STEP Startup Playground
-              </h1>
-              <p className="text-xs text-muted-foreground font-medium">
-                IIT Kharagpur Incubation &amp; Node Graph Execution Engine
-              </p>
-            </div>
-          </div>
-
-          {/* The tool buttons that used to live here now hang off the node they
-              belong to, in FigmaGraphCanvas. Only the system guide stays global,
-              since it documents the whole engine rather than one stage. */}
-          <Link href="/playground/docs" className="clay-btn clay-sky text-xs px-3.5 py-2">
-            <span>📚</span> Docs &amp; System Guide
-          </Link>
-        </div>
-      </header>
-
+      {/* No page-level header here: the site header in (public)/layout.tsx already
+          carries the branding, and every tool now sits on its node in
+          FigmaGraphCanvas. The hero is the first thing on the page. */}
       <main className="max-w-7xl mx-auto px-4 md:px-6 pt-8 relative z-10 space-y-8">
         {/* Top Hero Section with Embedded AI Banner Image & Infographic Stats */}
         <PlaygroundHero onStartBuilding={scrollToWorkspace} />
