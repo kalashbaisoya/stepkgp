@@ -6,6 +6,7 @@ import { listAllShowcase } from "@/modules/directory/service";
 import { createShowcaseAction } from "@/modules/directory/actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CompanyLogo } from "@/components/directory/company-logo";
 
 export default async function ShowcaseAdmin() {
   const user = await getCurrentUser();
@@ -30,23 +31,40 @@ export default async function ShowcaseAdmin() {
             <tr>
               <th className="px-4 py-3 font-medium">Startup</th>
               <th className="px-4 py-3 font-medium">Sector</th>
-              <th className="px-4 py-3 font-medium">Published</th>
+              <th className="px-4 py-3 font-medium">Batch</th>
+              <th className="px-4 py-3 font-medium">Where it shows</th>
               <th className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
             {entries.map((e) => (
               <tr key={e.id}>
-                <td className="px-4 py-3 font-medium">{e.name}</td>
-                <td className="px-4 py-3 capitalize text-muted-foreground">{e.sector ?? "-"}</td>
-                <td className={`px-4 py-3 ${e.published ? "text-status-success" : "text-muted-foreground"}`}>{e.published ? "Live" : "Hidden"}</td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <CompanyLogo name={e.name} src={e.logoUrl} className="clay-sm h-9 w-9 shrink-0" />
+                    <div className="min-w-0">
+                      <div className="truncate font-medium">{e.name}</div>
+                      <div className="truncate text-xs text-muted-foreground">/startups/{e.slug}</div>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-muted-foreground">{e.sector ?? "-"}</td>
+                <td className="px-4 py-3 text-muted-foreground">{e.batch ?? "-"}</td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    <span className={`clay-chip text-[11px] ${e.published ? "clay-mint" : "clay-well"}`}>
+                      {e.published ? "Live in directory" : "Hidden"}
+                    </span>
+                    {e.featured && <span className="clay-chip clay-sun text-[11px]">Homepage</span>}
+                  </div>
+                </td>
                 <td className="px-4 py-3 text-right">
                   <Link href={`/admin/cms/showcase/${e.id}`} className="font-medium text-brand hover:underline">Edit</Link>
                 </td>
               </tr>
             ))}
             {entries.length === 0 && (
-              <tr><td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">No showcase entries yet.</td></tr>
+              <tr><td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">No showcase entries yet.</td></tr>
             )}
           </tbody>
         </table>

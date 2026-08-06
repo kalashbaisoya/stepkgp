@@ -5,6 +5,7 @@ import Link from "next/link";
 import { updateShowcaseAction } from "@/modules/directory/actions";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
+import { ImageUpload } from "@/components/cms/image-upload";
 
 type Entry = {
   id: string; slug: string; name: string; description: string; sector: string; website: string;
@@ -66,7 +67,14 @@ export function ShowcaseEditor({ entry }: { entry: Entry }) {
         <div><Label>Stage</Label><Input value={e.stage} onChange={(ev) => set({ stage: ev.target.value })} placeholder="Growth / Established / Acquired" /></div>
         <div><Label>Location</Label><Input value={e.location} onChange={(ev) => set({ location: ev.target.value })} placeholder="Bengaluru, India" /></div>
         <div><Label>Tags (comma separated)</Label><Input value={e.tags.join(", ")} onChange={(ev) => set({ tags: ev.target.value.split(",").map((t) => t.trim()).filter(Boolean) })} placeholder="SaaS, AI/ML" /></div>
-        <div className="sm:col-span-2"><Label>Logo URL</Label><Input value={e.logoUrl} onChange={(ev) => set({ logoUrl: ev.target.value })} /></div>
+        <div className="sm:col-span-2">
+          <ImageUpload
+            label="Logo"
+            value={e.logoUrl}
+            onChange={(url) => set({ logoUrl: url })}
+            hint="PNG, JPEG, WebP, GIF or AVIF, up to 5MB. Leave empty to show a lettered monogram instead."
+          />
+        </div>
         <div className="sm:col-span-2">
           <Label>Description</Label>
           <textarea value={e.description} onChange={(ev) => set({ description: ev.target.value })} rows={3} className="clay-field text-sm" />
@@ -80,7 +88,41 @@ export function ShowcaseEditor({ entry }: { entry: Entry }) {
       <ListEditor title="Social / links (Label | URL)" items={e.socials.map((s) => `${s.label} | ${s.url}`)}
         onChange={(vals) => set({ socials: vals.map((v) => { const [label, url] = v.split("|").map((s) => s.trim()); return { label, url }; }) })}
         placeholder="LinkedIn | https://" />
-      <ListEditor title="Gallery image URLs" items={e.gallery} onChange={(vals) => set({ gallery: vals })} placeholder="https://image" />
+      <div className="mt-6">
+        <Label>Gallery images</Label>
+        <div className="space-y-2">
+          {e.gallery.map((url, i) => (
+            <div key={i} className="flex items-start gap-2">
+              <div className="flex-1">
+                <ImageUpload
+                  label={`Image ${i + 1}`}
+                  value={url}
+                  onChange={(next) => {
+                    const g = e.gallery.slice();
+                    g[i] = next;
+                    set({ gallery: g });
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => set({ gallery: e.gallery.filter((_, j) => j !== i) })}
+                className="mt-7 text-status-danger"
+                aria-label={`Remove image ${i + 1}`}
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => set({ gallery: [...e.gallery, ""] })}
+            className="clay-sm px-2.5 py-1 text-xs hover:bg-muted"
+          >
+            + Add image
+          </button>
+        </div>
+      </div>
       <ListEditor title="Video URLs" items={e.videos} onChange={(vals) => set({ videos: vals })} placeholder="https://youtube" />
     </div>
   );
