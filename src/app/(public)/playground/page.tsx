@@ -174,55 +174,12 @@ export default function StartupPlaygroundPage() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {/* Govt & IP Services Direct Action Button */}
-            <button
-              onClick={() => setGovtOpen(true)}
-              className="clay-btn clay-sun text-xs px-3.5 py-2"
-            >
-              <span>🏛️</span> Govt &amp; IP Services
-            </button>
-
-            {/* Statewise Policies & SOPs Direct Action Button */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="clay-btn clay-dark text-xs px-3.5 py-2"
-            >
-              <span>📜</span> Statewise Policies &amp; SOPs
-            </button>
-
-            {/* Hybrid Search Button */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="clay-btn clay-plain text-xs px-3.5 py-2"
-            >
-              <span>🔍</span> Search Ecosystem
-            </button>
-
-            {/* Claim Profile Button */}
-            <button
-              onClick={() => setProfileOpen(true)}
-              className="clay-btn clay-soft text-xs px-3.5 py-2"
-            >
-              <span>👤</span> Claim Profile
-            </button>
-
-            {/* MVP Spec Builder */}
-            <button
-              onClick={() => setMvpOpen(true)}
-              className="clay-btn clay-mint text-xs px-3.5 py-2"
-            >
-              <span>⚙️</span> MVP Spec Builder
-            </button>
-
-            {/* System Docs Link */}
-            <Link
-              href="/playground/docs"
-              className="clay-btn clay-sky text-xs px-3.5 py-2"
-            >
-              <span>📚</span> Docs &amp; System Guide
-            </Link>
-          </div>
+          {/* The tool buttons that used to live here now hang off the node they
+              belong to, in FigmaGraphCanvas. Only the system guide stays global,
+              since it documents the whole engine rather than one stage. */}
+          <Link href="/playground/docs" className="clay-btn clay-sky text-xs px-3.5 py-2">
+            <span>📚</span> Docs &amp; System Guide
+          </Link>
         </div>
       </header>
 
@@ -279,6 +236,10 @@ export default function StartupPlaygroundPage() {
                 setCurrentStage(id);
                 handleExecuteBackendNode(id);
               }}
+              onOpenSearch={() => setSearchOpen(true)}
+              onOpenProfile={() => setProfileOpen(true)}
+              onOpenMvp={() => setMvpOpen(true)}
+              onOpenGovt={() => setGovtOpen(true)}
             />
           ) : (
             <div className="clay p-6">

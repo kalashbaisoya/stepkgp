@@ -31,18 +31,6 @@ export default async function PublicLayout({
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/playground?search=open"
-              className="clay-chip clay-sun text-xs transition-transform hover:-translate-y-0.5"
-            >
-              <span>🏛️</span> Govt &amp; IP
-            </Link>
-            <Link
-              href="/playground?search=open"
-              className="clay-chip clay-soft text-xs transition-transform hover:-translate-y-0.5"
-            >
-              <span>📜</span> Policies &amp; SOPs
-            </Link>
           </nav>
 
           <div className="flex items-center gap-2.5">

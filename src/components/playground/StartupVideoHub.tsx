@@ -18,7 +18,7 @@ const VIDEOS: VideoItem[] = [
     id: '1',
     title: 'How to Find & Validate Startup Ideas',
     category: 'Stage 1: Validation',
-    duration: '15:20',
+    duration: '32:21',
     youtubeUrl: 'https://www.youtube.com/watch?v=Th8JoIan4dg',
     embedId: 'Th8JoIan4dg',
     thumbnail: 'https://img.youtube.com/vi/Th8JoIan4dg/hqdefault.jpg',
@@ -28,31 +28,31 @@ const VIDEOS: VideoItem[] = [
     id: '2',
     title: 'How to Talk to Users & Conduct Market Research',
     category: 'Stage 2: Customer Interviews',
-    duration: '21:45',
-    youtubeUrl: 'https://www.youtube.com/watch?v=MT4Hg8E0jL0',
-    embedId: 'MT4Hg8E0jL0',
-    thumbnail: 'https://img.youtube.com/vi/MT4Hg8E0jL0/hqdefault.jpg',
-    description: 'Learn the Mom Test framework to extract honest feedback without bias.',
+    duration: '31:37',
+    youtubeUrl: 'https://www.youtube.com/watch?v=MT4Ig2uqjTc',
+    embedId: 'MT4Ig2uqjTc',
+    thumbnail: 'https://img.youtube.com/vi/MT4Ig2uqjTc/hqdefault.jpg',
+    description: 'YC partner Eric Migicovsky on how to run user interviews that surface honest feedback.',
   },
   {
     id: '3',
     title: 'How to Calculate TAM, SAM & SOM Market Sizing',
     category: 'Stage 3: Financial BI',
-    duration: '18:10',
-    youtubeUrl: 'https://www.youtube.com/watch?v=gTj-xQ2-0Z8',
-    embedId: 'gTj-xQ2-0Z8',
-    thumbnail: 'https://img.youtube.com/vi/gTj-xQ2-0Z8/hqdefault.jpg',
-    description: 'Step-by-step masterclass on bottom-up vs top-down market estimation for VCs.',
+    duration: '8:28',
+    youtubeUrl: 'https://www.youtube.com/watch?v=j7wwVo-zJ3c',
+    embedId: 'j7wwVo-zJ3c',
+    thumbnail: 'https://img.youtube.com/vi/j7wwVo-zJ3c/hqdefault.jpg',
+    description: 'Walkthrough of top-down versus bottom-up market estimation, and when each holds up.',
   },
   {
     id: '4',
-    title: 'How to Write a Pitch Deck that Raises $1M+',
+    title: 'How to Pitch Your Seed Stage Startup',
     category: 'Stage 5: VC Pitch',
-    duration: '24:05',
-    youtubeUrl: 'https://www.youtube.com/watch?v=Xvnt51qYl8w',
-    embedId: 'Xvnt51qYl8w',
-    thumbnail: 'https://img.youtube.com/vi/Xvnt51qYl8w/hqdefault.jpg',
-    description: 'Teardown of successful seed pitch decks with slide-by-slide breakdowns.',
+    duration: '29:26',
+    youtubeUrl: 'https://www.youtube.com/watch?v=lw2X3PxKlAY',
+    embedId: 'lw2X3PxKlAY',
+    thumbnail: 'https://img.youtube.com/vi/lw2X3PxKlAY/hqdefault.jpg',
+    description: "YC's Michael Seibel on what a seed pitch has to say, and in what order.",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function StartupVideoHub() {
             Founder Masterclasses &amp; Course Hub
           </h2>
           <p className="text-xs text-muted-foreground font-medium">
-            Curated Y Combinator &amp; Stanford founder talks covering every stage of the incubation journey.
+            Curated founder talks covering every stage of the incubation journey.
           </p>
         </div>
       </div>
@@ -91,6 +91,18 @@ export default function StartupVideoHub() {
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  // A pulled or renamed video serves a 120x90 grey placeholder rather
+                  // than a 404, so it fails silently. Drop to the lower-res still,
+                  // which survives more often, and only then give up.
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    const fallback = `https://img.youtube.com/vi/${video.embedId}/mqdefault.jpg`;
+                    if (img.src !== fallback) {
+                      img.src = fallback;
+                    } else {
+                      img.style.display = 'none';
+                    }
+                  }}
                 />
                 <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors flex items-center justify-center">
                   <div className="clay-sm clay-primary w-11 h-11 rounded-full flex items-center justify-center text-sm group-hover:scale-110 transition-transform">

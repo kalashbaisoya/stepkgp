@@ -3,14 +3,38 @@
 import React from 'react';
 import { StartupIdeaState } from '@/app/(public)/playground/page';
 
+/** A tool that used to sit in the page header, now attached to the node it serves. */
+type NodeTool = { label: string; icon: string; tint: string; run: () => void };
+
 type Props = {
   ideaState: StartupIdeaState;
   currentStage: number;
   onSelectStage: (stageId: number) => void;
+  onOpenSearch: () => void;
+  onOpenProfile: () => void;
+  onOpenMvp: () => void;
+  onOpenGovt: () => void;
 };
 
-export default function FigmaGraphCanvas({ ideaState, currentStage, onSelectStage }: Props) {
-  const NODES = [
+export default function FigmaGraphCanvas({
+  ideaState,
+  currentStage,
+  onSelectStage,
+  onOpenSearch,
+  onOpenProfile,
+  onOpenMvp,
+  onOpenGovt,
+}: Props) {
+  const NODES: {
+    id: number;
+    title: string;
+    tag: string;
+    icon: string;
+    tint: string;
+    description: string;
+    subText: string;
+    tools: NodeTool[];
+  }[] = [
     {
       id: 1,
       title: '1. Seeded Problem Discovery',
@@ -19,6 +43,7 @@ export default function FigmaGraphCanvas({ ideaState, currentStage, onSelectStag
       tint: 'clay-sun',
       description: ideaState.problemStatement.slice(0, 75) + '...',
       subText: `Category: ${ideaState.category}`,
+      tools: [{ label: 'Search Ecosystem', icon: '🔍', tint: 'clay-plain', run: onOpenSearch }],
     },
     {
       id: 2,
@@ -28,6 +53,7 @@ export default function FigmaGraphCanvas({ ideaState, currentStage, onSelectStag
       tint: 'clay-sky',
       description: `Matched with ${ideaState.selectedFaculty.length} IIT KGP Labs & ${ideaState.selectedAlumni.length} Alumni Mentors.`,
       subText: 'Automated Briefs Dispatched',
+      tools: [{ label: 'Claim Profile', icon: '👤', tint: 'clay-soft', run: onOpenProfile }],
     },
     {
       id: 3,
@@ -37,6 +63,7 @@ export default function FigmaGraphCanvas({ ideaState, currentStage, onSelectStag
       tint: 'clay-mint',
       description: `Viability Index: ${ideaState.viabilityScore || 91}/100 • TAM/SAM Precision: ${ideaState.tamSamScore || 84}%`,
       subText: 'Competitor Risk Radar Active',
+      tools: [{ label: 'MVP Spec Builder', icon: '⚙️', tint: 'clay-mint', run: onOpenMvp }],
     },
     {
       id: 4,
@@ -46,6 +73,7 @@ export default function FigmaGraphCanvas({ ideaState, currentStage, onSelectStag
       tint: 'clay-lilac',
       description: 'Auto-generated LinkedIn launch copy, X thread & 30-sec elevator pitch deck.',
       subText: 'Virality Engine Ready',
+      tools: [],
     },
     {
       id: 5,
@@ -55,6 +83,10 @@ export default function FigmaGraphCanvas({ ideaState, currentStage, onSelectStag
       tint: 'clay-rose',
       description: 'Pitch deck evaluated and dispatched to 4 Partner VC Funds + STEP legal checklist.',
       subText: 'Approved for Pre-Seed Pipeline',
+      tools: [
+        { label: 'Govt & IP Services', icon: '🏛️', tint: 'clay-sun', run: onOpenGovt },
+        { label: 'Policies & SOPs', icon: '📜', tint: 'clay-dark', run: onOpenSearch },
+      ],
     },
   ];
 
@@ -123,9 +155,31 @@ export default function FigmaGraphCanvas({ ideaState, currentStage, onSelectStag
                   </p>
                 </div>
 
-                <div className="pt-2.5 border-t border-black/8 flex items-center justify-between gap-2 text-xs font-semibold">
-                  <span className={isActive ? 'text-brand' : 'text-muted-foreground'}>{node.subText}</span>
-                  <span className="group-hover:translate-x-1 transition">→</span>
+                <div className="space-y-2.5">
+                  {node.tools.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {node.tools.map((tool) => (
+                        <button
+                          key={tool.label}
+                          type="button"
+                          // The whole card selects the stage, so a tool click must not
+                          // bubble up and yank the user to a different node.
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            tool.run();
+                          }}
+                          className={`clay-btn ${tool.tint} text-[11px] px-2.5 py-1.5`}
+                        >
+                          <span>{tool.icon}</span> {tool.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="pt-2.5 border-t border-black/8 flex items-center justify-between gap-2 text-xs font-semibold">
+                    <span className={isActive ? 'text-brand' : 'text-muted-foreground'}>{node.subText}</span>
+                    <span className="group-hover:translate-x-1 transition">→</span>
+                  </div>
                 </div>
               </div>
             );
