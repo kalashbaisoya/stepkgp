@@ -632,7 +632,12 @@ async function seedNotificationTemplates() {
 // ---- Public showcase: real STEP IIT Kharagpur portfolio ----
 // Logos resolve via Clearbit from each company's own domain; the UI falls back to a
 // branded monogram if a logo can't be fetched, so nothing ever renders broken.
-const logo = (domain: string) => `https://logo.clearbit.com/${domain}`;
+// Clearbit's free logo API was retired and logo.clearbit.com no longer resolves,
+// so every seeded logo 404'd. Google's favicon endpoint is still live and serves
+// the real mark for a live domain. Anything that does fail falls back to the
+// branded monogram in CompanyLogo.
+const logo = (domain: string) =>
+  `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 
 async function seedShowcase() {
   // Remove earlier placeholder entries (not tied to a real incubation).
@@ -648,19 +653,20 @@ async function seedShowcase() {
       location: "Bengaluru, India",
       tags: ["SaaS", "AI/ML", "Retail Tech", "Loyalty"],
       description:
-        "AI-powered loyalty and customer-engagement platform used by leading retail and consumer brands worldwide. One of STEP's landmark success stories and a well-known name in retail technology.",
+        "Loyalty and customer-engagement software for retail and consumer brands. Runs loyalty programmes, personalisation and campaign management on one platform, using AI to segment shoppers and target offers.",
       website: "https://www.capillarytech.com",
       logoUrl: logo("capillarytech.com"),
-      funding: "Well funded",
+      funding: "Listed on NSE and BSE",
       founders: [
         { name: "Aneesh Reddy", role: "Co-founder & CEO" },
         { name: "Krishna Mehra", role: "Co-founder" },
         { name: "Ajay Modani", role: "Co-founder" },
       ],
       achievements: [
-        "Loyalty & customer engagement platform for global retail brands",
-        "Raised significant funding; widely recognised in retail tech",
-        "Founded by IIT Kharagpur alumni",
+        "Founded in August 2008 by three IIT Kharagpur alumni",
+        "Backed by Warburg Pincus and Sequoia Capital before listing",
+        "Now publicly traded on the NSE as CAPILLARY",
+        "Runs 100+ loyalty programmes reaching over 500 million consumers",
       ],
       socials: [{ label: "Website", url: "https://www.capillarytech.com" }],
     },
@@ -673,19 +679,20 @@ async function seedShowcase() {
       location: "Chandigarh, India",
       tags: ["AI/ML", "Food Quality", "Deep Tech", "Hardware"],
       description:
-        "AI-powered quality assessment for food and agriculture, combining spectroscopy, imaging and machine learning to test quality in seconds across the agri value chain.",
+        "Food quality testing hardware and software. Its Qualix platform pairs spectroscopy and imaging devices with AI to grade grain, milk, oilseeds, pulses, spices, tea and animal feed in seconds, at the point of trade.",
       website: "https://www.agnext.com",
       logoUrl: logo("agnext.com"),
-      funding: "Substantial funding raised",
+      funding: "About $34M raised",
       founders: [
         { name: "Taranjeet Singh Bhamra", role: "Founder & CEO" },
         { name: "Sparsh Kaur", role: "Co-founder" },
         { name: "Mrigank Sharad", role: "Co-founder" },
       ],
       achievements: [
-        "AI for food & agriculture quality testing",
-        "Raised substantial funding, including from Novo Holdings",
-        "Deployed across the agri supply chain",
+        "Qualix platform grades produce in seconds using AI, imaging and IoT",
+        "Raised a $21M Series A led by Alpha Wave Incubation",
+        "Novo Holdings led the Series B; Kalaari Capital and Omnivore also invested",
+        "Roughly $34M raised across six rounds",
       ],
       socials: [{ label: "Website", url: "https://www.agnext.com" }],
     },
@@ -698,19 +705,20 @@ async function seedShowcase() {
       location: "Pune, India",
       tags: ["Clean Energy", "Solar", "Cold Chain", "Climate"],
       description:
-        "Solar-powered cold storage and cooling solutions for agriculture. Ecofrost helps farmers cut post-harvest losses with reliable, off-grid refrigeration.",
+        "Solar powered farm infrastructure. Ecofrost is an off-grid cold room that uses thermal energy storage to keep produce cold without a grid connection, and Ecotron is a solar pump controller for irrigation.",
       website: "https://www.ecozensolutions.com/ecofrost",
       logoUrl: logo("ecozensolutions.com"),
-      funding: "Venture backed",
+      funding: "$25M Series C",
       founders: [
         { name: "Devendra Gupta", role: "Co-founder" },
         { name: "Prateek Singhal", role: "Co-founder" },
         { name: "Vivek Pandey", role: "Co-founder" },
       ],
       achievements: [
-        "Solar-powered cold storage for agriculture",
-        "Strong presence in the agritech and climate space",
-        "Reduces post-harvest losses for farmers",
+        "Ecofrost solar cold rooms run off-grid on thermal energy storage",
+        "Ecotron solar pumping adopted by more than 70,000 farmers",
+        "$25M Series C led by Nuveen and Dare Ventures",
+        "Founded on campus by three IIT Kharagpur alumni",
       ],
       socials: [{ label: "Website", url: "https://www.ecozensolutions.com" }],
     },
@@ -768,12 +776,21 @@ async function seedShowcase() {
       location: "Noida, India",
       tags: ["Security", "DLP", "Enterprise", "SaaS"],
       description:
-        "Data security and insider-threat management, with DLP and behavioural analytics that help enterprises protect sensitive information.",
+        "Insider threat and data loss prevention software. Its inDefend product watches email, USB drives, cloud uploads, printing and browsers to block unauthorised data transfers, and flags risky employee behaviour before it becomes a breach.",
       website: "https://www.dataresolve.com",
       logoUrl: logo("dataresolve.com"),
-      funding: "Venture backed",
-      founders: [],
-      achievements: ["Data security & DLP solutions", "Serves enterprise customers across India"],
+      funding: "$4.77M raised",
+      founders: [
+        { name: "Dhruv Khanna", role: "Co-founder" },
+        { name: "Nagarjun Rao Kota", role: "Co-founder" },
+        { name: "Dipanjan Biswas", role: "Co-founder" },
+      ],
+      achievements: [
+        "inDefend combines data loss prevention with user behaviour analytics",
+        "Founded in 2008 by IIT Kharagpur alumni",
+        "$4.77M raised from Parampara Capital and IIT Kharagpur",
+        "Serves 200+ enterprise customers across BFSI, IT services and healthcare",
+      ],
       socials: [{ label: "Website", url: "https://www.dataresolve.com" }],
     },
     {
@@ -782,15 +799,20 @@ async function seedShowcase() {
       sector: "Advanced Materials",
       stage: "Established",
       batch: "2007",
-      location: "India",
+      location: "Thane, India",
       tags: ["Materials", "Deep Tech", "Manufacturing"],
       description:
-        "Advanced ceramics and materials technology. Engineering high-performance ceramic components for demanding industrial applications.",
+        "Precision technical ceramics. Manufactures alumina, zirconia, fused silica and zircon components by powder compaction, injection moulding, isostatic pressing and slip casting, plus micro-machining of sintered ceramic blocks.",
       website: "https://www.antslab.in",
       logoUrl: logo("antslab.in"),
       funding: "Bootstrapped",
       founders: [],
-      achievements: ["Advanced ceramics and materials technology", "Deep-tech manufacturing capability"],
+      achievements: [
+        "Won the National Technology Day award from the President of India in 2018",
+        "Recognised for zirconia components and carbon sulphur analysis crucibles",
+        "Incubated at STEP IIT Kharagpur and CIIE IIM Ahmedabad from 2006",
+        "Micro-machines ZTA, silicon carbide, aluminium nitride and silicon nitride",
+      ],
       socials: [{ label: "Website", url: "https://www.antslab.in" }],
     },
     {
@@ -816,15 +838,20 @@ async function seedShowcase() {
       sector: "IT Services",
       stage: "Established",
       batch: "2005",
-      location: "India",
-      tags: ["Software Services", "Enterprise"],
+      location: "Kalyani, West Bengal",
+      tags: ["Software Services", "IoT", "Embedded", "Enterprise"],
       description:
-        "Software services company building custom enterprise applications and technology solutions for clients.",
+        "Engineering services for data acquisition and analytics, embedded and IoT systems, cloud applications and ERP. Takes projects from concept through to deployment for industrial and research clients.",
       website: "https://www.azuresys.com",
       logoUrl: logo("azuresys.com"),
-      funding: "Bootstrapped",
+      funding: "Bootstrapped, IIT Kharagpur holds a stake",
       founders: [],
-      achievements: ["Software services and custom enterprise development"],
+      achievements: [
+        "Over 25 years building embedded, IoT and data acquisition systems",
+        "IIT Kharagpur holds an equity stake in the company",
+        "Clients include AIIMS, DRDO, BHEL and IOCL",
+        "Also works with Intel, SanDisk and Synopsys",
+      ],
       socials: [{ label: "Website", url: "https://www.azuresys.com" }],
     },
   ];

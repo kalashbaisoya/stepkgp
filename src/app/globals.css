@@ -386,5 +386,6 @@ p {
 .link-accent { color: var(--brand); text-underline-offset: 3px; }
 .link-accent:hover { text-decoration: underline; }
 
-.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+/* line-clamp-* is built into Tailwind. Redefining it here put the rule outside
+   @layer, where unlayered CSS always beats layered, so group-hover:line-clamp-none
+   could never override it and clamped text stayed clamped when a card expanded. */

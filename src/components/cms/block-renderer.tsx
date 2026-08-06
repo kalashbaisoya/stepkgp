@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Block, BlockType } from "@/modules/cms/blocks";
 import { listFeaturedShowcase } from "@/modules/directory/service";
 import { CompanyLogo } from "@/components/directory/company-logo";
+import { CompanyCardDetail } from "@/components/directory/company-card-detail";
 import { HeroCarousel } from "./hero-carousel";
 
 // Public block renderer. Claymorphism: soft raised surfaces, orange accent.
@@ -129,20 +130,28 @@ async function FeaturedStartups({ data }: { data: Record<string, unknown> }) {
         </div>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((p) => (
-            <Link key={p.slug} href={`/startups/${p.slug}`} className="clay clay-hover group p-6">
-              <div className="flex items-center gap-4">
-                <CompanyLogo name={p.name} src={p.logoUrl} className="clay-sm h-12 w-12 p-1" />
-                <div className="min-w-0">
-                  <h3 className="truncate font-bold group-hover:text-brand">{p.name}</h3>
-                  {p.sector && <p className="truncate text-xs text-muted-foreground">{p.sector}</p>}
+            // The wrapper reserves the collapsed slot so the card can grow on hover
+            // without pushing the rest of the grid around.
+            <div key={p.slug} className="relative min-h-[15rem]">
+              <Link
+                href={`/startups/${p.slug}`}
+                className="clay clay-hover group absolute inset-0 flex flex-col p-6 hover:bottom-auto hover:z-20 hover:h-auto focus-visible:bottom-auto focus-visible:z-20 focus-visible:h-auto"
+              >
+                <div className="flex items-center gap-4">
+                  <CompanyLogo name={p.name} src={p.logoUrl} className="clay-sm h-12 w-12 p-1" />
+                  <div className="min-w-0">
+                    <h3 className="truncate font-bold group-hover:text-brand">{p.name}</h3>
+                    {p.sector && <p className="truncate text-xs text-muted-foreground">{p.sector}</p>}
+                  </div>
                 </div>
-              </div>
-              <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-muted-foreground">{p.description}</p>
-              <div className="mt-4 flex items-center justify-between text-xs">
-                {p.batch && <span className="clay-chip clay-soft text-[11px]">Batch {p.batch}</span>}
-                {p.funding && <span className="font-medium text-muted-foreground">{p.funding}</span>}
-              </div>
-            </Link>
+                <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-muted-foreground group-hover:line-clamp-none group-focus-visible:line-clamp-none">{p.description}</p>
+                <CompanyCardDetail company={p} />
+                <div className="mt-auto flex items-center justify-between gap-3 pt-4 text-xs">
+                  {p.batch && <span className="clay-chip clay-soft text-[11px]">Batch {p.batch}</span>}
+                  {p.funding && <span className="text-right font-medium text-muted-foreground">{p.funding}</span>}
+                </div>
+              </Link>
+            </div>
           ))}
           {featured.length === 0 && (
             <p className="clay-inset col-span-full p-12 text-center text-muted-foreground">Companies appear here as they graduate.</p>

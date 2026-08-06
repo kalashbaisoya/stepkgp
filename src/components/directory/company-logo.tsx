@@ -19,6 +19,14 @@ export function CompanyLogo({
   const [failed, setFailed] = useState(false);
   const showImg = src && !failed;
 
+  // The img is server-rendered, so the browser may finish (and fail) the request
+  // before React hydrates and attaches onError. That error is never dispatched to
+  // us, and a broken glyph sticks forever. Re-check on mount: a finished image
+  // with no intrinsic width is a failed one.
+  const checkOnMount = (node: HTMLImageElement | null) => {
+    if (node?.complete && node.naturalWidth === 0) setFailed(true);
+  };
+
   return (
     <div
       className={cn(
@@ -29,6 +37,7 @@ export function CompanyLogo({
       {showImg ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
+          ref={checkOnMount}
           src={src}
           alt={`${name} logo`}
           className="h-full w-full object-contain p-1.5"
