@@ -49,7 +49,8 @@ export async function registerAction(_: FormState, form: FormData): Promise<Form
   } catch (err) {
     return toState(err);
   }
-  redirect("/auth/verify?sent=1");
+  // register() already opened a session, so go straight where a login would land.
+  redirect(await postLoginDestination(form.get("next")));
 }
 
 export async function loginAction(_: FormState, form: FormData): Promise<FormState> {

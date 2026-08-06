@@ -13,15 +13,11 @@ const initial: FormState = {};
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ reset?: string; verified?: string; next?: string }>;
+  searchParams: Promise<{ reset?: string; next?: string }>;
 }) {
   const params = use(searchParams);
   const [state, action] = useActionState(loginAction, initial);
-  const notice = params.reset
-    ? "Password updated. Please sign in."
-    : params.verified
-      ? "Email verified. Please sign in."
-      : undefined;
+  const notice = params.reset ? "Password updated. Please sign in." : undefined;
 
   return (
     <>

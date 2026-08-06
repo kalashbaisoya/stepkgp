@@ -18,7 +18,6 @@ import {
   otpVerifySchema,
   forgotSchema,
   resetSchema,
-  verifyEmailSchema,
 } from "./schema";
 
 const APP_URL = process.env.APP_URL ?? "http://localhost:3000";
@@ -32,7 +31,7 @@ export class ServiceError extends Error {
   }
 }
 
-/** Register a new user, assign the applicant role, send a verification email. */
+/** Register a new user, assign the applicant role, and sign them straight in. */
 export async function register(input: unknown) {
   const { name, email, password } = registerSchema.parse(input);
 
@@ -42,8 +41,16 @@ export async function register(input: unknown) {
   const org = await db.organization.findUnique({ where: { slug: "step-iit-kgp" } });
   const passwordHash = await hashPassword(password);
 
+  // No email confirmation step: an account is usable the moment it is created.
   const user = await db.user.create({
-    data: { name, email, passwordHash, status: "PENDING", organizationId: org?.id },
+    data: {
+      name,
+      email,
+      passwordHash,
+      status: "ACTIVE",
+      emailVerified: new Date(),
+      organizationId: org?.id,
+    },
   });
 
   // Default role: applicant.
@@ -52,29 +59,9 @@ export async function register(input: unknown) {
     await db.userRole.create({ data: { userId: user.id, roleId: applicant.id } });
   }
 
-  const token = await createLinkToken(email, "EMAIL_VERIFY");
-  await sendEmail({
-    to: email,
-    subject: "Verify your STEP account",
-    html: `<p>Welcome to STEP IIT KGP. Verify your email:</p><p><a href="${APP_URL}/auth/verify?token=${token}">Verify my account</a></p>`,
-  });
-
+  await createSession(user.id);
   await audit({ actorId: user.id, action: "user.registered", targetType: "User", targetId: user.id });
   return { userId: user.id };
-}
-
-/** Verify an email via link token. */
-export async function verifyEmail(input: unknown) {
-  const { token } = verifyEmailSchema.parse(input);
-  const email = await consumeToken(token, "EMAIL_VERIFY");
-  if (!email) throw new ServiceError("INVALID_TOKEN", "This verification link is invalid or expired.");
-
-  const user = await db.user.update({
-    where: { email },
-    data: { emailVerified: new Date(), status: "ACTIVE" },
-  });
-  await audit({ actorId: user.id, action: "user.verified", targetType: "User", targetId: user.id });
-  return { ok: true };
 }
 
 /** Send a one-time login code. */
@@ -111,7 +98,7 @@ export async function verifyOtp(input: unknown) {
   return { ok: true };
 }
 
-/** Password login. Blocks unverified accounts. */
+/** Password login. Email and password are the only credentials required. */
 export async function login(input: unknown, ip?: string) {
   const { email, password } = loginSchema.parse(input);
   const limit = rateLimit(`login:${ip ?? email}`, 10, 15 * 60_000);
@@ -120,9 +107,6 @@ export async function login(input: unknown, ip?: string) {
   const user = await db.user.findUnique({ where: { email } });
   if (!user || user.deletedAt || !(await verifyPassword(password, user.passwordHash))) {
     throw new ServiceError("INVALID_CREDENTIALS", "Incorrect email or password.");
-  }
-  if (!user.emailVerified) {
-    throw new ServiceError("UNVERIFIED", "Please verify your email before signing in.");
   }
   if (user.status === "SUSPENDED") {
     throw new ServiceError("SUSPENDED", "This account is suspended.");
