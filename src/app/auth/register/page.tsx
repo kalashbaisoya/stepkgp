@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { use, useActionState } from "react";
 import { registerAction, type FormState } from "@/modules/auth/actions";
 import { Input, Label, FieldError } from "@/components/ui/input";
 import { SubmitButton } from "@/components/auth/submit-button";
@@ -9,7 +9,12 @@ import { FormAlert } from "@/components/auth/form-alert";
 
 const initial: FormState = {};
 
-export default function RegisterPage() {
+export default function RegisterPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const params = use(searchParams);
   const [state, action] = useActionState(registerAction, initial);
   return (
     <>
@@ -19,6 +24,8 @@ export default function RegisterPage() {
       </p>
       <FormAlert error={state.error} />
       <form action={action} className="space-y-4" noValidate>
+        {/* registerAction reads this to decide where to land, same as login. */}
+        {params.next && <input type="hidden" name="next" value={params.next} />}
         <div>
           <Label htmlFor="name">Full name</Label>
           <Input id="name" name="name" autoComplete="name" required />
@@ -38,7 +45,10 @@ export default function RegisterPage() {
       </form>
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/auth/login" className="font-medium text-brand hover:underline">
+        <Link
+          href={params.next ? `/auth/login?next=${encodeURIComponent(params.next)}` : "/auth/login"}
+          className="font-medium text-brand hover:underline"
+        >
           Log in
         </Link>
       </p>

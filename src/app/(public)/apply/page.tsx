@@ -21,7 +21,7 @@ export default async function ApplyPage() {
           next cycle opens.
         </p>
         <div className="mt-8 flex justify-center gap-4">
-          <Link href="/auth/register" className="inline-flex h-11 items-center rounded-md bg-brand px-5 font-medium text-brand-foreground hover:opacity-90">Create account</Link>
+          <Link href="/auth/register?next=%2Fapp" className="inline-flex h-11 items-center rounded-md bg-brand px-5 font-medium text-brand-foreground hover:opacity-90">Create account</Link>
         </div>
       </div>
     );
@@ -75,10 +75,10 @@ export default async function ApplyPage() {
       </div>
 
       <div className="mt-10 flex flex-wrap gap-4">
-        <Link href="/auth/register" className="inline-flex h-12 items-center rounded-md bg-brand px-6 text-base font-medium text-brand-foreground hover:opacity-90">
+        <Link href="/auth/register?next=%2Fapp" className="inline-flex h-12 items-center rounded-md bg-brand px-6 text-base font-medium text-brand-foreground hover:opacity-90">
           Create account &amp; apply
         </Link>
-        <Link href="/auth/login" className="inline-flex h-12 items-center clay-sm px-6 text-base font-medium hover:bg-muted">
+        <Link href="/auth/login?next=%2Fapp" className="inline-flex h-12 items-center clay-sm px-6 text-base font-medium hover:bg-muted">
           Log in
         </Link>
       </div>

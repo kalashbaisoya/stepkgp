@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getNavigation } from "@/modules/cms/service";
+import { getCurrentUser } from "@/lib/auth/session";
+import { roleLandingPath } from "@/lib/rbac/guard";
 
 // Public shell. Claymorphism: soft raised surfaces on warm paper, orange accent.
 export default async function PublicLayout({
@@ -7,10 +9,15 @@ export default async function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [primary, footer] = await Promise.all([
+  const [primary, footer, user] = await Promise.all([
     getNavigation("primary"),
     getNavigation("footer"),
+    getCurrentUser(),
   ]);
+
+  // Apply always ends up inside the app. Signed out, that means signing up
+  // first and being carried through to the same place afterwards.
+  const applyHref = user ? "/app" : "/auth/register?next=%2Fapp";
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -34,10 +41,22 @@ export default async function PublicLayout({
           </nav>
 
           <div className="flex items-center gap-2.5">
-            <Link href="/auth/login" className="hidden text-sm font-medium text-foreground/80 transition-colors hover:text-brand sm:block">
-              Sign in
-            </Link>
-            <Link href="/apply" className="clay-btn clay-primary h-10 px-5 text-sm">
+            {user ? (
+              <Link
+                href={roleLandingPath(user)}
+                className="hidden text-sm font-medium text-foreground/80 transition-colors hover:text-brand sm:block"
+              >
+                {user.name?.split(" ")[0] ?? "Dashboard"}
+              </Link>
+            ) : (
+              <Link
+                href="/auth/login"
+                className="hidden text-sm font-medium text-foreground/80 transition-colors hover:text-brand sm:block"
+              >
+                Sign in
+              </Link>
+            )}
+            <Link href={applyHref} className="clay-btn clay-primary h-10 px-5 text-sm">
               Apply
             </Link>
           </div>
