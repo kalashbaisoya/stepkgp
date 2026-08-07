@@ -22,6 +22,20 @@ import {
 
 const APP_URL = process.env.APP_URL ?? "http://localhost:3000";
 
+/**
+ * Role handed to every new signup.
+ *
+ * TEMPORARY: set to super_admin so anyone who signs in can reach /admin while
+ * the CMS is being built out. Registration is open and no longer email
+ * verified, so this means any address at all, real or not, gets user
+ * management, role editing, the audit log and CMS write.
+ *
+ * Change this back to "applicant" before the site is public. It is the only
+ * line that needs to change; existing accounts are adjusted from the admin
+ * Users page or by removing the role row directly.
+ */
+const SIGNUP_ROLE_KEY = "super_admin";
+
 export class ServiceError extends Error {
   constructor(
     public code: string,
@@ -53,10 +67,9 @@ export async function register(input: unknown) {
     },
   });
 
-  // Default role: applicant.
-  const applicant = await db.role.findUnique({ where: { key: "applicant" } });
-  if (applicant) {
-    await db.userRole.create({ data: { userId: user.id, roleId: applicant.id } });
+  const role = await db.role.findUnique({ where: { key: SIGNUP_ROLE_KEY } });
+  if (role) {
+    await db.userRole.create({ data: { userId: user.id, roleId: role.id } });
   }
 
   await createSession(user.id);
